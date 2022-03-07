@@ -1,0 +1,37 @@
+<launch>
+  <arg name="world" default="square2wall.world"/> 
+  <arg name="model" default="rubot.urdf" />
+  <arg name="x_pos" default="0.8"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+  <arg name="yaw" default="1.0"/>
+  <!-- spawn world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+  </include>
+  <!-- spawn nexus -->
+  <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
+    args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw) -param robot_description" />
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
+  <!-- Navigation Program   -->
+  <arg name="kp" default="5" />
+  <arg name="distance_reference" default="0.25" />
+  <arg name="lookahead_distance" default="0.25" />
+  <arg name="theta" default="50" />
+  <arg name="forward_speed" default="0.2" />
+  <node name="wall_follower_controller" pkg="rubot_control" type="rubot_wall_follower_gm.py" output="screen" >
+        <param name="kp" value="$(arg kp)"/>
+        <param name="distance_reference" value="$(arg distance_reference)"/>
+        <param name="lookahead_distance" value="$(arg lookahead_distance)"/>
+        <param name="theta" value="$(arg theta)"/>
+        <param name="forward_speed" value="$(arg forward_speed)"/>
+  </node>
+</launch>

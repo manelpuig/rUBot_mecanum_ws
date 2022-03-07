@@ -1,0 +1,34 @@
+<launch>
+  <arg name="world" default="world1.world"/> 
+  <arg name="model" default="nexus.urdf" />
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+  </include>
+
+  <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+  
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"
+    args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+
+  <!-- send joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz" required="true"/>
+  <!-- Navigation Program   -->
+    <arg name="v" default="0.1"/>
+    <arg name="w" default="0"/>
+    <arg name="d" default="0.3"/>
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_nav.py" output="screen" >
+    <param name="v" value="$(arg v)"/>
+    <param name="w" value="$(arg w)"/>
+    <param name="d" value="$(arg d)"/>
+  </node>
+</launch>

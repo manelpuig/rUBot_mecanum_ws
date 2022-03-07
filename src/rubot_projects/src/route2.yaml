@@ -1,0 +1,3 @@
+- {filename: './src/robot_projects/rubot_projects/photos/room11.png', position: { x: -0.3, y: -0.8}, angle: {fi: -90}}
+- {filename: './src/robot_projects/rubot_projects/photos/room22.png', position: { x: 1.7, y: -0.7}, angle: {fi: 0}}
+- {filename: './src/robot_projects/rubot_projects/photos/room33.png', position: { x: 1.7, y: 0.5}, angle: {fi: 0}}

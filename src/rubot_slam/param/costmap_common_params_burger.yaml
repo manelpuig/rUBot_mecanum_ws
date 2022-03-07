@@ -1,0 +1,14 @@
+obstacle_range: 3.0
+raytrace_range: 3.5
+
+#robot_gopigo
+#footprint: [[-0.17, -0.06], [-0.17, 0.06], [0.09, 0.06], [0.09, -0.06]]
+#robot_nexus
+footprint: [[-0.22, -0.16], [-0.22, 0.16], [0.22, 0.16], [0.22, -0.16]]
+
+inflation_radius: 1.0
+cost_scaling_factor: 5.0
+
+map_type: costmap
+observation_sources: scan
+scan: {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+        <arg name="R" default="255" />
+        <arg name="G" default="255" />
+        <arg name="B" default="0" />
+        <arg name="colour_error" default="10.0" />
+        <!-- mode if its different from colour_cal, it will start following line ( line_follow )-->
+        <arg name="mode" default="follow_line" />
+
+        <node name="line_follower_start"
+            pkg="rubot_projects"
+            type="line_follower2.py"
+            respawn="false" output="screen" args="$(arg R) $(arg G) $(arg B) $(arg colour_error) $(arg mode)">
+        </node>
+</launch>

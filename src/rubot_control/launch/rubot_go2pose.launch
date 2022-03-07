@@ -1,0 +1,26 @@
+<launch>
+    <arg name="world" default="square.world"/> 
+    <arg name="model" default="nexus.urdf" />
+    <arg name="x_pos" default="-0.5"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="z_pos" default="0.0"/>
+  
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+    </include>
+  
+  <!-- Spawn the robot -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
+      args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  
+  <!-- run navigation program  -->
+    <arg name="x" default="0.7"/>
+    <arg name="y" default="0.7"/>
+    <arg name="f" default="120"/>
+    <node pkg="rubot_control" type="rubot_go2pose.py" name="nexus_control" output="screen" >
+      <param name="x" value="$(arg x)"/>
+      <param name="y" value="$(arg y)"/>
+      <param name="f" value="$(arg f)"/>
+    </node>
+  </launch>

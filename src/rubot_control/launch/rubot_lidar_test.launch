@@ -1,0 +1,25 @@
+<launch>
+    <arg name="world" default="square.world"/> 
+    <arg name="model" default="rubot.urdf" />
+    <arg name="x_pos" default="0.5"/>
+    <arg name="y_pos" default="0.5"/>
+    <arg name="z_pos" default="0.0"/>
+  
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+    </include>
+  
+  <!-- Load rviz -->
+    <include file="$(find rubot_mecanum_description)/launch/display.launch" />
+
+  <!-- Spawn the robot -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
+      args="-urdf -model rubot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  
+  <!-- run navigation program   -->
+  <!-- LIDAR Test -->
+  <node name="scan_values" pkg="rubot_control" type="rubot_lidar_test.py" output="screen" >
+  </node> 
+  
+</launch>
