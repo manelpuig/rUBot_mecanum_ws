@@ -1,4 +1,4 @@
-# rubot_mecanum
+# rubot_mecanum2
 This workspace is organized in:
 | Document | Contents   |
 |------|------|
