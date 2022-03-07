@@ -213,8 +213,13 @@
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <publishOdomTF>true</publishOdomTF>
       <odometryRate>50.0</odometryRate>
       <robotBaseFrame>base_footprint</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
     </plugin>
   </gazebo>
   <!-- 2D Camera controller -->
@@ -301,22 +306,43 @@
   </gazebo>
   <gazebo reference="upper_left_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.0</mu1>
-    <mu2>0.0</mu2>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.5</maxVel>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
   <gazebo reference="lower_left_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.0</mu1>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.5</maxVel>
+    <fdir1>1 0 0</fdir1>
     <mu2>0.0</mu2>
   </gazebo>
   <gazebo reference="upper_right_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.0</mu1>
-    <mu2>0.0</mu2>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.5</maxVel>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
   <gazebo reference="lower_right_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.0</mu1>
-    <mu2>0.0</mu2>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.5</maxVel>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 </robot>
