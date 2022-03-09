@@ -28,10 +28,10 @@ state_dict_ = {
 def clbk_laser(msg):
     global regions_
     regions_ = {
-        'front':  min(min(msg.ranges[301:420]), 3),
-        'fright':  min(min(msg.ranges[181:300]), 3),
-        'right':   min(min(msg.ranges[179:181]), 3),
-        'bright':   min(min(msg.ranges[60:178]), 3),
+        'front':  min(min(msg.ranges[660:719]),min(msg.ranges[0:60]), 3),
+        'fright':  min(min(msg.ranges[541:659]), 3),
+        'right':   min(min(msg.ranges[539:540]), 3),
+        'bright':   min(min(msg.ranges[420:538]), 3),
     }
     print ("front distance: "+ str(regions_["front"]))
     print ("front-right distance: "+ str(regions_["fright"]))
