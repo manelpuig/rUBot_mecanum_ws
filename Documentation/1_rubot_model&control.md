@@ -583,8 +583,45 @@ We can control the movement of our robot using:
 - the keyboard or a joypad
 - pragramatically in python creating a "/rubot_nav" node
 
+In any case the first step is to "bringup" our robot in the desired virtual environment. We will create a rubot_bringup.launch file to:
+- Open gazebo with the desired virtual world
+- spawn our robot model in a speciffic position
+
+This file is:
+```xml
+<launch>
+    <arg name="world" default="square2wall.world"/> 
+    <arg name="model" default="rubot.urdf" />
+    <arg name="x_pos" default="0.8"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="yaw" default="1.0"/>
+    <!-- spawn world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+    </include>
+    <!-- spawn nexus -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
+      args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
+    <!-- send fake joint values -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="use_gui" value="False"/>
+    </node>
+    <!-- Combine joint values -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
+  </launch>
+  ```
+  ![](./Images/1_mecanum_bringup.png)
+  > In bringup file we open rviz to see the sensor messages.
+  >
+  > The fixed frame is now odom, then the world will not move with robot movements. We find odom frame in rviz because joint_state_publisher and robot_state_publisher are launched!
+
+We are now ready to launch control actions
+
 #### **3.2.1. Keyboard control**
-You can control the nexus robot with the keyboard installing the following packages:
+You can control the rUBot with the keyboard installing the following packages:
 ```shell
 sudo apt-get install ros-noetic-teleop-tools
 sudo apt-get install ros-noetic-teleop-twist-keyboard
@@ -615,7 +652,7 @@ We will create now a first navigation python files in "src" folder:
 
 Specific launch file have been created to launch the node and python file created above:
 ```shell
-roslaunch rubot_control rubot_nav.launch
+roslaunch rubot_control node_nav.launch
 ```
 
 #### **b) LIDAR test**
@@ -644,7 +681,7 @@ rospy.spin()
 ```
 To test the LIDAR we have generated a launch file
 ```shell
-roslaunch rubot_control rubot_lidar_test.launch
+roslaunch rubot_control node_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 ![](./Images/1_nexus_lidar_test.png)
@@ -653,9 +690,9 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 #### **c) Autonomous navigation with obstacle avoidance**
 We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
 
-We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
+We have to launch the "node_self_nav.launch" file in the "rubot_control" package.
 ```shell
-roslaunch rubot_control rubot_self_nav.launch
+roslaunch rubot_control node_self_nav.launch
 ```
 >Careful:
 - we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
@@ -675,7 +712,7 @@ The algorithm description functionality is:
         closestDistance, elementIndex = min(
             (val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max
         )
-        angleClosestDistance = (elementIndex / 2)-180 # RPLidar zero angle in backside
+        angleClosestDistance = self.__wrapAngle((elementIndex / 2)-180) # RPLidar zero angle in backside
 
         rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",
                       closestDistance, angleClosestDistance)
@@ -703,7 +740,7 @@ The algorithm is based on:
 
 A rubot_wall_follower_gm.launch is generated to test the node within a specified world
 ```shell
-roslaunch rubot_control rubot_wall_follower_gm.launch
+roslaunch rubot_control node_wall_follower_gm.launch
 ```
 
 You can see a video for the Maze wall follower process in: 
@@ -722,7 +759,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 ![](./Images/1_lidar_type.png)
 
 ```shell
-roslaunch rubot_control rubot_wall_follower_rg.launch
+roslaunch rubot_control node_wall_follower_rg.launch
 ```
 ![](./Images/1_nexus_wall_follower_rg.png)
 
@@ -737,6 +774,6 @@ Modify the python script developed in turlesim control package according to the 
 
 For validation type:
 ```shell
-roslaunch rubot_control rubot_go2pose.launch
+roslaunch rubot_control node_go2pose.launch
 ```
 ![](./Images/1_nexus_go2pose.png)

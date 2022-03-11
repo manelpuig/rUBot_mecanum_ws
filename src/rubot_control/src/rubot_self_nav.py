@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
 
-class GoPiGo3:
+class rUBot:
 
     def __init__(self):
 
@@ -35,7 +35,7 @@ class GoPiGo3:
         closestDistance, elementIndex = min(
             (val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max
         )
-        angleClosestDistance = (elementIndex / 2) # RPLidar zero angle in backside
+        angleClosestDistance = self.__wrapAngle(elementIndex / 2) # RPLidar zero angle in backside
 
         rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",
                       closestDistance, angleClosestDistance)
@@ -69,7 +69,7 @@ class GoPiGo3:
 
 if __name__ == '__main__':
     try:
-        gpg = GoPiGo3()
-        gpg.start()
+        rUBot1 = rUBot()
+        rUBot1.start()
         rospy.spin()
     except rospy.ROSInterruptException: pass
