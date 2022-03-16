@@ -4,6 +4,11 @@ The hardware bringup file will contain:
 - launch the LIDAR node
 - launch the raspicam node
 
+Graphically, the final node structure will be:
+![Getting Started](./Images/2_rubot_nodes.png)
+
+The bringup launch file will prepare the rUBot to comunicate with /rUBot_nav node for specific control actions.
+
 ## **1. Launch rUBot node**
 
 To bringup we need to run the driver designed for rubot_mecanum robot. The driver is in fact an arduino program that controls:
@@ -26,12 +31,17 @@ This final code contains:
 
 >Take care about:
 >- Motor connections
+
 ![](./Images/2b_motor.jpg)
+
 >- Shield schematics
+
 ![](./Images/2b_shield.jpg)
->- Pin number of encoders and PWM
+
+>- Pin number of encoders, PWM and DIR in config.h and encoder.h files
+
 ![](./Images/2b_pinout.jpg)
->- When you want to test the program in ROS, you need to close the arduino IDE to make available the USB connection
+
 
 The final code will be:
 
@@ -227,6 +237,18 @@ Serial.println(gz);
  
 }
 ```
+> Important modification!:
+> - We need to increase the buffer size of /odom publisher because the Arduino MEGA Buffer size for messages is 512bits (not enough for Odometry messages). To perform this modification, in ROS.h file from the Arduino library you have to add (at the end in else case section):
+  ```python
+  #else
+
+    //typedef NodeHandle_<ArduinoHardware, 25, 25, 512, 512, FlashReadOutBuffer_> NodeHandle;
+    typedef NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> NodeHandle;
+
+  #endif  
+  ```
+
+>- When you want to test the program in ROS, you need to close the arduino IDE to make available the USB connection
 
 To test your rubot_mecanum arduino program you need to:
 - open arduino IDE
@@ -253,7 +275,8 @@ To launch the raspicam sensor, execute:
 ```shell
 roslaunch raspicam_node camerav2_410x308_30fps.launch enable_raw:=true camera_frame_id:="laser_frame"
 ```
-> Change the launch file for image resolution and frame rate
+> Change the launch file for image resolution and frame rate:
+**Modificacio Sergio!**
 
 ## **Final bringup launch file**
 
