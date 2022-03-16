@@ -419,6 +419,7 @@ roslaunch rubot_mecanum_description display.launch
 
 ![](./Images/1_rubot_frames2.png)
 
+In the case of RPlidar, the zero index is located in rear orientation. The urdf model modifications will be considering the frame rotation and link translation according to:
 
 ## **2. rUBot mecanum spawn in world environment**
 
