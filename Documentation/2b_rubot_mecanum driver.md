@@ -1,117 +1,23 @@
-# **rUBot Mecanum driver**
+# **rUBot Mecanum Hardware bringup**
+The hardware bringup file will contain:
+- launch the rUBot node in Arduino-Mega board
+- launch the LIDAR node
+- launch the raspicam node
 
-Create a folder Arduino with all the installed libraries and code.
+## **1. Launch rUBot node**
 
-To test the functionality, we could create a first code to test de Odometry publishing:
-- define a circle trajectory
-- publish the tf frames of moving frame using tf.transform_broadcaster
-- publish the Odometry messages in /odom topic
+To bringup we need to run the driver designed for rubot_mecanum robot. The driver is in fact an arduino program that controls:
 
-Create a first code program in arduino:
-```python
-// Rosserial pubsub exemple
-#include <ros.h>
-#include <ros/time.h>
-#include <tf/tf.h>
-#include <tf/transform_broadcaster.h>
-#include <nav_msgs/Odometry.h>
-#include <sensor_msgs/Range.h>
-#include <geometry_msgs/Twist.h>
+- The kinematics of the 4 mecanum wheels to apply the twist message in /cmd_vel topic
+- The encoders to obtain the odometry
+- Read the IMU orientation values
+- interface with all the other sensors/actuators connected to arduino-mega board
 
-ros::NodeHandle  nh;
-double x = 1.0;
-double y = 0.0;
-double theta = 1.57;
-double vx = 0.0;
-double w = 0.0;
-char base_link[] = "/base_link";
-char odom_link[] = "/odom";
+The "rubot_mecanum.ino" arduino program is located on /Documentation/files/arduino/ folder
 
-void messageCb( const geometry_msgs::Twist& cmd_msg) {
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  nh.loginfo("cmd_vel received!");
-  vx=cmd_msg.linear.x;
-  w=cmd_msg.angular.z;
-  nh.loginfo("vel published!:");
-  //nh.loginfo(vx);
-  
-}
-
-ros::Subscriber<geometry_msgs::Twist> sub_vel("cmd_vel", messageCb );
-
-sensor_msgs::Range range_msg;
-ros::Publisher pub_range( "range_data", &range_msg);
-nav_msgs::Odometry odom;
-ros::Publisher odom_pub("odom", &odom);
-
-geometry_msgs::TransformStamped t;
-tf::TransformBroadcaster broadcaster;
-
-
-void setup()
-{
-  pinMode(13, OUTPUT);
-  nh.initNode();
-  broadcaster.init(nh);
-  nh.advertise(odom_pub);
-  nh.advertise(pub_range);
-  nh.subscribe(sub_vel);
-}
-
-void loop()
-{
-  // drive in a circle
-  double dx = 0.2;
-  double dtheta = 0.18;
-  x += cos(theta)*dx*0.1;
-  y += sin(theta)*dx*0.1;
-  theta += dtheta*0.1;
-  if(theta > 3.14)
-    theta=-3.14;
-    
-  // tf odom->base_link
-  t.header.frame_id = odom_link;
-  t.child_frame_id = base_link;
-  
-  t.transform.translation.x = x;
-  t.transform.translation.y = y;
-  
-  t.transform.rotation = tf::createQuaternionFromYaw(theta);
-  t.header.stamp = nh.now();
-  
-  broadcaster.sendTransform(t);
-  
-  // Odom Publishing
-  odom.header.stamp = nh.now();;
-  odom.header.frame_id = "odom";
-  odom.pose.pose.position.x = x;
-  odom.pose.pose.position.y = y;
-  odom.pose.pose.position.z = 0.0;
-  odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-
-  odom.child_frame_id = "base_link";
-  odom.twist.twist.linear.x = 3;
-  odom.twist.twist.linear.y = 4;
-  odom.twist.twist.angular.z = 5;
-  //odom_pub.publish(&odom);
-
-  // Range Publishing
-  range_msg.range = 3;
-  //pub_range.publish(&range_msg);
-  
-  nh.spinOnce();
-  delay(50);
-}
-```
-Open a terminal and type:
-```shell
-roscore
-rosrun rosserial_python serial_node.py /dev/ttyACM0
-```
-You can see the Odom in rviz
-![](./Images/2b_odom_TF.png)
-
-## **2. Closed loop code**
+>Carefull!:
+>
+>You need to install Encoder.h lib: https://www.arduino.cc/reference/en/libraries/encoder/
 
 This final code contains:
 - Subscriber to /cmd_vel topic 
@@ -138,8 +44,6 @@ The final code will be:
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include<std_msgs/Bool.h>
-//#include <WinsenZE03.h>
-//WinsenZE03 sensor;  // sensor de ozo
 #include"encoder.h"
 #include"kinematics.hpp"
 #include"motor.h"
@@ -150,7 +54,6 @@ The final code will be:
 
 #if !defined(HDW_DEBUG)
 ros::NodeHandle nh;
-//ros::NodeHandle_<ArduinoHardware, 5, 5, 512, 1024> nh;
 tf::TransformBroadcaster broadcaster;
 
 
@@ -313,7 +216,7 @@ Serial.println(gz);
   odom.twist.twist.linear.y = vyi;
   odom.twist.twist.angular.z = omegai;
 
-  //odom_pub.publish(&odom);
+  odom_pub.publish(&odom);
 
 
   if((millis()-lastctrl)>1000*ctrlrate){
@@ -324,7 +227,55 @@ Serial.println(gz);
  
 }
 ```
-To publish a cmd_vel, type:
+
+To test your rubot_mecanum arduino program you need to:
+- open arduino IDE
+- upload the rubot_mecanum.ino file
+- Open 3 new terminals and type:
 ```shell
-rostopic pub -r 1 /cmd_vel geometry_msgs/Twist '[2, 0, 0]' '[0, 0, 2]'
+roscore
+rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0.0, 0.0]' '[0.0, 0.0, 0.0]'
+```
+> /dev/arduino is the port to which the Arduino is connected, change it in case yours is different
+
+> The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]', you should only change vx, vy and wz values as the others do not apply. As it is an holonomic robot, if all the values are 0.0 except for wz (angular velocity in z axis) you will obtain a movement in which the robot spins on itself.
+
+## **2. Launch LIDAR node**
+
+To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi and execute:
+```shell
+roslaunch rplidar_ros rplidar.launch
+```
+## **3. Launch raspicam node**
+
+To launch the raspicam sensor, execute:
+```shell
+roslaunch raspicam_node camerav2_410x308_30fps.launch enable_raw:=true camera_frame_id:="laser_frame"
+```
+> Change the launch file for image resolution and frame rate
+
+## **Final bringup launch file**
+
+We will create a "rubot_bringup.launch" file to setup the rUBot_mecanum.
+
+```xml
+<launch>
+ <!-- launch rUBot mecanum   -->
+  <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+    <param name="port" type="string" value="/dev/arduino"/>
+    <param name="baud" type="int" value="57600"/>
+  </node>
+ <!-- launch ydlidar   -->
+  <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+  <!-- launch raspicam   -->
+  <include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch">
+	<arg name="enable_raw" value="true"/>
+	<arg name="camera_frame_id" value="base_scan"/>
+  </include>
+</launch>
+```
+To launch the bringup file type:
+```shell
+roslaunch rubot_control rubot_hw_bringup.launch
 ```
