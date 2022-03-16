@@ -398,7 +398,9 @@ roslaunch rubot_mecanum_description display.launch
 
 > rUBot frames: are all located in the back-right corner:
 ![](./Images/1_rubot_frames.png)
-> You need to shift the Image and lidar frames in urdf file according to the Freecad position values
+
+You need to shift the Image and lidar frames in urdf file according to the Freecad position values:
+- In the case of Camera frame you shift the joint with the values you obtain in freecad and the link with the same ones in negative to have the final frame in its camera gravity center.
 ```xml
 <!-- 2D Camera as a mesh of actual PiCamera -->
   <joint name="joint_camera" type="fixed">
@@ -416,13 +418,43 @@ roslaunch rubot_mecanum_description display.launch
       <material name="black"/>
     </visual>
 ```
-
-![](./Images/1_rubot_frames2.png)
-
-In the case of RPlidar, the zero index is located in rear orientation. The urdf model modifications will be considering the frame rotation and link translation according to:
+- In the case of RPlidar, the zero index is located in rear orientation. The urdf model modifications will be considering the 180 frame rotation and 180 link rotations. The translation values are specified in freecad and you have to take into account that after a 180 deg rotation, the x and y values became -x and -y in link translation
 ```xml
-
+  <!-- LIDAR base_scan -->
+  <link name="base_scan">
+    <visual>
+      <origin rpy="0 0 3.14" xyz="0.111 0.076 -0.124"/>
+      <geometry>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <cylinder length="0.01575" radius="0.0275"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.4"/>
+      <mass value="0.057"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  <joint name="scan_joint" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 3.14" xyz="0.111 0.076 0.124"/>
+    <parent link="base_link"/>
+    <child link="base_scan"/>
+  </joint>
 ```
+To verify the final frame orientations:
+```shell
+roslaunch rubot_mecanum_description rubot_world.launch
+roslaunch rubot_mecanum_description display.launch
+```
+![](./Images/1_rubot_rp_urdf.png)
+> To see the frames you have to add TF in rviz
 
 ## **2. rUBot mecanum spawn in world environment**
 
@@ -616,6 +648,10 @@ This file is:
     <!-- Show in Rviz   -->
     <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
   </launch>
+  ```
+  type:
+  ```shell
+roslaunch rubot_control rubot_bringup.launch
   ```
   ![](./Images/1_mecanum_bringup.png)
   > In bringup file we open rviz to see the sensor messages.

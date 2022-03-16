@@ -103,7 +103,6 @@ def turn_left():
 
 def follow_the_wall():
     global regions_
-
     msg = Twist()
     msg.linear.x = 0.1
     msg.angular.z = 0.05
