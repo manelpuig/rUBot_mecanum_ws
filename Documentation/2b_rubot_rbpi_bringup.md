@@ -257,7 +257,7 @@ To test your rubot_mecanum arduino program you need to:
 ```shell
 roscore
 rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
-rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0.0, 0.0]' '[0.0, 0.0, 0.0]'
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist  "{linear:  {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 ```
 > /dev/arduino is the port to which the Arduino is connected, change it in case yours is different
 
