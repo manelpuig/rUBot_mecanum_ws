@@ -42,6 +42,7 @@ This final code contains:
 
 ![](./Images/2b_pinout.jpg)
 
+M4 Encoder B=1
 
 The final code will be:
 
