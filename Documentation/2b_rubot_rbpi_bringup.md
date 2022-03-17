@@ -42,7 +42,17 @@ This final code contains:
 
 ![](./Images/2b_pinout.jpg)
 
-
+>- Kinematics expressions in kinematics.hpp library according to:
+![](./Images/1_mecanum_kine4.png)
+The kinematics.hpp has to include the correct expressions:
+```python
+//wABCD m/s
+void InverseKinematic(float vx,float vy,float omega, float &pwmA,float &pwmB,float &pwmC,float &pwmD){
+  pwmA=speed2pwm((vx-vy-K*omega)); 
+  pwmB=speed2pwm(vx+vy+K*omega); 
+  pwmC=speed2pwm(vx+vy-K*omega);
+  pwmD=speed2pwm(vx-vy+K*omega); 
+```
 The final code will be:
 
 ```python
