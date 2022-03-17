@@ -288,21 +288,32 @@ We will create a "rubot_bringup.launch" file to setup the rUBot_mecanum.
 
 ```xml
 <launch>
- <!-- launch rUBot mecanum   -->
-  <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
-    <param name="port" type="string" value="/dev/arduino"/>
-    <param name="baud" type="int" value="57600"/>
-  </node>
- <!-- launch ydlidar   -->
-  <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+    <arg name="model" default="rubot.urdf" />
+  <!-- spawn nexus -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+  <!-- send joint values -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="use_gui" value="False"/>
+    </node>
+  <!-- Combine joint values -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
+  <!-- launch rUBot mecanum   -->
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+      <param name="port" type="string" value="/dev/ttyACM0"/>
+      <param name="baud" type="int" value="57600"/>
+    </node>
+  <!-- launch ydlidar   -->
+    <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
   <!-- launch raspicam   -->
-  <include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch">
-	<arg name="enable_raw" value="true"/>
-	<arg name="camera_frame_id" value="base_scan"/>
-  </include>
+    <include file="$(find raspicam_node)/launch/camerav2_1280x960_10fps.launch">
+    <arg name="enable_raw" value="true"/>
+    <arg name="camera_frame_id" value="base_scan"/>
+    </include>
 </launch>
 ```
 To launch the bringup file type:
 ```shell
-roslaunch rubot_control rubot_hw_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
