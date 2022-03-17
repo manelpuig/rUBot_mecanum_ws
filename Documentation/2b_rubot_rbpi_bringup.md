@@ -42,7 +42,6 @@ This final code contains:
 
 ![](./Images/2b_pinout.jpg)
 
-M4 Encoder B=1
 
 The final code will be:
 
@@ -55,6 +54,8 @@ The final code will be:
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include<std_msgs/Bool.h>
+//#include <WinsenZE03.h>
+//WinsenZE03 sensor;  // sensor de ozo
 #include"encoder.h"
 #include"kinematics.hpp"
 #include"motor.h"
@@ -65,6 +66,8 @@ The final code will be:
 
 #if !defined(HDW_DEBUG)
 ros::NodeHandle nh;
+//ros::NodeHandle_<ArduinoHardware, 5, 5, 512, 1024> nh;
+//ros::NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> nh;
 tf::TransformBroadcaster broadcaster;
 
 
@@ -223,9 +226,9 @@ Serial.println(gz);
   odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
 
   odom.child_frame_id = "base_link";
-  odom.twist.twist.linear.x = vxi;
-  odom.twist.twist.linear.y = vyi;
-  odom.twist.twist.angular.z = omegai;
+  //odom.twist.twist.linear.x = vxi;
+  //odom.twist.twist.linear.y = vyi;
+  //odom.twist.twist.angular.z = omegai;
 
   odom_pub.publish(&odom);
 
@@ -258,7 +261,7 @@ To test your rubot_mecanum arduino program you need to:
 ```shell
 roscore
 rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
-rostopic pub -r 10 /cmd_vel geometry_msgs/Twist  "{linear:  {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
 > /dev/arduino is the port to which the Arduino is connected, change it in case yours is different
 
