@@ -32,15 +32,15 @@ This final code contains:
 >Take care about:
 >- Motor connections
 
-![](./Images/2b_motor.jpg)
+![](./Images/2b_motor.png)
 
 >- Shield schematics
 
-![](./Images/2b_shield.jpg)
+![](./Images/2b_shield.png)
 
 >- Pin number of encoders, PWM and DIR in config.h and encoder.h files
 
-![](./Images/2b_pinout.jpg)
+![](./Images/2b_pinout.png)
 
 >- Kinematics expressions in kinematics.hpp library according to:
 ![](./Images/1_mecanum_kine4.png)
@@ -53,10 +53,25 @@ void InverseKinematic(float vx,float vy,float omega, float &pwmA,float &pwmB,flo
   pwmC=speed2pwm(vx+vy-K*omega);
   pwmD=speed2pwm(vx-vy+K*omega); 
 ```
+>- The Odometry expression is calculated according to:
+![](./Images/1_odom_mecanum.png)
+> This is implemented in the main loop of arduino program:
+```python
+void loop(){
+  float ax,ay,az,gx,gy,gz;
+  delay(10);
+  float vxi=0,vyi=0,omegai=0;
+  ForwardKinematic(wA,wB,wC,wD,vxi,vyi,omegai);
+  float dt=PIDA.getDeltaT();
+  x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
+  y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
+  theta+=omegai*dt;
+  if(theta > 3.14)
+    theta=-3.14;
+```
 The final code will be:
 
 ```python
-
 #include <ros.h>
 #include <ros/time.h>
 #include <tf/tf.h>
@@ -64,8 +79,6 @@ The final code will be:
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include<std_msgs/Bool.h>
-//#include <WinsenZE03.h>
-//WinsenZE03 sensor;  // sensor de ozo
 #include"encoder.h"
 #include"kinematics.hpp"
 #include"motor.h"
@@ -76,8 +89,7 @@ The final code will be:
 
 #if !defined(HDW_DEBUG)
 ros::NodeHandle nh;
-//ros::NodeHandle_<ArduinoHardware, 5, 5, 512, 1024> nh;
-//ros::NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> nh;
+FlashReadOutBuffer_> nh;
 tf::TransformBroadcaster broadcaster;
 
 

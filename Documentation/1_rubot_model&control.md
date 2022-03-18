@@ -610,7 +610,9 @@ In our case we want to apply a robot movement defined by:
 
 This corresponds to an Inverse Kinematics defined by the following expressions:
 ![](./Images/1_mecanum_kine4.png)
-This is in fact what the Gazebo plugin calculates to obtain the Odometry.
+With the information of (uf,ul,w) Gazebo plugin calculates to obtain the Odometry.
+The analytical expressions are explained graphically in the picture:
+![](./Images/1_odom_mecanum.png)
 
 In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
 
