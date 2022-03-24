@@ -52,12 +52,12 @@ Other platforms:
 
 ## **2. Setup the HW drivers in raspberrypi4**
 The raspberrypi4 onboard is preinstalled with:
-- Ubuntu 20 server 32bits
+- Ubuntu 20 server 64bits
   - NoMachine remote desktop
 - ROS Noetic
 - rubot_rbpi4_ws repository is located in /home/pi/Desktop folder 
 
-### **2.1. Install Ubuntu 20 server 32bits**
+### **2.1. Install Ubuntu 20 server 64bits**
 
 Follow the steps in order to properly install the Raspberrypi:
 
@@ -151,7 +151,7 @@ The raspberrypi4 is configured:
 - NoMachine activated 
 - raspicam activated 
 
-When powering the raspberrypi3, generates a hotspot you have to connect to:
+When powering the raspberrypi4, generates a hotspot you have to connect to:
 - SSID name: rUBot_01 
 - password "rUBot_Mec"
 
