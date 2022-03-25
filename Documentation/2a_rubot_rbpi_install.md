@@ -219,11 +219,11 @@ git clone --single-branch --branch=noetic-devel https://github.com/ros-perceptio
 git clone --single-branch --branch=noetic https://github.com/ros-perception/vision_opencv.git
 git clone --single-branch --branch=noetic-devel https://github.com/ros-perception/image_common.git
 ```
-Some dependencies have to be added.
+> Make sure that your user is in the video group by running groups|grep video (https://github.com/UbiquityRobotics/raspicam_node).
+```shell
+sudo usermod -a -G video ubuntu
+```
 
-**Instruccions Sergio!**
-
-Follow raspicam_node --> Build Instructions in: https://github.com/UbiquityRobotics/raspicam_node
 
 Then you are able to compile the workspace:
 ```shell
