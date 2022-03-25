@@ -219,7 +219,9 @@ git clone --single-branch --branch=noetic-devel https://github.com/ros-perceptio
 git clone --single-branch --branch=noetic https://github.com/ros-perception/vision_opencv.git
 git clone --single-branch --branch=noetic-devel https://github.com/ros-perception/image_common.git
 ```
-> Make sure that your user is in the video group by running groups|grep video (https://github.com/UbiquityRobotics/raspicam_node).
+> Follow the Build instructions in: https://github.com/UbiquityRobotics/raspicam_node.
+
+> Make sure that your user is in the video group by running groups|grep video 
 ```shell
 sudo usermod -a -G video ubuntu
 ```
