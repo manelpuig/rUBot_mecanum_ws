@@ -89,10 +89,7 @@ The final code will be:
 
 #if !defined(HDW_DEBUG)
 ros::NodeHandle nh;
-FlashReadOutBuffer_> nh;
 tf::TransformBroadcaster broadcaster;
-
-
 #endif
 
 float ctrlrate=1.0;
@@ -171,17 +168,14 @@ void setup()
  digitalWrite(3, LOW);
  digitalWrite(4, LOW);
  digitalWrite(5, LOW);
-
- 
-  Serial3.begin(9600);
-  //sensor.begin(&Serial3, CO);
-  //sensor.setAs(QA);
  #endif
+
 	IO_init();
   PIDA.init();
   PIDB.init();
   PIDC.init();
   PIDD.init();
+
 //  Imu.SetupDevice();
   #if !defined(HDW_DEBUG)
   nh.initNode();
@@ -206,61 +200,50 @@ void loop(){
   theta+=omegai*dt;
   if(theta > 3.14)
     theta=-3.14;
-//                        TODO IMU
- Imu.getGyro(gx,gy,gz);
-Imu.getAcc(ax,ay,az);
-#if defined(HDW_DEBUG)
-Serial.print("ACC:  x: ");
-Serial.print(ax);
-Serial.print(" y: ");
-Serial.print(ay);
-Serial.print(" z: ");
-Serial.println(az);
-
-Serial.print("GRYO:  x: ");
-Serial.print(gx);
-Serial.print(" y: ");
-Serial.print(gy);
-Serial.print(" z: ");
-Serial.println(gz);
-
-#endif
+  //                        TODO IMU
+  Imu.getGyro(gx,gy,gz);
+  Imu.getAcc(ax,ay,az);
+  #if defined(HDW_DEBUG)
+    Serial.print("ACC:  x: ");
+    Serial.print(ax);
+    Serial.print(" y: ");
+    Serial.print(ay);
+    Serial.print(" z: ");
+    Serial.println(az);
+    Serial.print("GRYO:  x: ");
+    Serial.print(gx);
+    Serial.print(" y: ");
+    Serial.print(gy);
+    Serial.print(" z: ");
+    Serial.println(gz);
+  #endif
 
   #if !defined(HDW_DEBUG)
+    t.header.stamp = nh.now();
+    t.header.frame_id = "odom";
+    t.child_frame_id = "base_footprint";
+    t.transform.translation.x = x;
+    t.transform.translation.y = y;
+    t.transform.rotation = tf::createQuaternionFromYaw(theta);
+    broadcaster.sendTransform(t);
 
- t.header.frame_id = "odom";
- t.child_frame_id = "base_link";
-  
-  t.transform.translation.x = x;
-  t.transform.translation.y = y;
-  
-  t.transform.rotation = tf::createQuaternionFromYaw(theta);
-  t.header.stamp = nh.now();
-  
-  broadcaster.sendTransform(t);
+    odom.header.stamp = nh.now();;
+    odom.header.frame_id = "odom";
+    odom.child_frame_id = "base_footprint";
+    odom.pose.pose.position.x = x;
+    odom.pose.pose.position.y = y;
+    odom.pose.pose.position.z = 0.0;
+    odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
+    odom.twist.twist.linear.x = vxi;
+    odom.twist.twist.linear.y = vyi;
+    odom.twist.twist.angular.z = omegai;
+    odom_pub.publish(&odom);
 
-  
-  odom.header.stamp = nh.now();;
-  odom.header.frame_id = "odom";
-  odom.pose.pose.position.x = x;
-  odom.pose.pose.position.y = y;
-  odom.pose.pose.position.z = 0.0;
-  odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-
-  odom.child_frame_id = "base_link";
-  //odom.twist.twist.linear.x = vxi;
-  //odom.twist.twist.linear.y = vyi;
-  //odom.twist.twist.angular.z = omegai;
-
-  odom_pub.publish(&odom);
-
-
-  if((millis()-lastctrl)>1000*ctrlrate){
-    STOP();
-  }
-  nh.spinOnce();
+    if((millis()-lastctrl)>1000*ctrlrate){
+      STOP();
+    }
+    nh.spinOnce();
   #endif
- 
 }
 ```
 > Important modification!:
@@ -295,6 +278,7 @@ To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi and execut
 ```shell
 roslaunch rplidar_ros rplidar.launch
 ```
+> Carefull!: You need to change the frame name from laser to base_scan in rplidar_ros/launch/rplidar.launch
 ## **3. Launch raspicam node**
 
 To launch the raspicam sensor, execute:
@@ -310,7 +294,7 @@ We will create a "rubot_bringup.launch" file to setup the rUBot_mecanum.
 
 ```xml
 <launch>
-    <arg name="model" default="rubot.urdf" />
+    <arg name="model" default="rubot_rp.urdf" />
   <!-- spawn nexus -->
     <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
   <!-- send joint values -->
@@ -339,3 +323,19 @@ To launch the bringup file type:
 ```shell
 roslaunch rubot_control rubot_bringup_hw.launch
 ```
+# **Firsts tests**
+The firsts tests we can do are:
+- Image view in rviz
+- lidar ranges
+- wheels movement for desired direction
+- odometry values
+- DC motor linear velocity and position
+
+## **1. Image view**
+The selected resolution for camera is the lowest possible of 400x308 choosing the "camerav2_410x308_30fps.launch" file.
+
+When you launch the bringup file, you have to change the topic name to "/raspicam/camera1/imageraw" and save the config file to the rviz folder.
+
+## **2. Lidar ranges**
+In function of lidar module, there are 720 or more laser beams. 
+We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
