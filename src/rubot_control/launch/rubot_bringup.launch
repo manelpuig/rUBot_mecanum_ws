@@ -3,15 +3,15 @@
     <arg name="model" default="rubot_rp.urdf" />
     <arg name="x_pos" default="0.8"/>
     <arg name="y_pos" default="0.0"/>
-    <arg name="yaw" default="1.0"/>
+    <arg name="yaw" default="0.0"/>
     <!-- spawn world -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
     </include>
-    <!-- spawn nexus -->
+    <!-- spawn rubot -->
     <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
-      args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
+      args="-urdf -model rUBot -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
     <!-- send fake joint values -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
       <param name="use_gui" value="False"/>

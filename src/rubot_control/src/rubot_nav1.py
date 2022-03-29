@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import math
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 import rospy
@@ -18,8 +18,8 @@ def odom_callback(data):
     (roll, pitch, yaw)=euler_from_quaternion(q)
     rospy.loginfo("Robot Odometry x= %f\n",robot_x)
     rospy.loginfo("Robot Odometry y= %f\n",robot_y)
-    rospy.loginfo("Robot Odometry roll= %.0f\n",math.degrees(roll))
-    rospy.loginfo("Robot Odometry pitch= %.0f\n",math.degrees(pitch))
+    #rospy.loginfo("Robot Odometry roll= %.0f\n",math.degrees(roll))
+    #rospy.loginfo("Robot Odometry pitch= %.0f\n",math.degrees(pitch))
     rospy.loginfo("Robot Odometry yaw= %.0f\n",math.degrees(yaw))
 	
 def move_rubot(lin_velx,lin_vely,ang_vel,distance):
@@ -39,7 +39,7 @@ def move_rubot(lin_velx,lin_vely,ang_vel,distance):
         vel.angular.z = ang_vel
         rospy.loginfo("Linear Vel_x = %f: Linear Vel_y = %f: Angular Vel = %f",lin_velx,lin_vely,ang_vel)
 
-        if(robot_y >= distance):
+        if(robot_x >= distance):
             rospy.loginfo("Robot Reached destination")
             rospy.logwarn("Stopping robot")
             vel.linear.x = 0

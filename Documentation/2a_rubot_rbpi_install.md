@@ -52,12 +52,12 @@ Other platforms:
 
 ## **2. Setup the HW drivers in raspberrypi4**
 The raspberrypi4 onboard is preinstalled with:
-- Ubuntu 20 server 32bits
+- Ubuntu 20 server 64bits
   - NoMachine remote desktop
 - ROS Noetic
 - rubot_rbpi4_ws repository is located in /home/pi/Desktop folder 
 
-### **2.1. Install Ubuntu 20 server 32bits**
+### **2.1. Install Ubuntu 20 server 64bits**
 
 Follow the steps in order to properly install the Raspberrypi:
 
@@ -151,7 +151,7 @@ The raspberrypi4 is configured:
 - NoMachine activated 
 - raspicam activated 
 
-When powering the raspberrypi3, generates a hotspot you have to connect to:
+When powering the raspberrypi4, generates a hotspot you have to connect to:
 - SSID name: rUBot_01 
 - password "rUBot_Mec"
 
@@ -219,11 +219,13 @@ git clone --single-branch --branch=noetic-devel https://github.com/ros-perceptio
 git clone --single-branch --branch=noetic https://github.com/ros-perception/vision_opencv.git
 git clone --single-branch --branch=noetic-devel https://github.com/ros-perception/image_common.git
 ```
-Some dependencies have to be added.
+> Follow the Build instructions in: https://github.com/UbiquityRobotics/raspicam_node.
 
-**Instruccions Sergio!**
+> Make sure that your user is in the video group by running groups|grep video 
+```shell
+sudo usermod -a -G video ubuntu
+```
 
-Follow raspicam_node --> Build Instructions in: https://github.com/UbiquityRobotics/raspicam_node
 
 Then you are able to compile the workspace:
 ```shell

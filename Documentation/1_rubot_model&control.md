@@ -591,6 +591,8 @@ The forces involved define the robot linear and angular movement:
 
 The forward Kinematic's equations are defined below:
 ![](./Images/1_mecanum_kine3.png)
+> Note error in the sign of ul!
+
 where
 
 - Vi: Linear speed of the wheels.
