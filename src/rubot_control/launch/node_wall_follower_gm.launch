@@ -5,7 +5,7 @@
   <arg name="lookahead_distance" default="0.3" />
   <arg name="theta" default="50" />
   <arg name="forward_speed" default="0.1" />
-  <node name="wall_follower_controller" pkg="rubot_control" type="rubot_wall_follower_gm.py" output="screen" >
+  <node name="wall_follower_controller" pkg="rubot_control" type="rubot_wall_follower_gm_hw.py" output="screen" >
         <param name="kp" value="$(arg kp)"/>
         <param name="distance_reference" value="$(arg distance_reference)"/>
         <param name="lookahead_distance" value="$(arg lookahead_distance)"/>
