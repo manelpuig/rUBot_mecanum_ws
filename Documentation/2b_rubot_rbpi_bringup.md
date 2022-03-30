@@ -327,7 +327,7 @@ roslaunch rubot_control rubot_bringup_hw.launch
 The firsts tests we can do are:
 - Image view in rviz
 - lidar ranges
-- wheels movement for desired direction
+- Kinematics: wheels movement for desired direction
 - odometry values
 - DC motor linear velocity and position
 
@@ -339,3 +339,39 @@ When you launch the bringup file, you have to change the topic name to "/raspica
 ## **2. Lidar ranges**
 In function of lidar module, there are 720 or more laser beams. 
 We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
+
+## **3. Kinematics**
+First verification is the forward kinematics. You need to verify the arduino program in terms of the control of wheel rotation for desired (uf, ul,w).
+
+To test your rubot_mecanum arduino program you need to:
+- open arduino IDE
+- upload the rubot_mecanum.ino file
+- Open 3 new terminals and type (change values for different direction of movement):
+```shell
+roscore
+rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
+```
+
+## **4. Odometry**
+The arduino program publishes the odometry values in real-time. These values are obtained according to the theoretical expressions.
+
+To test the odometry values, type:
+```shell
+rostopic echo /odom
+```
+To reset the odometry values, type:
+```shell
+rostopic pub /rest_odom 
+```
+
+## **5. DC motor linear velocity and position**
+When you apply a wheel velocity value, you will see that the velocity value increases progressivelly and stablishes to a final desired value after a period of time. The same occurs when we stop the wheel. This is due to the closed-loop PID-based wheel velocity control system designed.
+
+We suggest you:
+- create a python file to view the velocity and odometry evolution with time 
+- define the maximum overshoot and setling time
+- optimize the PID control values to accomplish the desired transient values
+- verify experimentally these transient behaviour with the created python file
+
+The final desired transient behaviour will be graphically the following.
