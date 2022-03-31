@@ -280,13 +280,13 @@ roslaunch rplidar_ros rplidar.launch
 ```
 > Carefull!: You need to change the frame name from laser to base_scan in rplidar_ros/launch/rplidar.launch
 ## **3. Launch raspicam node**
-
+We have changed the camera resolution to 640x480. We have to upload the files:
+- camera640x480.launch in raspicam_node/launch
+- camera640x480.yaml in raspicam_node/camera_info
 To launch the raspicam sensor, execute:
 ```shell
-roslaunch raspicam_node camerav2_410x308_30fps.launch enable_raw:=true camera_frame_id:="laser_frame"
+roslaunch raspicam_node camera640x480.launch enable_raw:=true camera_frame_id:="laser_frame"
 ```
-> Change the launch file for image resolution and frame rate:
-**Modificacio Sergio!**
 
 ## **Final bringup launch file**
 
@@ -313,7 +313,7 @@ We will create a "rubot_bringup.launch" file to setup the rUBot_mecanum.
   <!-- launch ydlidar   -->
     <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
   <!-- launch raspicam   -->
-    <include file="$(find raspicam_node)/launch/camerav2_1280x960_10fps.launch">
+    <include file="$(find raspicam_node)/launch/camera640x480.launch">
     <arg name="enable_raw" value="true"/>
     <arg name="camera_frame_id" value="base_scan"/>
     </include>
@@ -332,9 +332,18 @@ The firsts tests we can do are:
 - DC motor linear velocity and position
 
 ## **1. Image view**
-The selected resolution for camera is the lowest possible of 400x308 choosing the "camerav2_410x308_30fps.launch" file.
+The selected resolution for camera is the lowest possible of 640x480.
 
-When you launch the bringup file, you have to change the topic name to "/raspicam/camera1/imageraw" and save the config file to the rviz folder.
+We have to upload the files:
+- camera640x480.launch in raspicam_node/launch
+- camera640x480.yaml in raspicam_node/camera_info
+
+When you launch the bringup file, you have to change the topic name to "/raspicam/image" and save the config file to the rviz folder.
+
+To view the image is better to use:
+```shell
+rqt_image_view
+```
 
 ## **2. Lidar ranges**
 In function of lidar module, there are 720 or more laser beams. 
