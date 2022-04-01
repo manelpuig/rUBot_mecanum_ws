@@ -378,7 +378,8 @@ rostopic pub /rest_odom
 When you apply a wheel velocity value, you will see that the velocity value increases progressivelly and stablishes to a final desired value after a period of time. The same occurs when we stop the wheel. This is due to the closed-loop PID-based wheel velocity control system designed.
 
 We suggest you:
-- create a python file to view the velocity and odometry evolution with time 
+- Use the "rubot_nav.py" file to test the velocity and odometry evolution with time for speciffic PID parameters
+  > Use the rqt_plot tool to view the vx and x evolution with time
 - define the maximum overshoot and setling time
 - optimize the PID control values to accomplish the desired transient values
 - verify experimentally these transient behaviour with the created python file
