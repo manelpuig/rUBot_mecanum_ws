@@ -348,6 +348,9 @@ rqt_image_view
 ## **2. Lidar ranges**
 In function of lidar module, there are 720 or more laser beams. 
 We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
+```shell
+roslaunch rubot_control rubot_lidar_test.launch
+```
 
 ## **3. Kinematics**
 First verification is the forward kinematics. You need to verify the arduino program in terms of the control of wheel rotation for desired (uf, ul,w).
@@ -358,7 +361,7 @@ To test your rubot_mecanum arduino program you need to:
 - Open 3 new terminals and type (change values for different direction of movement):
 ```shell
 roscore
-rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
 
@@ -368,6 +371,8 @@ The arduino program publishes the odometry values in real-time. These values are
 To test the odometry values, type:
 ```shell
 rostopic echo /odom
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0, 0, 0]' '[0, 0, 0]'
 ```
 To reset the odometry values, type:
 ```shell
@@ -379,6 +384,9 @@ When you apply a wheel velocity value, you will see that the velocity value incr
 
 We suggest you:
 - Use the "rubot_nav.py" file to test the velocity and odometry evolution with time for speciffic PID parameters
+```shell
+roslaunch rubot_control rubot_nav.launch
+```
   > Use the rqt_plot tool to view the vx and x evolution with time
 - define the maximum overshoot and setling time
 - optimize the PID control values to accomplish the desired transient values

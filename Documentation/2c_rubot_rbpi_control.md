@@ -1,52 +1,9 @@
 # **rUBot mecanum in Raspberrypi4 Control**
 
-The main objectives are:
-- Assemble a real robot (rUBot mecanum)
-- Control the rUBot movement
-
-Let's see how to fulfill these objectives
-
-References:
-- https://github.com/ros-mobile-robots/diffbot
-- https://johanschwind.medium.com/mobile-robot-teleoperation-with-the-jetson-nano-and-ros-d72b4b57e9be
-
-## **1. rUBot assembling**
-
-This tobot prototype is based on:
-- Mecanum wheel chasis:
-  - https://es.aliexpress.com/item/4001121790912.html?gatewayAdapt=glo2esp&spm=a2g0o.9042311.0.0.3c7963c0XKupJW
-- Battery 12V&5V (3Ah):
-  - https://www.amazon.es/gp/product/B072HR211P/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1
-- Battery 12V (6,7 and 20Ah): 
-  - https://www.amazon.es/gp/product/B07YSCXGNF/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1
-  - https://www.amazon.es/THENAGD-Recargable-Interruptor-Encendido-DC-122000/dp/B091F465RP/ref=sr_1_48?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3OCUQZILUVPAJ&keywords=bateria%2B5v%2B12v%2B2a%2Brecargable&qid=1642669235&sprefix=bateria%2B5v%2B12v%2B2a%2Brecargable%2Caps%2C65&sr=8-48&th=1
-- Battery 5V (20 and 26Ah):
-  - https://www.amazon.es/dp/B09MYQFXP5?psc=1&smid=AKVUAZL0K2E1J&ref_=chk_typ_imgToDp
-  - https://www.amazon.es/SWEYE-Capacidad%EF%BC%BDCargador-M%C3%BAltiples-Protecciones-Smartphones/dp/B0814JMRLR/ref=sr_1_18?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3OCUQZILUVPAJ&keywords=bateria+5v+12v+2a+recargable&qid=1642669235&sprefix=bateria+5v+12v+2a+recargable%2Caps%2C65&sr=8-18
-- On-board Raspberrypi4
-  - https://es.rs-online.com/web/p/raspberry-pi/2012367
-  - https://es.rs-online.com/web/p/placas-hat-y-complementos-para-raspberry-pi/2208633
-- Arduino mega: for HW driver control
-  - https://es.rs-online.com/web/p/arduino/7154084
-- Arduino motor driver shield TB6612FNG:
-  - https://es.aliexpress.com/item/4001086592215.html?spm=a2g0o.productlist.0.0.55da155eRs0f1N&algo_pvid=523f34f9-da3e-4a7e-bcbd-927dc560fb14&algo_exp_id=523f34f9-da3e-4a7e-bcbd-927dc560fb14-40
-  - https://github.com/Seeed-Studio/Grove_Motor_Driver_TB6612FNG
-- RaspiCAM RGB camera:
-  - https://es.rs-online.com/web/p/camaras-para-raspberry-pi/9132664
-  - https://es.rs-online.com/web/p/cajas-para-raspberry-pi/8679049
-- rpLidar:
-  - https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html
-- USB cables:
-  - USB-A to USB-B: https://www.amazon.es/gp/product/B073XQ33L2/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&th=1
-  - USB-C to USB-B: https://www.amazon.es/gp/product/B08RXQJJ9Z/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&th=1
-  - microUSB to USB-B: https://www.amazon.es/gp/product/B00WMAQKS2/ref=ppx_yo_dt_b_asin_title_o04_s00?ie=UTF8&th=1
-
-![Getting Started](./Images/1_osoyoo.png)
-
-Other platforms:
-- https://www.superdroidrobots.com/robotic-kits-platforms/mecanum-robots
-- https://www.robotshop.com/es/es/kit-robot-arduino-con-rueda-mecanum-4wd-60-mm.html
-- https://www.robotshop.com/es/es/4wd-robot-basico-mecanum-compatible-con-arduino.html
+The main objectives are to control the rUBot movements:
+- self navigation
+- follow wall
+- go to pose
 
 ### **Setup your workspace**
 The raspberrypi4 onboard is preinstalled with:
@@ -55,24 +12,6 @@ The raspberrypi4 onboard is preinstalled with:
 - ROS Noetic
 - rubot_rbpi4_ws repository is located in /home/pi/Desktop folder 
 
-If you do not have the "rubot_rbpi4_ws" folder in your desktop, you can "transfer" folder from your PC (it takes 30s)
-
-The first time you copy the folder, you need to compile the workspace:
-- open a terminal in the ws
-- type "catkin_make" (it takes 10min)
-
->Carefull!: Some actions have to be done:
->- review the ~/.bashrc: source to the ws and delete the environment variables
->- make executable the c++ and python files
-
-## **2. rUBot_mecanum first control movements**
-First, let's control the rUBot_mecanum movement to perform:
-- movement control using keyboard
-- movement control with specific python script
-- autonomous navigation
-- autonomous navigation following right or left wall
-- Navigation to speciffic POSE
-
 We will create a "rubot_control" package to perform the rUBot_mecanum control movements:
 ```shell
 cd ~/Desktop/rubot_rbpi4_ws/src
@@ -80,22 +19,26 @@ catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msg
 cd ..
 catkin_make
 ```
+>Carefull!: Some actions have to be done:
+>- review the ~/.bashrc: source to the ws and delete the environment variables
+>- make executable the python files
+
 First of all you need to bringup the rubot_mecanum robot.
 
-### **3.1. Bringup rubot_mecanum**
+### **Bringup rubot_mecanum**
 
 The bringup consists to:
 - launch the rUBot node in Arduino-Mega board
 - launch the LIDAR node
 - launch the raspicam node
 
-You will launch first "rubot_hw_bringup.launch" file to setup the rUBot_mecanum.
+You will launch first "rubot_bringup_hw.launch" file to setup the rUBot_mecanum.
 
 ```shell
-roslaunch rubot_control rubot_hw_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 
-### **3.2. Movement control using keyboard**
+### **Movement control using keyboard**
 
 To control the gopigo robot with keyboard, we need to install "teleop_tools" package. Open a new terminal and install the packages:
 ```shell
@@ -105,7 +48,7 @@ sudo apt-get install ros-noetic-teleop-twist-keyboard
 Proceed with:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal and type:
 ```shell
@@ -114,7 +57,7 @@ or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
-### **3.3. Movement control with python script**
+## **Movement control with python script**
 
 From the "rubot_rbpi4_ws" workspace, the src/rubot_control folder has 2 new folders:
 - scrip folder: with the python programs for specific movement control
