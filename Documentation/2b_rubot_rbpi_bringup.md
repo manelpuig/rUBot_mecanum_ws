@@ -393,3 +393,4 @@ roslaunch rubot_control rubot_nav.launch
 - verify experimentally these transient behaviour with the created python file
 
 The final desired transient behaviour will be graphically the following.
+![](./Images/2_odom_pid1.png)
