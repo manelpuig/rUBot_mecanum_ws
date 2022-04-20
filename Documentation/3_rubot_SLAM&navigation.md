@@ -44,7 +44,7 @@ Now you can follow the next steps:
 ### **1. Spawn the robot in our custom made maze**
 We open a new terminal and type:
 ```shell
-roslaunch nexus_slam rubot_world.launch
+roslaunch rubot_slam rubot_world.launch
 ```
 ### **2. Generate the MAP**
 We will start the slam_gmapping node. This node is highly configurable and has lots of parameters you can change in order to improve the mapping performance. (http://wiki.ros.org/gmapping)
@@ -58,7 +58,7 @@ Let's now check some of the most important ones that usually have to be changed:
 
 Open the "gmapping.launch" file and change properly the parameters you consider. Then launch the rubot_slam file:
 ```shell
-roslaunch nexus_slam rubot_slam.launch
+roslaunch rubot_slam rubot_slam.launch
 ```
 Teleoperate the robot to make it cover as much as possible of the surface of the current Gazebo world. 
 
@@ -68,7 +68,7 @@ rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 ```
 Or use the navigation program you have designed to follow the walls for exemple to properly generate the map.
 ```shell
-roslaunch nexus_control node_wall_follower_gm.launch
+roslaunch rubot_control node_wall_follower_gm.launch
 ```
 > Take care to launch only the wall_follower node
 
@@ -147,14 +147,14 @@ https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#tuning-guide
 
 So, basically, we have to do the following:
 
-- Open the nexus robot in Hospital3 world (if you have closed it before)
+- Open the rUBot in Hospital3 world (if you have closed it before)
 ```shell
-roslaunch nexus_slam rubot_world.launch
+roslaunch rubot_slam rubot_world.launch
 ```
 
 - Open Navigation launch file including the map location:
 ```shell
-roslaunch nexus_slam rubot_navigation.launch
+roslaunch rubot_slam rubot_navigation.launch
 ```
 > Take care in launch file to read the correct map file in "maps" folder
 

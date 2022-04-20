@@ -1,6 +1,6 @@
 <launch>
   <!-- Robot model to match with that of Gazebo or the physical robot -->
-  <arg name="model" default="nexus.urdf" />
+  <arg name="model" default="rubot.urdf" />
   <!-- More arguments -->
   <arg name="multi_robot_name" default=""/>
   <arg name="open_rviz" default="true"/>
