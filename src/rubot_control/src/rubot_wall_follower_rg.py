@@ -25,13 +25,35 @@ state_dict_ = {
     3: 'follow corner',
 }
 
+isScanRangesLengthCorrectionFactorCalculated = False
+scanRangesLengthCorrectionFactor = 1
+
+
+
 def clbk_laser(msg):
+    # En la primera ejecucion, calculamos el factor de correcion
+    global isScanRangesLengthCorrectionFactorCalculated
+    global scanRangesLengthCorrectionFactor
+    
+    if not isScanRangesLengthCorrectionFactorCalculated:
+            scanRangesLengthCorrectionFactor = int(len(msg.ranges) / 360)
+            isScanRangesLengthCorrectionFactorCalculated = True
+            
+    bright_min = 60 * scanRangesLengthCorrectionFactor
+    bright_max = 88 * scanRangesLengthCorrectionFactor
+    right_min = 88 * scanRangesLengthCorrectionFactor
+    right_max = 92 * scanRangesLengthCorrectionFactor
+    fright_min = 92 * scanRangesLengthCorrectionFactor
+    fright_max = 120 * scanRangesLengthCorrectionFactor
+    front_min= 120 * scanRangesLengthCorrectionFactor
+    front_max = 240 * scanRangesLengthCorrectionFactor
+            
     global regions_
     regions_ = {
-        'front':  min(min(msg.ranges[660:719]),min(msg.ranges[0:60]), 3),
-        'fright':  min(min(msg.ranges[541:659]), 3),
-        'right':   min(min(msg.ranges[539:540]), 3),
-        'bright':   min(min(msg.ranges[420:538]), 3),
+        'front':  min(min(msg.ranges[front_min:front_max]), 3),
+        'fright':  min(min(msg.ranges[fright_min:fright_max]), 3),
+        'right':   min(min(msg.ranges[right_min:right_max]), 3),
+        'bright':   min(min(msg.ranges[bright_min:bright_max]), 3),
     }
     print ("front distance: "+ str(regions_["front"]))
     print ("front-right distance: "+ str(regions_["fright"]))
@@ -57,7 +79,7 @@ def take_action():
 
     state_description = ''
 
-    d = 0.4
+    d = 0.3
 
     if regions['front'] > d and regions['fright'] > (d+0.6) and regions['bright'] > d:
         state_description = 'case 1 - nothing'
@@ -97,7 +119,7 @@ def find_wall():
 
 def turn_left():
     msg = Twist()
-    msg.angular.z = 0.5
+    msg.angular.z = 0.1
     return msg
 
 
@@ -116,6 +138,8 @@ def follow_corner():
 
 def main():
     global pub_
+    global isScanRangesLengthCorrectionFactorCalculated
+    global scanRangesLengthCorrectionFactor
 
     rospy.init_node('wall_follower')
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
