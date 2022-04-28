@@ -80,20 +80,20 @@ class WallFollower:
                 newRange.append(val) """
         # Obtenemos las mediciones de A y B y las guardamos en variables locales
         """zero angle is on th back --> angle-180 """
-        A = scan.ranges[int(round(self.__unWrapAngle(-90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor]
-        B = scan.ranges[(self.__unWrapAngle(-90)) *
+        A = scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor]
+        B = scan.ranges[(self.__unWrapAngle(90)) *
                         self.__scanRangesLengthCorrectionFactor]
 
         rospy.loginfo_once('Ángulo derecha:\t%d, Ángulo theta:\t%d',
-            (self.__unWrapAngle(-90)) * self.__scanRangesLengthCorrectionFactor,
-            int(round(self.__unWrapAngle(-90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor)
+            (self.__unWrapAngle(90)) * self.__scanRangesLengthCorrectionFactor,
+            int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor)
             
         rospy.loginfo("LIDAR: Delante:\t%.2f, Atrás:\t%.2f, Izquierda:\t%.2f, Derecha:\t%.2f, Theta:\t%.2f",
-            scan.ranges[self.__unWrapAngle(0) * self.__scanRangesLengthCorrectionFactor],
             scan.ranges[self.__unWrapAngle(180) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[self.__unWrapAngle(90) * self.__scanRangesLengthCorrectionFactor],
+            scan.ranges[self.__unWrapAngle(0) * self.__scanRangesLengthCorrectionFactor],
             scan.ranges[self.__unWrapAngle(-90) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta))-0)) * self.__scanRangesLengthCorrectionFactor])
+            scan.ranges[self.__unWrapAngle(90) * self.__scanRangesLengthCorrectionFactor],
+            scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta))) * self.__scanRangesLengthCorrectionFactor)])
 
         # Si el valor leido de A no es NaN ni infinito y da entre 0.1 y 16 m (limites del Lidar),
         # actualizamos la propiedad self.__A con el nuevo valor. wrong readings deliver 0 value in range

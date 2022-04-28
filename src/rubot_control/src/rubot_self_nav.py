@@ -23,6 +23,17 @@ class rUBot:
         rospy.on_shutdown(self.shutdown)
 
         self._r = rospy.Rate(5)
+        
+        # Propiedades secundarias
+
+        # Tenemos operando dos versiones de Lidar que devuelven 360 0 720 puntos.
+        # Para que el codigo sea compatible con cualquiera de los dos, aplicaremos
+        # este factor de correccion en los angulos/indices de scan.ranges.
+        # Se debe de calcular en la primera ejecucion de __callbackLaser(). Esta
+        # variable sirve para asegurar que solo se ejecuta este calculo del
+        # factor de correccion una sola vez.
+        self.__isScanRangesLengthCorrectionFactorCalculated = False
+        self.__scanRangesLengthCorrectionFactor = 1
 
     def start(self):
 
@@ -31,11 +42,17 @@ class rUBot:
             self._r.sleep()
 
     def callbackLaser(self, scan):
-
+        """Funcion ejecutada cada vez que se recibe un mensaje en /scan."""
+        # En la primera ejecucion, calculamos el factor de correcion
+        if not self.__isScanRangesLengthCorrectionFactorCalculated:
+            self.__scanRangesLengthCorrectionFactor = int(
+                len(scan.ranges) / 360)
+            self.__isScanRangesLengthCorrectionFactorCalculated = True
+            
         closestDistance, elementIndex = min(
             (val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max
         )
-        angleClosestDistance = self.__wrapAngle(elementIndex / 2) # RPLidar zero angle in backside
+        angleClosestDistance = self.__wrapAngle((elementIndex / self.__scanRangesLengthCorrectionFactor) - 180) # RPLidar zero angle in backside
 
         rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",
                       closestDistance, angleClosestDistance)

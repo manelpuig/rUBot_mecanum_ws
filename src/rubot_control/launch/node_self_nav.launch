@@ -1,11 +1,11 @@
 <launch>
   <!-- Navigation Program   -->
-    <arg name="distance_laser" default="0.3" />
+    <arg name="distance_laser" default="0.4" />
     <arg name="speed_factor" default="0.1" />
     <arg name="forward_speed" default="2" />
     <arg name="backward_speed" default="-2" />
     <arg name="rotation_speed" default="15" />
-  <node name="rubot_nav" pkg="rubot_control" type="rubot_self_nav_hw.py" output="screen" >
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_self_nav.py" output="screen" >
         <param name="distance_laser" value="$(arg distance_laser)"/>
         <param name="speed_factor" value="$(arg speed_factor)"/>
         <param name="forward_speed" value="$(arg forward_speed)"/>
