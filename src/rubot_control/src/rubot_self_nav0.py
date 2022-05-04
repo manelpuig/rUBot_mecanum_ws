@@ -26,7 +26,7 @@ class rUBot:
         
         # Propiedades secundarias
 
-        # Tenemos operando dos versiones de Lidar que devuelven 360 0 720 0 1080 puntos.
+        # Tenemos operando dos versiones de Lidar que devuelven 360 0 720 puntos.
         # Para que el codigo sea compatible con cualquiera de los dos, aplicaremos
         # este factor de correccion en los angulos/indices de scan.ranges.
         # Se debe de calcular en la primera ejecucion de __callbackLaser(). Esta
@@ -45,27 +45,19 @@ class rUBot:
         """Funcion ejecutada cada vez que se recibe un mensaje en /scan."""
         # En la primera ejecucion, calculamos el factor de correcion
         if not self.__isScanRangesLengthCorrectionFactorCalculated:
-            self.__scanRangesLengthCorrectionFactor = int(len(scan.ranges) / 360)
+            self.__scanRangesLengthCorrectionFactor = int(
+                len(scan.ranges) / 360)
             self.__isScanRangesLengthCorrectionFactorCalculated = True
-            rospy.loginfo("Scan Ranges correction %5.2f we have,%5.2f points.", self.__scanRangesLengthCorrectionFactor, len(scan.ranges))
-        
-        
-        closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max)
-        angleClosestDistance = (elementIndex / self.__scanRangesLengthCorrectionFactor)  
-        rospy.loginfo("Degree div factor %5.2f ",(elementIndex / self.__scanRangesLengthCorrectionFactor))
+            
+        closestDistance, elementIndex = min(
+            (val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max
+        )
+        angleClosestDistance = self.__wrapAngle((elementIndex / self.__scanRangesLengthCorrectionFactor) - 180) # RPLidar zero angle in backside
 
-        angleClosestDistance= self.__wrapAngle(angleClosestDistance)
-        rospy.loginfo("Degree wraped %5.2f ",(angleClosestDistance))
-        
-        if angleClosestDistance > 0:
-            angleClosestDistance=(angleClosestDistance-180)
-        else:
-            angleClosestDistance=(angleClosestDistance+180)
-			
-        rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",closestDistance, angleClosestDistance)
-                      
+        rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",
+                      closestDistance, angleClosestDistance)
 
-        if closestDistance < self._distanceLaser and -80 < angleClosestDistance < 80:
+        if closestDistance < self._distanceLaser and -90 < angleClosestDistance < 90:
             self._msg.linear.x = self._backwardSpeed * self._speedFactor
             self._msg.angular.z = -self.__sign(angleClosestDistance) * self._rotationSpeed * self._speedFactor
             rospy.logwarn("Within laser distance threshold. Rotating the robot (z=%4.1f)...", self._msg.angular.z)
@@ -89,15 +81,12 @@ class rUBot:
 
     def shutdown(self):
         self._msg.linear.x = 0
-        self._msg.linear.y = 0
         self._msg.angular.z = 0
         self._cmdVel.publish(self._msg)
-        rospy.loginfo("Stop RVIZ")
 
 if __name__ == '__main__':
     try:
         rUBot1 = rUBot()
         rUBot1.start()
         rospy.spin()
-        rUBot1.shutdown()
-    except rospy.ROSInterruptException: rUBot1.shutdown()#pass
+    except rospy.ROSInterruptException: pass
