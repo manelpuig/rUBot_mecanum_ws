@@ -285,7 +285,7 @@ We have changed the camera resolution to 640x480. We have to upload the files:
 - camera640x480.yaml in raspicam_node/camera_info
 To launch the raspicam sensor, execute:
 ```shell
-roslaunch raspicam_node camera640x480.launch enable_raw:=true camera_frame_id:="laser_frame"
+roslaunch raspicam_node camera640x480.launch enable_raw:=true camera_frame_id:="camera"
 ```
 
 ## **Final bringup launch file**
@@ -315,7 +315,7 @@ We will create a "rubot_bringup.launch" file to setup the rUBot_mecanum.
   <!-- launch raspicam   -->
     <include file="$(find raspicam_node)/launch/camera640x480.launch">
     <arg name="enable_raw" value="true"/>
-    <arg name="camera_frame_id" value="base_scan"/>
+    <arg name="camera_frame_id" value="camera"/>
     </include>
 </launch>
 ```
@@ -391,9 +391,9 @@ rostopic pub /rest_odom
 When you apply a wheel velocity value, you will see that the velocity value increases progressivelly and stablishes to a final desired value after a period of time. The same occurs when we stop the wheel. This is due to the closed-loop PID-based wheel velocity control system designed.
 
 We suggest you:
-- Use the "rubot_nav.py" file to test the velocity and odometry evolution with time for speciffic PID parameters
+- Use the "rubot_PIDtest.py" file to test the velocity and odometry evolution with time for speciffic PID parameters
 ```shell
-roslaunch rubot_control rubot_nav.launch
+roslaunch rubot_control node_PIDtest.launch
 ```
   > Use the rqt_plot tool to view the vx and x evolution with time
 - define the maximum overshoot and setling time

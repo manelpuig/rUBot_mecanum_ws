@@ -78,19 +78,18 @@ The nodes and topics structure corresponds to the following picture:
 
 We have created a first navigation python files in "src" folder:
 
-- rubot_nav.py: to define a rubot movement with linear and angular speed to reach a maximum x-distance
-- rubot_nav1.py: to define the movement with vx, vy and w to reach a maximum distance in x or y
+- rubot_nav.py: to define the movement with vx, vy and w to reach a maximum distance in x or y
 
-A "rubot_nav.launch" and "rubot_nav1.launch" files have been created to launch the node and python file created above.
+A "node_nav.launch" file is created to launch the node and python file created above.
 
 To properly perform a especific movement control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the specific movement control.
 ```shell
-roslaunch rubot_control rubot_nav.launch
+roslaunch rubot_control node_nav.launch
 ```
 
 ### **b) LIDAR test**
@@ -100,11 +99,11 @@ In order to navigate autonomously and avoid obstacles, we will use a specific rp
 To properly perform a especific movement control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the rpLIDAR test. We have created specific python file and launch file for this test control
 ```shell
-roslaunch rubot_control rubot_lidar_test.launch
+roslaunch rubot_control node_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
@@ -117,11 +116,11 @@ This performance is defined in "rubot_self_nav.py"
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the self-navigation. We have created specific python file and launch file for this navigation control
 ```shell
-roslaunch rubot_control rubot_self_nav.launch
+roslaunch rubot_control node_self_nav.launch
 ```
 The launch file contains some parameters you can modify:
 ```xml
@@ -143,7 +142,7 @@ The launch file contains some parameters you can modify:
 ```
 In order to see the rubot with the topics information we will use rviz. Open rviz in a new terminal.
 
-In rviz, select the fixed frame to "base_scan", and add Camera and LaserScan with the corresponding topics names.
+In rviz, select the fixed frame to "odom", and add Camera and LaserScan with the corresponding topics names.
 
 You can then save the config file as laserscan.rviz name and use it in the launch file
 

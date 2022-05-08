@@ -1,0 +1,11 @@
+<launch>
+ <!-- Navigation Program   -->
+    <arg name="v" default="0.2"/>
+    <arg name="w" default="0"/>
+    <arg name="d" default="0.8"/>
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_PIDtest.py" output="screen" >
+    <param name="v" value="$(arg v)"/>
+    <param name="w" value="$(arg w)"/>
+    <param name="d" value="$(arg d)"/>
+  </node>
+</launch>
