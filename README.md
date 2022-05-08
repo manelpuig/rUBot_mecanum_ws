@@ -1,5 +1,5 @@
 # rubot_mecanum
-This workspace is organized in:
+This rubot_mecanum workspace is organized in:
 | Document | Contents   |
 |------|------|
 |   rUBot Model&Control  | Simulated model and different control actions|
