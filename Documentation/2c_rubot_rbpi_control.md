@@ -72,7 +72,7 @@ Diferent navigation programs are created:
 - go to POSE: attend a specific position and orientation
 
 The nodes and topics structure corresponds to the following picture:
-![Getting Started](./Images/2_rubot_nodes.png)
+![Getting Started](./Images/2_nodes_topics.png)
 
 ### **a) Navigation control**
 

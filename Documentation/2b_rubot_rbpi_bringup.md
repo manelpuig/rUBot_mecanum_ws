@@ -5,7 +5,7 @@ The hardware bringup file will contain:
 - launch the raspicam node
 
 Graphically, the final node structure will be:
-![Getting Started](./Images/2_rubot_nodes.png)
+![Getting Started](./Images/2_nodes_topics.png)
 
 The bringup launch file will prepare the rUBot to comunicate with /rUBot_nav node for specific control actions.
 
