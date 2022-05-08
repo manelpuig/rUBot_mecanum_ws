@@ -345,8 +345,16 @@ To view the image is better to use:
 rqt_image_view
 ```
 
-## **2. Lidar ranges**
-In function of lidar module, there are 720 or more laser beams. 
+## **2. Lidar reference frame and ranges**
+the LIDAR reference-frame is by default "base_scan". When using rplidar mounted back-side, the "base_scan" frame is looking to the back-side. Then you see the lidar red-points in RVIZ 180deg rotated. You have to change the reference-frame to "odom" frame to see the obstacles in the right orientation. You have to open the "rplidar.launch" file and change the line:
+```xml
+<param name="frame_id" type="string" value="base_scan"/>
+```
+to the param value:
+```xml
+<param name="frame_id" type="string" value="odom"/>
+```
+In function of lidar module, there are 720 or more laser beams.
 We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
 ```shell
 roslaunch rubot_control rubot_lidar_test.launch
