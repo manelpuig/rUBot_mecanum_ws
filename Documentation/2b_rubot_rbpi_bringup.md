@@ -278,7 +278,7 @@ To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi and execut
 ```shell
 roslaunch rplidar_ros rplidar.launch
 ```
-> Carefull!: You need to change the frame name from laser to base_scan in rplidar_ros/launch/rplidar.launch
+
 ## **3. Launch raspicam node**
 We have changed the camera resolution to 640x480. We have to upload the files:
 - camera640x480.launch in raspicam_node/launch
