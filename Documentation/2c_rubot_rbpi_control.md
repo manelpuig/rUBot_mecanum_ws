@@ -89,7 +89,7 @@ roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the specific movement control.
 ```shell
-roslaunch rubot_control node_nav.launch
+roslaunch rubot_control rubot_nav.launch
 ```
 
 ### **b) LIDAR test**
@@ -103,7 +103,7 @@ roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the rpLIDAR test. We have created specific python file and launch file for this test control
 ```shell
-roslaunch rubot_control node_lidar_test.launch
+roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
@@ -120,7 +120,7 @@ roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the self-navigation. We have created specific python file and launch file for this navigation control
 ```shell
-roslaunch rubot_control node_self_nav.launch
+roslaunch rubot_control rubot_self_nav.launch
 ```
 The launch file contains some parameters you can modify:
 ```xml
@@ -150,7 +150,7 @@ You can then save the config file as laserscan.rviz name and use it in the launc
 
 A launch file is created to integrate all the needed roslaunch parameters but you can change the defauld values with this syntax:
 ```shell
-roslaunch rubot_control rubot_self_nav.launch distance_laser:=0.2 speed_factor:=1.3
+roslaunch rubot_control rubot_self_nav.launch distance_laser:=0.5 speed_factor:=0.5
 ```
 ### **D) Wall Follower**
 
@@ -172,7 +172,7 @@ https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20co
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the wall-follower. We have created specific python file and launch file for this navigation control
 ```shell
@@ -215,7 +215,7 @@ Take into account that:
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the wall-follower. We have created specific python file and launch file for this navigation control
 ```shell
@@ -226,7 +226,7 @@ The launch file has no parameters to modify:
 ```xml
 <launch>
   <!-- launch follow wall   -->
-  <node name="wall_follow" pkg="gopigo_control" type="rubot_wall_follower_rg.py" output="screen" >
+  <node name="wall_follow" pkg="rubot_control" type="rubot_wall_follower_rg.py" output="screen" >
   </node>
 </launch>
 ```
@@ -240,7 +240,7 @@ The objective is to program the robot to reach a speciffic target POSE defining:
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_control rubot_bringup_hw.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the go 2 pose control. We have created specific python file and launch file for this navigation control
 ```shell
