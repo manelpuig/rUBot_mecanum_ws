@@ -1,6 +1,6 @@
 <launch>
     <arg name="model" default="rubot_rp.urdf" />
-  <!-- spawn nexus -->
+  <!-- spawn rubot_rp -->
     <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
   <!-- send joint values -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -15,7 +15,7 @@
       <param name="port" type="string" value="/dev/ttyACM0"/>
       <param name="baud" type="int" value="57600"/>
     </node>
-  <!-- launch ydlidar   -->
+  <!-- launch rplidar   -->
     <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
   <!-- launch raspicam   -->
     <include file="$(find raspicam_node)/launch/camera640x480.launch">
