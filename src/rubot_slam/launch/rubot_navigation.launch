@@ -1,6 +1,6 @@
 <launch>
   <!-- Robot model to match with that of Gazebo or the physical robot -->
-  <arg name="model" default="rubot_rp.urdf" />
+  <arg name="model" default="rubot.urdf" />
   <!-- More arguments -->
   <arg name="multi_robot_name" default=""/>
   <arg name="map_file" default="$(find rubot_slam)/maps/Hospital3_map.yaml"/>
