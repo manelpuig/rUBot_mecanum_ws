@@ -20,6 +20,7 @@ This tobot prototype is based on:
 - Battery 12V&5V (3Ah):
   - https://www.amazon.es/gp/product/B072HR211P/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1
 - Battery 12V (6,7 and 20Ah): 
+  - https://www.amazon.es/gp/product/6040388099/ref=ewc_pr_img_1?smid=A17M1OH9UAKGE7&psc=1
   - https://www.amazon.es/gp/product/B07YSCXGNF/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1
   - https://www.amazon.es/THENAGD-Recargable-Interruptor-Encendido-DC-122000/dp/B091F465RP/ref=sr_1_48?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3OCUQZILUVPAJ&keywords=bateria%2B5v%2B12v%2B2a%2Brecargable&qid=1642669235&sprefix=bateria%2B5v%2B12v%2B2a%2Brecargable%2Caps%2C65&sr=8-48&th=1
 - Battery 12V/5V
