@@ -307,7 +307,7 @@ Follow instructions:
   ```
   To see the needed properties to create udev rules, type:
   ```shell
-  lusb
+  lsusb
   ```
   You will see:
   ```shell

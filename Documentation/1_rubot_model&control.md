@@ -61,8 +61,8 @@ source ~/Desktop/rubot_mecanum_ws/devel/setup.bash
 To create our robot model, we use URDF files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
 
 We have created 2 folders for model description:
-- URDF: folder where different URDF models are located
-- meshes: folder where 3D body models in stl format are located.
+- URDF: folder where different URDF models are located. In our case nexus.urdf and rubot.urdf
+- meshes: folder where 3D body models in stl format are located. We will have nexus and rubot folders.
 
 You can reduce the amount of code in a URDF file using Xacro package. With this package you can use constants, simple math and macros to create your robot model easier and compact.
 
@@ -294,7 +294,7 @@ A driver is needed to see the 720 laser distance points:
 > or use rviz
 
 It is important to note that:
-- the number of points of real RPLidar is 720 (one each half degree)
+- the number of points of real RPLidar is usually 720 (one each half degree)
 - the number of points of simulated Lidar has to be adapted to the same 720 (by default is 360 (one each degree))
 ### **Mecanum drive actuator plugin**
 A driver is needed to describe the kinematics.This kinematics is described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
@@ -400,18 +400,90 @@ roslaunch rubot_mecanum_description display.launch
 ![](./Images/1_rubot_frames.png)
 
 You need to shift the Image and lidar frames in urdf file according to the Freecad position values:
+- In case of base_scan the center is located in x=130mm y=75mm
+```xml
+<!-- base_footprint reference frame without inertia is needed -->
+  <link name="base_footprint"/>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+<!-- base_link -->
+  <joint name="base_link_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.13 -0.075 0"/>
+      <geometry>
+  ...
+  </link>
+```
+- In the case of upper right wheel:
+  - it link is shifted (201, -31,-28) 
+  - Its joint has to be shifted respect the base_link: (73mm,-106mm ,-28mm)
+![](./Images/1_free_upper_right.png)
+
+```xml
+<!-- upper_right_wheel -->
+  <joint name="upper_right_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0.073 -0.106 -0.028"/>
+    <parent link="base_link"/>
+    <child link="upper_right_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="upper_right_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.201 0.031 0.028"/>
+      <geometry>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey"/>
+    </visual>
+    <collision>
+  ...
+  </link>
+```
+- In the case of lower right wheel:
+  - it link is shifted (46, -31,-28) 
+  - Its joint has to be shifted respect the base_link: (-82mm,-106mm ,-28mm)
+![](./Images/1_free_lower_right.png)
+
+```xml
+<!-- upper_right_wheel -->
+  <joint name="upper_right_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="-0.082 -0.106 -0.028"/>
+    <parent link="base_link"/>
+    <child link="upper_right_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="upper_right_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.046 0.031 0.028"/>
+      <geometry>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey"/>
+    </visual>
+    <collision>
+  ...
+  </link>
+```
+- Similar shifts have to be applied to the left-side wheels
+
 - In the case of Camera frame you shift the joint with the values you obtain in freecad and the link with the same ones in negative to have the final frame in its camera gravity center.
 ```xml
 <!-- 2D Camera as a mesh of actual PiCamera -->
   <joint name="joint_camera" type="fixed">
-    <origin rpy="0 0 0" xyz="0.236 0.076 0.072"/>
+    <origin rpy="0 0 0" xyz="0.236 0.0 0.072"/>
     <parent link="base_link"/>
     <child link="camera"/>
     <axis xyz="0 1 0"/>
   </joint>
   <link name="camera">
     <visual>
-      <origin rpy="0 0 0" xyz="-0.236 -0.076 -0.072"/>
+      <origin rpy="0 0 0" xyz="-0.236 -0.075 -0.072"/>
       <geometry>
         <mesh filename="package://rubot_mecanum_description/meshes/rubot/picam.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -423,7 +495,7 @@ You need to shift the Image and lidar frames in urdf file according to the Freec
   <!-- LIDAR base_scan -->
   <link name="base_scan">
     <visual>
-      <origin rpy="0 0 3.14" xyz="0.111 0.076 -0.124"/>
+      <origin rpy="0 0 0" xyz="-0.111 -0.075 -0.124"/>
       <geometry>
         <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -443,7 +515,7 @@ You need to shift the Image and lidar frames in urdf file according to the Freec
   </link>
   <joint name="scan_joint" type="fixed">
     <axis xyz="0 0 1"/>
-    <origin rpy="0 0 3.14" xyz="0.111 0.076 0.124"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.124"/>
     <parent link="base_link"/>
     <child link="base_scan"/>
   </joint>
@@ -453,7 +525,7 @@ To verify the final frame orientations:
 roslaunch rubot_mecanum_description rubot_world.launch
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/1_rubot_rp_urdf.png)
+![](./Images/1_rviz_rubot.png)
 > To see the frames you have to add TF in rviz
 
 ## **2. rUBot mecanum spawn in world environment**

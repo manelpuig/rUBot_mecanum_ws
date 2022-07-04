@@ -1,0 +1,13 @@
+<launch>
+ <!-- Navigation Program   -->
+    <arg name="v" default="0.2"/>
+    <arg name="w" default="0.4"/>
+    <arg name="td" default="2"/>
+    <arg name="path" default="Square"/>
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_path_nav.py" output="screen" >
+    <param name="v" value="$(arg v)"/>
+    <param name="w" value="$(arg w)"/>
+    <param name="td" value="$(arg td)"/>
+    <param name="path" value="$(arg path)"/>
+  </node>
+</launch>
