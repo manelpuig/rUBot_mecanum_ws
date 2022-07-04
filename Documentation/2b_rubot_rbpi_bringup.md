@@ -246,7 +246,7 @@ void loop(){
   #endif
 }
 ```
-> Important modification!:
+> Increase the /odom publisher buffer size:
 > - We need to increase the buffer size of /odom publisher because the Arduino MEGA Buffer size for messages is 512bits (not enough for Odometry messages). To perform this modification, in ROS.h file from the Arduino library you have to add (at the end in else case section):
   ```python
   #else
@@ -257,7 +257,30 @@ void loop(){
   #endif  
   ```
 
->- When you want to test the program in ROS, you need to close the arduino IDE to make available the USB connection
+> Increase the communication baudrate:
+> - The default baudrate to communicate with Arduino board is 57600. In some cases is necessary to increase it. To increase this baudrate you need in ArduinoHardware.h file from the Arduino library to change this default baudrate:
+```python
+class ArduinoHardware {
+  public:
+    //ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
+    ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
+      iostream = io;
+      baud_ = baud;
+    }
+    ArduinoHardware()
+    {
+#if defined(USBCON) and !(defined(USE_USBCON))
+      /* Leonardo support */
+      iostream = &Serial1;
+#elif defined(USE_TEENSY_HW_SERIAL) or defined(USE_STM32_HW_SERIAL)
+      iostream = &Serial1;
+#else
+      iostream = &Serial;
+#endif
+      //baud_ = 57600;
+      baud_ = 115200;
+    }
+```
 
 To test your rubot_mecanum arduino program you need to:
 - open arduino IDE
@@ -268,7 +291,7 @@ roscore
 rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
-> /dev/arduino is the port to which the Arduino is connected, change it in case yours is different
+> /dev/arduino is the port to which the Arduino is connected, change it in case yours is different (usually /dev/ttyACM0)
 
 > The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]', you should only change vx, vy and wz values as the others do not apply. As it is an holonomic robot, if all the values are 0.0 except for wz (angular velocity in z axis) you will obtain a movement in which the robot spins on itself.
 

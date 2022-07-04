@@ -183,7 +183,7 @@
   <!-- LIDAR base_scan -->
   <link name="base_scan">
     <visual>
-      <origin rpy="0 0 3.14" xyz="0.111 0.076 -0.124"/>
+      <origin rpy="0 0 3.14" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -257,8 +257,8 @@
   <!-- Laser Distance Sensor YDLIDAR X4 controller-->
   <gazebo reference="base_scan">
     <sensor name="lds_lfcd_sensor" type="ray">
-      <pose>0.111 0.076 0.124 0 0 0</pose>
-      <visualize>true</visualize>
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
       <update_rate>5</update_rate>
       <ray>
         <scan>

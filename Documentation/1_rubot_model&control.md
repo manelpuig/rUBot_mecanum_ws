@@ -767,7 +767,7 @@ We will create now a first navigation python files in "src" folder:
 
 Specific launch file have been created to launch the node and python file created above:
 ```shell
-roslaunch rubot_control node_nav.launch
+roslaunch rubot_control rubot_nav.launch
 ```
 
 #### **b) LIDAR test**
@@ -796,7 +796,7 @@ rospy.spin()
 ```
 To test the LIDAR we have generated a launch file
 ```shell
-roslaunch rubot_control node_lidar_test.launch
+roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 ![](./Images/1_nexus_lidar_test.png)
@@ -805,9 +805,9 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 #### **c) Autonomous navigation with obstacle avoidance**
 We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
 
-We have to launch the "node_self_nav.launch" file in the "rubot_control" package.
+We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
 ```shell
-roslaunch rubot_control node_self_nav.launch
+roslaunch rubot_control rubot_self_nav.launch
 ```
 >Careful:
 - we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
@@ -855,7 +855,7 @@ The algorithm is based on:
 
 A rubot_wall_follower_gm.launch is generated to test the node within a specified world
 ```shell
-roslaunch rubot_control node_wall_follower_gm.launch
+roslaunch rubot_control rubot_wall_follower_gm.launch
 ```
 
 You can see a video for the Maze wall follower process in: 
@@ -874,7 +874,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 ![](./Images/1_lidar_type.png)
 
 ```shell
-roslaunch rubot_control node_wall_follower_rg.launch
+roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 ![](./Images/1_nexus_wall_follower_rg.png)
 
@@ -889,6 +889,6 @@ Modify the python script developed in turlesim control package according to the 
 
 For validation type:
 ```shell
-roslaunch rubot_control node_go2pose.launch
+roslaunch rubot_control rubot_go2pose.launch
 ```
 ![](./Images/1_nexus_go2pose.png)

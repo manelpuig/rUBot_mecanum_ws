@@ -357,7 +357,7 @@ Follow instructions:
   ```
   To see the needed properties to create udev rules, type:
   ```shell
-  lusb
+  lsusb
   ```
   You will see your rpLIDAR device properties:
   ```shell
@@ -386,6 +386,7 @@ Follow instructions:
   ```
 
 You have now your rUBot_mecanum ready to work-with!!
+
 
 ### **Install joy control**
 

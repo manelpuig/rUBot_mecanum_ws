@@ -1,4 +1,0 @@
-<launch>
-  <node name="wall_follower" pkg="rubot_control" type="rubot_wall_follower_rg.py" output="screen" >
-  </node>
-</launch>
