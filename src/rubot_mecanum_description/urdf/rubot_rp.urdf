@@ -47,7 +47,7 @@
   </link>
 <!-- upper_left_wheel -->
   <joint name="upper_left_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0.07 0.1 0"/>
     <parent link="base_link"/>
     <child link="upper_left_wheel"/>
     <axis xyz="0 1 0"/>
@@ -56,14 +56,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_leftFront.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_leftFront.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -74,7 +74,7 @@
   </link>
 <!-- lower_left_wheel -->
   <joint name="lower_left_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="-0.085 0.1 0"/>
     <parent link="base_link"/>
     <child link="lower_left_wheel"/>
     <axis xyz="0 1 0"/>
@@ -83,14 +83,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_leftBack.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_left_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_leftBack.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_left_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -101,7 +101,7 @@
   </link>
 <!-- upper_right_wheel -->
   <joint name="upper_right_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0.07 -0.1 0"/>
     <parent link="base_link"/>
     <child link="upper_right_wheel"/>
     <axis xyz="0 1 0"/>
@@ -110,14 +110,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_right_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_right_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -128,7 +128,7 @@
   </link>
 <!-- lower_right_wheel -->
   <joint name="lower_right_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="-0.085 -0.1 0"/>
     <parent link="base_link"/>
     <child link="lower_right_wheel"/>
     <axis xyz="0 1 0"/>
@@ -137,14 +137,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightBack.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_right_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightBack.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_right_wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -155,16 +155,16 @@
   </link> -->
 <!-- 2D Camera as a mesh of actual PiCamera -->
   <joint name="joint_camera" type="fixed">
-    <origin rpy="0 0 0" xyz="0.236 0.076 0.072"/>
+    <origin rpy="0 0 0" xyz="0.120 0.0 0.09"/>
     <parent link="base_link"/>
     <child link="camera"/>
     <axis xyz="0 1 0"/>
   </joint>
   <link name="camera">
     <visual>
-      <origin rpy="0 0 0" xyz="-0.236 -0.076 -0.072"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/picam.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/piCamera.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="black"/>
     </visual>
@@ -176,16 +176,16 @@
     </collision>
     <inertial>
       <origin rpy="0 1.570795 0" xyz="0 0 0"/>
-      <mass value="1e-3"/>
+      <mass value="1"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
     </inertial>
   </link>
   <!-- LIDAR base_scan -->
   <link name="base_scan">
     <visual>
-      <origin rpy="0 0 3.14" xyz="0 0 0"/>
+      <origin rpy="0 0 3.14" xyz="0 0 0.0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/Lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="black"/>
     </visual>
@@ -203,7 +203,7 @@
   </link>
   <joint name="scan_joint" type="fixed">
     <axis xyz="0 0 1"/>
-    <origin rpy="0 0 3.14" xyz="0.111 0.076 0.124"/>
+    <origin rpy="0 0 3.14" xyz="0 0 0.15"/>
     <parent link="base_link"/>
     <child link="base_scan"/>
   </joint>
@@ -294,6 +294,7 @@
 <!-- Gazebo colors have to be specified here with predefined Gazebo colors -->
   <gazebo reference="base_footprint">
     <material>Gazebo/Yellow</material>
+    <gravity>true</gravity>
   </gazebo>
   <gazebo reference="base_link">
     <material>Gazebo/Yellow</material>

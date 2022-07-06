@@ -1,0 +1,29 @@
+<launch>
+  <arg name="lidar_model" default="yd"/>
+  <arg name="model" default="gopigo3" />
+  <arg name="open_rviz" default="true"/>
+
+  <param if="$(eval lidar_model=='yd')"
+    name="robot_description"
+    textfile="$(find gopigo3_description)/urdf/$(arg model).urdf" />
+
+  <param if="$(eval lidar_model=='rp')"
+    name="robot_description"
+    textfile="$(find gopigo3_description)/urdf/$(arg model)rp.urdf" />
+
+
+  <node if="$(eval lidar_model=='yd')" pkg="tf" type="static_transform_publisher" name="base_link_to_base_scan"
+        args="-0.03 0.01 0.15 3.1416  0.0 0.0   /base_link /base_scan 40" /> 
+
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <include file="$(find gopigo3_slam)/launch/gmapping.launch"/>
+
+  <node if="$(arg open_rviz)" pkg="rviz" type="rviz" name="rviz" required="true"
+    args="-d $(find gopigo3_slam)/rviz/gmapping.rviz"/>
+</launch>
