@@ -10,7 +10,7 @@ from rgb_hsv import BGR_HSV
 
 
 class LineFollower(object):
-    def __init__(self, rgb_to_track , colour_error = 1.0, colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
+    def __init__(self, rgb_to_track, colour_error = 1.0, colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
         #colour_error = 10.0
 
         self._colour_cal = colour_cal
