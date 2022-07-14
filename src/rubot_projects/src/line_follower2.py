@@ -10,7 +10,7 @@ from rgb_hsv import BGR_HSV
 
 
 class LineFollower(object):
-    def __init__(self, rgb_to_track, colour_error = 1.0,colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
+    def __init__(self, rgb_to_track , colour_error = 1.0, colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
         #colour_error = 10.0
 
         self._colour_cal = colour_cal
@@ -67,15 +67,15 @@ class LineFollower(object):
                 cv2.imshow("crop image", crop_img)
 
                 # Convert from RGB to HSV
-                hsv = cv2.cvtColor(crop_img, cv2.COLOR_RGB2HSV)
-                cv2.imshow("HSV image", hsv)
-                print("hsv: "+str(self.hsv))
+                hsv_img = cv2.cvtColor(crop_img, cv2.COLOR_RGB2HSV)
+                cv2.imshow("HSV image", hsv_img)
+                print("hsv yellow: "+str(self.hsv))
 
-                lower_color = np.array([28,255,255], dtype=np.uint8)
-                upper_color = np.array([33,255,255], dtype=np.uint8)
+                lower_color = np.array([27,100,20])#, dtype=np.uint8)
+                upper_color = np.array([33,255,255])#, dtype=np.uint8)
 
                 # Threshold the HSV image to get only yellow colors
-                mask = cv2.inRange(hsv, lower_color, upper_color)
+                mask = cv2.inRange(hsv_img, lower_color, upper_color)
                 cv2.imshow("mask image", mask)
 
                 # Bitwise-AND mask and original image
@@ -237,19 +237,19 @@ if __name__ == '__main__':
     rospy.loginfo(str(len(sys.argv)))
     rospy.loginfo(str(sys.argv))
 
-    if len(sys.argv) > 5:
-        red_value = int(float(sys.argv[1]))
-        green_value = int(float(sys.argv[2]))
-        blue_value = int(float(sys.argv[3]))
-        colour_error_value = float(sys.argv[4])
-        mode_value = sys.argv[5]
+#    if len(sys.argv) > 5:
+    red_value = int(float(sys.argv[1]))
+    green_value = int(float(sys.argv[2]))
+    blue_value = int(float(sys.argv[3]))
+    colour_error_value = float(sys.argv[4])
+    mode_value = sys.argv[5]
 
-        is_colour_cal = mode_value == "colour_cal"
+    is_colour_cal = mode_value == "colour_cal"
 
-        #rgb_to_track = [255,255,255]
-        rgb_to_track = [red_value, green_value, blue_value]
-        print(rgb_to_track)
-        robot_mover = LineFollower(rgb_to_track=rgb_to_track,
-                                   colour_error= colour_error_value,
-                                   colour_cal=is_colour_cal)
-        robot_mover.loop()
+	#rgb_to_track = [255,255,255]
+    rgb_to_track = [red_value, green_value, blue_value]
+    print("RGB to track: " + str(rgb_to_track))
+    robot_mover = LineFollower(rgb_to_track=rgb_to_track,
+				   colour_error= colour_error_value,
+				   colour_cal=is_colour_cal)
+    robot_mover.loop()

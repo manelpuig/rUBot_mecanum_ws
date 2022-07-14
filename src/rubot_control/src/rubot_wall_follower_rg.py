@@ -27,13 +27,14 @@ state_dict_ = {
 
 isScanRangesLengthCorrectionFactorCalculated = False
 scanRangesLengthCorrectionFactor = 1
-
+angleClosestDistance = 0
 
 
 def clbk_laser(msg):
     # En la primera ejecucion, calculamos el factor de correcion
     global isScanRangesLengthCorrectionFactorCalculated
     global scanRangesLengthCorrectionFactor
+    global angleClosestDistance
     
     if not isScanRangesLengthCorrectionFactorCalculated:
             scanRangesLengthCorrectionFactor = int(len(msg.ranges) / 360)
@@ -47,6 +48,9 @@ def clbk_laser(msg):
     fright_max = 120 * scanRangesLengthCorrectionFactor
     front_min= 120 * scanRangesLengthCorrectionFactor
     front_max = 240 * scanRangesLengthCorrectionFactor
+    
+    closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(msg.ranges) if msg.range_min < val < msg.range_max)
+    angleClosestDistance = (elementIndex / scanRangesLengthCorrectionFactor)
             
     global regions_
     regions_ = {
@@ -119,21 +123,23 @@ def find_wall():
 
 def turn_left():
     msg = Twist()
-    msg.angular.z = 0.2
+    msg.angular.z = 0.05
     return msg
 
 
 def follow_the_wall():
     global regions_
+    global angleClosestDistance
     msg = Twist()
     msg.linear.x = 0.2
-    msg.angular.z = 0.05
+    msg.angular.z = 0.01 * (angleClosestDistance -90)
+    print ("angle minim: " + str(angleClosestDistance))
     return msg
 
 def follow_corner():
     msg = Twist()
     msg.linear.x = 0.1
-    msg.angular.z = -1
+    msg.angular.z = -0.7
     return msg
 
 def main():
