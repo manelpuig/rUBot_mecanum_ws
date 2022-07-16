@@ -34,7 +34,7 @@
       <material name="yellow"/>
     </visual>
     <collision>
-      <origin xyz="0.1 0.1 0.1"/>
+      <origin xyz="0 0 0"/>
       <geometry>
         <box size="0.1 0.1 0.35"/>
       </geometry>
@@ -270,7 +270,7 @@
           </horizontal>
         </scan>
         <range>
-          <min>0.22</min>
+          <min>0.12</min>
           <max>10</max>
           <resolution>0.015</resolution>
         </range>
