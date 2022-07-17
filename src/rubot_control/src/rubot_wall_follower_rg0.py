@@ -18,10 +18,9 @@ regions_ = {
 state_ = 0
 state_dict_ = {
     0: 'find the wall',
-    1: 'front wall',
-    2: 'fright wall',
-    3: 'follow wall',
-    4: 'bright corner',
+    1: 'turn left',
+    2: 'follow the wall',
+    3: 'follow corner',
 }
 
 isScanRangesLengthCorrectionFactorCalculated = False
@@ -40,13 +39,13 @@ def clbk_laser(msg):
             isScanRangesLengthCorrectionFactorCalculated = True
             
     bright_min = 60 * scanRangesLengthCorrectionFactor
-    bright_max = 80 * scanRangesLengthCorrectionFactor
-    right_min = 80 * scanRangesLengthCorrectionFactor
-    right_max = 120 * scanRangesLengthCorrectionFactor
-    fright_min = 120 * scanRangesLengthCorrectionFactor
-    fright_max = 150 * scanRangesLengthCorrectionFactor
-    front_min= 150 * scanRangesLengthCorrectionFactor
-    front_max = 210 * scanRangesLengthCorrectionFactor
+    bright_max = 88 * scanRangesLengthCorrectionFactor
+    right_min = 88 * scanRangesLengthCorrectionFactor
+    right_max = 92 * scanRangesLengthCorrectionFactor
+    fright_min = 92 * scanRangesLengthCorrectionFactor
+    fright_max = 120 * scanRangesLengthCorrectionFactor
+    front_min= 120 * scanRangesLengthCorrectionFactor
+    front_max = 240 * scanRangesLengthCorrectionFactor
     
     closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(msg.ranges) if msg.range_min < val < msg.range_max)
     angleClosestDistance = (elementIndex / scanRangesLengthCorrectionFactor)
@@ -58,10 +57,10 @@ def clbk_laser(msg):
         'right':   min(min(msg.ranges[right_min:right_max]), 3),
         'bright':   min(min(msg.ranges[bright_min:bright_max]), 3),
     }
-    #print ("front distance: "+ str(regions_["front"]))
-    #print ("front-right distance: "+ str(regions_["fright"]))
+    print ("front distance: "+ str(regions_["front"]))
+    print ("front-right distance: "+ str(regions_["fright"]))
     print ("right distance: "+ str(regions_["right"]))
-    #print ("back-right distance: "+ str(regions_["bright"]))
+    print ("back-right distance: "+ str(regions_["bright"]))
 
     take_action()
 
@@ -84,21 +83,30 @@ def take_action():
 
     d = 0.3
 
-    if regions['front'] > d and regions['fright'] > d and regions['right'] > d and regions['bright'] > d:
+    if regions['front'] > d and regions['fright'] > (d+0.6) and regions['bright'] > d:
         state_description = 'case 1 - nothing'
         change_state(0)
-    elif regions['front'] < d:# and regions['fright'] > d:
+    elif regions['front'] < d and regions['fright'] > d:
         state_description = 'case 2 - front'
         change_state(1)
-    elif regions['fright'] < d:# and regions['fright'] < d:
-        state_description = 'case 2 - fright'
+    elif regions['front'] < d and regions['fright'] < d:
+        state_description = 'case 2 - front & fright'
+        change_state(1)
+    elif regions['front'] > d and regions['fright'] < d:
+        state_description = 'case 3 - fright'
         change_state(2)
-    elif regions['right'] < d:# and regions['fright'] < d:
-        state_description = 'case 3 - right'
+    elif regions['front'] > d and regions['right'] < d:
+        state_description = 'case 4 - right'
+        change_state(2)
+    elif regions['front'] > d and regions['bright'] < d:
+        state_description = 'case 5 - bright'
         change_state(3)
-    elif regions['bright'] < d:# and regions['right'] < d:
-        state_description = 'case 4 - bright'
-        change_state(4)
+    elif regions['front'] > d and regions['right'] > d:
+        state_description = 'case 5 - right too far'
+        change_state(3)    
+    elif regions['front'] > d and regions['bright'] > d and regions['fright'] < (d+0.6):
+        state_description = 'case 5 - close fright'
+        change_state(3)
     else:
         state_description = 'unknown case'
         rospy.loginfo('unknown case')
@@ -107,31 +115,28 @@ def take_action():
 def find_wall():
     msg = Twist()
     msg.linear.x = 0.2
-    msg.angular.z = 0.05
+    msg.angular.z = 0.01
     return msg
 
-def front_wall():
-    msg = Twist()
-    msg.angular.z = 0.2
-    return msg
-    
-def fright_wall():
+
+def turn_left():
     msg = Twist()
     msg.angular.z = 0.05
     return msg
 
-def follow_wall():
+
+def follow_the_wall():
     global regions_
     global angleClosestDistance
     msg = Twist()
     msg.linear.x = 0.2
-    msg.angular.z = 0.05 * (angleClosestDistance -90)
+    msg.angular.z = 0.01 * (angleClosestDistance -90)
     print ("angle minim: " + str(angleClosestDistance))
     return msg
 
-def bright_corner():
+def follow_corner():
     msg = Twist()
-    msg.linear.x = 0.7*0.3
+    msg.linear.x = 0.1
     msg.angular.z = -0.7
     return msg
 
@@ -150,13 +155,11 @@ def main():
         if state_ == 0:
             msg = find_wall()
         elif state_ == 1:
-            msg = front_wall()
+            msg = turn_left()
         elif state_ == 2:
-            msg = fright_wall()
+            msg = follow_the_wall()
         elif state_ == 3:
-            msg = follow_wall()
-        elif state_ == 4:
-            msg = bright_corner()
+            msg = follow_corner()
             pass
         else:
             rospy.logerr('Unknown state!')
