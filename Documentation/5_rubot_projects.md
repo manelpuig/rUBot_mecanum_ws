@@ -272,9 +272,10 @@ rosrun rubot_projects color_detection.py
 
 ## **5. Line follower**
 
-Importan information can be obtained here: 
+Important information can be obtained here: 
 - https://www.theconstructsim.com/morpheus-chair-create-a-linefollower-with-rgb-camera-and-ros-episode-5/
 - https://www.youtube.com/watch?v=9C7Q8bRERgM
+- https://github.com/noshluk2/ROS2-Self-Driving-Car-AI-using-OpenCV
 
 Related to the links:
 - http://www.rosject.io/l/8292943/
@@ -301,7 +302,7 @@ We will construct first these models in a specific folder:
 
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done in ~/.bashrc file adding this line:
 ```xml
-export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/robot_projects/rubot_projects/models:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
 ```
 #### **a) Traffic sign**
 Let's create a "sign board 30" model:
