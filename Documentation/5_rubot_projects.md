@@ -303,7 +303,7 @@ We will construct first these models in a specific folder:
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
 -  in ~/.bashrc file adding this line:
 ```xml
-export GAZEBO_MODEL_PATH=~/Escritorio/rubot_mecanum_ws/src/rubot_projects/models/:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
 ```
 - or copy the models folder in ~/.gazebo/models/
 
