@@ -305,6 +305,7 @@ We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is d
 ```xml
 export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
 ```
+> If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
 - or copy the models folder in ~/.gazebo/models/
 
 #### **a) Traffic sign**
