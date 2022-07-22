@@ -300,10 +300,13 @@ We have created different models to include in gazebo world:
 We will construct first these models in a specific folder:
 - /media/sf_github_manelpuig/rubot_mecanum_ws/src/robot_projects/rubot_projects/models
 
-We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done in ~/.bashrc file adding this line:
+We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
+-  in ~/.bashrc file adding this line:
 ```xml
-export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=~/Escritorio/rubot_mecanum_ws/src/rubot_projects/models/:$GAZEBO_MODEL_PATH
 ```
+- or copy the models folder in ~/.gazebo/models/
+
 #### **a) Traffic sign**
 Let's create a "sign board 30" model:
 - Open Gazebo as superuser (sudo gazebo)
