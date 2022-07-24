@@ -8,6 +8,7 @@ from tf import transformations
 
 import math
 
+
 pub_ = None
 regions_ = {
     'front': 0,
@@ -27,13 +28,15 @@ state_dict_ = {
 isScanRangesLengthCorrectionFactorCalculated = False
 scanRangesLengthCorrectionFactor = 1
 angleClosestDistance = 0
-
+ClosestDistance = 0
+d = 0.3
 
 def clbk_laser(msg):
     # En la primera ejecucion, calculamos el factor de correcion
     global isScanRangesLengthCorrectionFactorCalculated
     global scanRangesLengthCorrectionFactor
     global angleClosestDistance
+    global ClosestDistance
     
     if not isScanRangesLengthCorrectionFactorCalculated:
             scanRangesLengthCorrectionFactor = int(len(msg.ranges) / 360)
@@ -60,7 +63,7 @@ def clbk_laser(msg):
     }
     #print ("front distance: "+ str(regions_["front"]))
     #print ("front-right distance: "+ str(regions_["fright"]))
-    print ("right distance: "+ str(regions_["right"]))
+    #print ("right distance: "+ str(regions_["right"]))
     #print ("back-right distance: "+ str(regions_["bright"]))
 
     take_action()
@@ -69,12 +72,13 @@ def clbk_laser(msg):
 def change_state(state):
     global state_, state_dict_
     if state is not state_:
-        print ('Wall follower - [%s] - %s' % (state, state_dict_[state]))
+        print ('Wall follower - new state [%s] - %s' % (state, state_dict_[state]))
         state_ = state
 
 
 def take_action():
     global regions_
+    global d
     regions = regions_
     msg = Twist()
     linear_x = 0
@@ -82,21 +86,21 @@ def take_action():
 
     state_description = ''
 
-    d = 0.3
+    #d = 0.3
 
-    if regions['front'] > d and regions['fright'] > d and regions['right'] > d and regions['bright'] > d:
-        state_description = 'case 1 - nothing'
+    if regions['front'] > d and regions['fright'] > d and regions['right'] > (d+0.4) and regions['bright'] > d:
+        state_description = 'case 0 - nothing'
         change_state(0)
-    elif regions['front'] < d:# and regions['fright'] > d:
-        state_description = 'case 2 - front'
+    elif regions['front'] < d:
+        state_description = 'case 1 - front'
         change_state(1)
-    elif regions['fright'] < d:# and regions['fright'] < d:
+    elif regions['fright'] < d and regions['front'] > d:
         state_description = 'case 2 - fright'
         change_state(2)
-    elif regions['right'] < d:# and regions['fright'] < d:
+    elif regions['right'] < d and regions['fright'] > d and regions['front'] > d:
         state_description = 'case 3 - right'
         change_state(3)
-    elif regions['bright'] < d:# and regions['right'] < d:
+    elif regions['bright'] < (d+0.0) and regions['right'] > d and regions['fright'] > d and regions['front'] > d:
         state_description = 'case 4 - bright'
         change_state(4)
     else:
@@ -104,35 +108,41 @@ def take_action():
         rospy.loginfo('unknown case')
 
 
-def find_wall():
+def find_wall():# 'case 0 - nothing'
     msg = Twist()
     msg.linear.x = 0.2
     msg.angular.z = 0.05
     return msg
 
-def front_wall():
+def front_wall():# 'case 1 - front'
     msg = Twist()
     msg.angular.z = 0.2
     return msg
     
-def fright_wall():
+def fright_wall():# 'case 2 - fright'
     msg = Twist()
-    msg.angular.z = 0.05
+    msg.angular.z = 0.2
     return msg
 
-def follow_wall():
+def follow_wall():# 'case 3 - right'
     global regions_
+    global d
     global angleClosestDistance
+    global ClosestDistance
     msg = Twist()
-    msg.linear.x = 0.2
-    msg.angular.z = 0.05 * (angleClosestDistance -90)
-    print ("angle minim: " + str(angleClosestDistance))
+    msg.linear.x = 0.1
+    msg.angular.z = 0.3 * ((d-0.05) - regions_["right"])
+    #msg.angular.z = 0.3 * ((d-0.05) - ClosestDistance)
+    print ("Distance: " + str(regions_["right"]))
+    #msg.angular.z = 0.05 * (angleClosestDistance -90)
+    #print ("angle minim: " + str(angleClosestDistance))
     return msg
 
-def bright_corner():
+def bright_corner():# 'case 4 - bright'
+    global d
     msg = Twist()
-    msg.linear.x = 0.7*0.3
-    msg.angular.z = -0.7
+    msg.linear.x = 0.5*0.3
+    msg.angular.z = -1
     return msg
 
 def main():
