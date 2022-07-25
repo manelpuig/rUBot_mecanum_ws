@@ -381,150 +381,27 @@ Design a proper model corresponding to the real rUBot_mecanum you will work with
 ![](./Images/1_osoyoo.png)
 
 The main steps are:
-- Design the rubot 3D parts in FreeCAD following the instructions in "Documentation/files/Freecad"
+- Design or obtain the rubot 3D parts. We will deliver the main designed parts (structure, wheels, lidar and camera) and you will have to:
+  - contruct the 3D rUBot in freecad ("Documentation/files/Freecad/mainParts")
+  - design your own part to be printed and assembled to the rUBot
+> Follow the tutorial instructions for FreeCAD in "Documentation/files/Freecad/tutorial".
+
+The final rUBot project design will look like:
+
 ![](./Images/1_rubot_freecad.png)
-- Create the stl format part files for base_link, wheels, lidar and picam.
-- generate the rubot.urdf file 
+- Create the stl format for your own part and change the origin of part frame in its gravity center. The other parts (base_link, wheels, lidar and picam) are ready. 
+- generate the rubot.urdf considering the Vision, Collision and Inertia tags.
+  - Vision tag: take into account the position and orientation of each part with respect to the base_link frame. The ROS_URDF preview will help you during the URDF file construction.
 ![](./Images/1_rubot_urdf.png)
+  - Collision tag: consider simple geometrical shapes (box, cylinder and sphere)
+  - Inertia tag: consider the Inertia matrix you can generate using the inertia.py program file you have in "Documentation/files/URDF". 
 
-Test the robot model within rview and gazebo
-```shell
-roslaunch rubot_mecanum_description display.launch
-```
-![](./Images/1_rubot_rviz.png) 
-
-![](./Images/1_rubot_gazebo.png)
-> FreeCAD model is shifted -0.028m this is why the view in gazebo. It is better the lowest coordinates are 0m in freecad.
-
-> rUBot frames: are all located in the back-right corner:
-![](./Images/1_rubot_frames.png)
-
-You need to shift the Image and lidar frames in urdf file according to the Freecad position values:
-- In case of base_scan the center is located in x=130mm y=75mm
-```xml
-<!-- base_footprint reference frame without inertia is needed -->
-  <link name="base_footprint"/>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-    </visual>
-<!-- base_link -->
-  <joint name="base_link_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="base_footprint"/>
-    <child link="base_link"/>
-  </joint>
-  <link name="base_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="-0.13 -0.075 0"/>
-      <geometry>
-  ...
-  </link>
-```
-- In the case of upper right wheel:
-  - it link is shifted (201, -31,-28) 
-  - Its joint has to be shifted respect the base_link: (73mm,-106mm ,-28mm)
-![](./Images/1_free_upper_right.png)
-
-```xml
-<!-- upper_right_wheel -->
-  <joint name="upper_right_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0.073 -0.106 -0.028"/>
-    <parent link="base_link"/>
-    <child link="upper_right_wheel"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="upper_right_wheel">
-    <visual>
-      <origin rpy="0 0 0" xyz="-0.201 0.031 0.028"/>
-      <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="light_grey"/>
-    </visual>
-    <collision>
-  ...
-  </link>
-```
-- In the case of lower right wheel:
-  - it link is shifted (46, -31,-28) 
-  - Its joint has to be shifted respect the base_link: (-82mm,-106mm ,-28mm)
-![](./Images/1_free_lower_right.png)
-
-```xml
-<!-- upper_right_wheel -->
-  <joint name="upper_right_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="-0.082 -0.106 -0.028"/>
-    <parent link="base_link"/>
-    <child link="upper_right_wheel"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="upper_right_wheel">
-    <visual>
-      <origin rpy="0 0 0" xyz="-0.046 0.031 0.028"/>
-      <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/wheel_rightFront.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="light_grey"/>
-    </visual>
-    <collision>
-  ...
-  </link>
-```
-- Similar shifts have to be applied to the left-side wheels
-
-- In the case of Camera frame you shift the joint with the values you obtain in freecad and the link with the same ones in negative to have the final frame in its camera gravity center.
-```xml
-<!-- 2D Camera as a mesh of actual PiCamera -->
-  <joint name="joint_camera" type="fixed">
-    <origin rpy="0 0 0" xyz="0.236 0.0 0.072"/>
-    <parent link="base_link"/>
-    <child link="camera"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="camera">
-    <visual>
-      <origin rpy="0 0 0" xyz="-0.236 -0.075 -0.072"/>
-      <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/picam.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="black"/>
-    </visual>
-```
-- In the case of RPlidar, the zero index is located in rear orientation. The urdf model modifications will be considering the 180 frame rotation and 180 link rotations. The translation values are specified in freecad and you have to take into account that after a 180 deg rotation, the x and y values became -x and -y in link translation
-```xml
-  <!-- LIDAR base_scan -->
-  <link name="base_scan">
-    <visual>
-      <origin rpy="0 0 0" xyz="-0.111 -0.075 -0.124"/>
-      <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="black"/>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.04"/>
-      <geometry>
-        <cylinder length="0.01575" radius="0.0275"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.4"/>
-      <mass value="0.057"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
-  <joint name="scan_joint" type="fixed">
-    <axis xyz="0 0 1"/>
-    <origin rpy="0 0 0" xyz="0.0 0.0 0.124"/>
-    <parent link="base_link"/>
-    <child link="base_scan"/>
-  </joint>
-```
 To verify the final frame orientations:
 ```shell
 roslaunch rubot_mecanum_description rubot_world.launch
 roslaunch rubot_mecanum_description display.launch
 ```
+![](./Images/1_rubot_gazebo.png)
 ![](./Images/1_rviz_rubot.png)
 > To see the frames you have to add TF in rviz
 
