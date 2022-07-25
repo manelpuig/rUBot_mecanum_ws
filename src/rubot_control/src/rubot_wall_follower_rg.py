@@ -42,11 +42,11 @@ def clbk_laser(msg):
             scanRangesLengthCorrectionFactor = int(len(msg.ranges) / 360)
             isScanRangesLengthCorrectionFactorCalculated = True
             
-    bright_min = 60 * scanRangesLengthCorrectionFactor
+    bright_min = 30 * scanRangesLengthCorrectionFactor
     bright_max = 80 * scanRangesLengthCorrectionFactor
     right_min = 80 * scanRangesLengthCorrectionFactor
-    right_max = 120 * scanRangesLengthCorrectionFactor
-    fright_min = 120 * scanRangesLengthCorrectionFactor
+    right_max = 100 * scanRangesLengthCorrectionFactor
+    fright_min = 100 * scanRangesLengthCorrectionFactor
     fright_max = 150 * scanRangesLengthCorrectionFactor
     front_min= 150 * scanRangesLengthCorrectionFactor
     front_max = 210 * scanRangesLengthCorrectionFactor
@@ -65,6 +65,7 @@ def clbk_laser(msg):
     #print ("front-right distance: "+ str(regions_["fright"]))
     #print ("right distance: "+ str(regions_["right"]))
     #print ("back-right distance: "+ str(regions_["bright"]))
+    #print ("Closestdistance: "+ str(ClosestDistance))
 
     take_action()
 
@@ -88,7 +89,7 @@ def take_action():
 
     #d = 0.3
 
-    if regions['front'] > d and regions['fright'] > d and regions['right'] > (d+0.4) and regions['bright'] > d:
+    if regions['front'] > d and regions['fright'] > d and regions['right'] > (d+0.2) and regions['bright'] > d:
         state_description = 'case 0 - nothing'
         change_state(0)
     elif regions['front'] < d:
@@ -97,7 +98,7 @@ def take_action():
     elif regions['fright'] < d and regions['front'] > d:
         state_description = 'case 2 - fright'
         change_state(2)
-    elif regions['right'] < d and regions['fright'] > d and regions['front'] > d:
+    elif regions['right'] < (d+0.2) and regions['fright'] > d and regions['front'] > d:
         state_description = 'case 3 - right'
         change_state(3)
     elif regions['bright'] < (d+0.0) and regions['right'] > d and regions['fright'] > d and regions['front'] > d:
@@ -121,6 +122,7 @@ def front_wall():# 'case 1 - front'
     
 def fright_wall():# 'case 2 - fright'
     msg = Twist()
+    msg.linear.x = 0.0
     msg.angular.z = 0.2
     return msg
 
@@ -131,9 +133,10 @@ def follow_wall():# 'case 3 - right'
     global ClosestDistance
     msg = Twist()
     msg.linear.x = 0.1
-    msg.angular.z = 0.3 * ((d-0.05) - regions_["right"])
+    msg.angular.z = 0.3 * ((d-0.1) - regions_["right"])
     #msg.angular.z = 0.3 * ((d-0.05) - ClosestDistance)
-    print ("Distance: " + str(regions_["right"]))
+    #print ("Distance: " + str(regions_["right"]))
+    print ("w , Dist: " + str(msg.angular.z) + " , " + str(regions_["right"]))
     #msg.angular.z = 0.05 * (angleClosestDistance -90)
     #print ("angle minim: " + str(angleClosestDistance))
     return msg
@@ -141,8 +144,8 @@ def follow_wall():# 'case 3 - right'
 def bright_corner():# 'case 4 - bright'
     global d
     msg = Twist()
-    msg.linear.x = 0.5*0.3
-    msg.angular.z = -1
+    msg.linear.x = 0.1
+    msg.angular.z = -2.0
     return msg
 
 def main():
