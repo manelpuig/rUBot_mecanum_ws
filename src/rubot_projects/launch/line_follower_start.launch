@@ -10,7 +10,7 @@
 
         <node name="line_follower_start"
             pkg="rubot_projects"
-            type="line_follower2.py"
+            type="line_follower3.py"
             respawn="false" output="screen" args="$(arg R) $(arg G) $(arg B) $(arg colour_error) $(arg mode)">
         </node>
 </launch>

@@ -10,7 +10,7 @@ from rgb_hsv import BGR_HSV
 
 
 class LineFollower(object):
-    def __init__(self, rgb_to_track, colour_error = 1.0, colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
+    def __init__(self, rgb_to_track, colour_error = 1.0,colour_cal=False, camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"):
         #colour_error = 10.0
 
         self._colour_cal = colour_cal
@@ -33,11 +33,11 @@ class LineFollower(object):
 
     def camera_callback(self, data):
 
-        # It seems that making tests, the rapsicam doesnt update the image until 2-6 frames have passed. Specify 2 frames here
-        self.process_this_frame = self.droped_frames >= 4
+        # It seems that making tests, the rapsicam doesnt update the image until 2-6 frames have passed
+        self.process_this_frame = self.droped_frames >= 2
 
         if self.process_this_frame:
-            # We reset the counter. Specify here droped_frames=0
+            # We reset the counter
             #print("Process Frame, Dropped frame to==" + str(self.droped_frames))
             self.droped_frames = 0
             try:
@@ -66,18 +66,18 @@ class LineFollower(object):
                 crop_img = cv_image
                 cv2.imshow("crop image", crop_img)
                 height, width, channels = crop_img.shape
-                print("shape: "+str(height)+" , "+str(width))
+                print("shape: "+str(height)+" , "+str(width))# size 240 x 320
 
                 # Convert from RGB to HSV
-                hsv_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
-                cv2.imshow("HSV image", hsv_img)
-                print("hsv yellow: "+str(self.hsv))
+                hsv = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
+                cv2.imshow("HSV image", hsv)
+                print("hsv: "+str(self.hsv))
 
-                lower_color = np.array([27,100,20])#, dtype=np.uint8)
-                upper_color = np.array([33,255,255])#, dtype=np.uint8)
+                lower_color = np.array([28,255,255], dtype=np.uint8)
+                upper_color = np.array([33,255,255], dtype=np.uint8)
 
                 # Threshold the HSV image to get only yellow colors
-                mask = cv2.inRange(hsv_img, lower_color, upper_color)
+                mask = cv2.inRange(hsv, lower_color, upper_color)
                 cv2.imshow("mask image", mask)
 
                 # Bitwise-AND mask and original image
@@ -159,15 +159,16 @@ class LineFollower(object):
 
         delta_left_percentage_not_important = 0.1
         min_lin = 0.2 # before 0.26
-        min_ang = 2.0 # before 0.7
+        min_ang = 0.05 # before 0.7 and 0.05
         
         if cx is not None and cy is not None:
-            #origin = [image_dim_x / 2.0, image_dim_y / 2.0]
-            origin = [image_dim_x / 1.0, image_dim_y / 1.0]
+            origin = [image_dim_x / 2.0, image_dim_y / 2.0]
+            #origin = [image_dim_x / 1.0, image_dim_y / 1.0]
             centroid = [cx, cy]
+            #centroid = [cx-50, cy]
             delta_left_right = centroid[0] - origin[0]
             print("delta_left_right===>" + str(delta_left_right))
-            if delta_left_right <= image_dim_x * delta_left_percentage_not_important:
+            if abs(delta_left_right) <= image_dim_x * delta_left_percentage_not_important:
                 print("delta_left_right TO SMALL <=" + str(image_dim_x* delta_left_percentage_not_important))
                 delta_left_right = 0.0
             delta = [delta_left_right, centroid[1]]
@@ -215,7 +216,8 @@ class LineFollower(object):
             cmd_vel_simple.angular.z = 0
 
         print("SPEED==>["+str(cmd_vel_simple.linear.x)+","+str(cmd_vel_simple.angular.z)+"]")
-        self.cmd_vel_pub.publish(cmd_vel_simple)
+        #self.cmd_vel_pub.publish(cmd_vel_simple)
+        self.cmd_vel_pub.publish(cmd_vel)
         # We move for only a fraction of time
         init_time = rospy.get_time()
         finished_movement_time = False
@@ -240,19 +242,19 @@ if __name__ == '__main__':
     rospy.loginfo(str(len(sys.argv)))
     rospy.loginfo(str(sys.argv))
 
-#    if len(sys.argv) > 5:
-    red_value = int(float(sys.argv[1]))
-    green_value = int(float(sys.argv[2]))
-    blue_value = int(float(sys.argv[3]))
-    colour_error_value = float(sys.argv[4])
-    mode_value = sys.argv[5]
+    if len(sys.argv) > 5:
+        red_value = int(float(sys.argv[1]))
+        green_value = int(float(sys.argv[2]))
+        blue_value = int(float(sys.argv[3]))
+        colour_error_value = float(sys.argv[4])
+        mode_value = sys.argv[5]
 
-    is_colour_cal = mode_value == "colour_cal"
+        is_colour_cal = mode_value == "colour_cal"
 
-	#rgb_to_track = [255,255,255]
-    rgb_to_track = [red_value, green_value, blue_value]
-    print("RGB to track: " + str(rgb_to_track))
-    robot_mover = LineFollower(rgb_to_track=rgb_to_track,
-				   colour_error= colour_error_value,
-				   colour_cal=is_colour_cal)
-    robot_mover.loop()
+        #rgb_to_track = [255,255,255]
+        rgb_to_track = [red_value, green_value, blue_value]
+        print(rgb_to_track)
+        robot_mover = LineFollower(rgb_to_track=rgb_to_track,
+                                   colour_error= colour_error_value,
+                                   colour_cal=is_colour_cal)
+        robot_mover.loop()
