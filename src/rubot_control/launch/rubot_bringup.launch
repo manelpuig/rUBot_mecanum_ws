@@ -19,6 +19,6 @@
     </node>
     <!-- Combine joint values -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    <!-- Show in Rviz   
-    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>-->
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
   </launch>
