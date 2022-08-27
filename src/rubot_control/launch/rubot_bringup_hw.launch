@@ -17,6 +17,7 @@
     </node>
   <!-- launch rplidar   -->
     <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+    <param name="frame_id"            type="string" value="base_link"/>
   <!-- launch raspicam   -->
     <include file="$(find raspicam_node)/launch/camera640x480.launch">
     <arg name="enable_raw" value="true"/>
