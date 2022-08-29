@@ -4,10 +4,10 @@
     <include>
       <uri>model://sun</uri>
     </include>
-    <!-- A ground plane -->
+    <!-- A ground plane 
     <include>
       <uri>model://ground_plane</uri>
-    </include>
+    </include>-->
  
     <!-- sign_board_30_small -->
     <include>
