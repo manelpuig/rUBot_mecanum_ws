@@ -1,5 +1,5 @@
 <launch>
-  <arg name="world" default="traffic2.world"/> 
+  <arg name="world" default="lineFollow.world"/> 
   <arg name="model" default="rubot_rp.urdf"/>
   <arg name="x_pos" default="2.0"/>
   <arg name="y_pos" default="0.2"/>
