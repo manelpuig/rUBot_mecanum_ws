@@ -37,9 +37,9 @@
       <material name="yellow"/>
     </visual>
     <collision>
-      <origin xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.03"/>
       <geometry>
-        <box size="0.1 0.1 0.35"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/base_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -188,18 +188,18 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.0015 0.0015 0.0015"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="black"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.01575" radius="0.0275"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0.13 0.075 0.16"/>
       <mass value="0.057"/>
       <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
     </inertial>
@@ -261,7 +261,7 @@
   <gazebo reference="base_scan">
     <sensor name="lds_lfcd_sensor" type="ray">
       <pose>0.0 0.0 0.0 0 0 0</pose>
-      <visualize>true</visualize>
+      <visualize>false</visualize>
       <update_rate>5</update_rate>
       <ray>
         <scan>
