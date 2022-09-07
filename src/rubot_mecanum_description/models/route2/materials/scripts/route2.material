@@ -1,0 +1,16 @@
+material route2/Diffuse
+{
+  receive_shadows off
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture road2.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
