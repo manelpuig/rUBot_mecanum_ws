@@ -497,7 +497,7 @@ You can create model parts like walls of 90cm or 60cm with a geometry and color,
   ```xml
   export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
   ```
-- in ROS win
+- in ROS windows terminal
   ```xml
   set GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models
   ```

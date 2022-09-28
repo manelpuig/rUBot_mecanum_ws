@@ -208,7 +208,7 @@
         <material>
           <script>
             <uri>model:\\sign_left_turn\materials\scripts</uri>
-            <uri>file:\\sign_left_turn\materials\textures</uri>
+            <uri>model:\\sign_left_turn\materials\textures</uri>
             <name>sign_left_turn/Diffuse</name>
           </script>
         </material>
