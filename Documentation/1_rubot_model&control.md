@@ -470,6 +470,10 @@ Open gazebo as superuser:
 ```shell
 sudo gazebo
 ```
+In ROS windows:
+```shell
+roslaunch gazebo_ros empty_world.launch
+```
 You can build your world using "Building Editor" in Edit menu
 ![](./Images/1_BuildingWorld1_1.png)
 You can save:
@@ -493,6 +497,11 @@ You can create model parts like walls of 90cm or 60cm with a geometry and color,
   ```xml
   export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
   ```
+- in ROS win
+  ```xml
+  set GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models
+  ```
+- When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
 
 You will have acces in gazebo insert section. Then you can construct your world adding parts.
 

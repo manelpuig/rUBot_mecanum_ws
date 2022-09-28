@@ -22,7 +22,7 @@
           <script>
             <uri>model://route2/materials/scripts</uri>
             <uri>model://route2/materials/textures</uri>
-            <name>route2/Diffuse</name>
+            <name>road2/Diffuse</name>
           </script>
           <ambient>1 1 1 1</ambient>
         </material>
