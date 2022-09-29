@@ -21,7 +21,7 @@
         <material>
           <script>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Wood</name>
+            <name>Gazebo/Road2</name>
           </script>
           <ambient>1 1 1 1</ambient>
         </material>
