@@ -1,0 +1,27 @@
+Textures
+
+Road:
+- add a new floor plane model from gazebo
+- edit road in ppt and save it in png or jpeg format
+- copy the png file to package folder gazebo-10/media/materials/textures
+- open package file "gazebo-10/media/materials/scripts/gazebo.material"
+- add this code at the end (with png file name):
+material Gazebo/Road2
+{
+  technique
+  {
+    pass
+    {
+      ambient 1.0 1.0 1.0 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.2 0.2 0.2 1.0 12.5
+
+      texture_unit
+      {
+        texture road2.png
+        filtering trilinear
+      }
+    }
+  }
+}
+- open gazebo and add road model with this texture

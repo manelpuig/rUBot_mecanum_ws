@@ -207,9 +207,8 @@
 
         <material>
           <script>
-            <uri>model:\\sign_left_turn\materials\scripts</uri>
-            <uri>model:\\sign_left_turn\materials\textures</uri>
-            <name>sign_left_turn/Diffuse</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Left</name>
           </script>
         </material>
 

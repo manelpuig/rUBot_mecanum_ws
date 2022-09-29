@@ -1,5 +1,5 @@
 <launch>
-  <arg name="world" default="lineFollow.world"/> 
+  <arg name="world" default="road2.world"/> 
   <arg name="model" default="rubot_rp.urdf"/>
   <arg name="x_pos" default="2.0"/>
   <arg name="y_pos" default="0.2"/>
@@ -7,7 +7,7 @@
   <arg name="yaw" default="0.0"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find rubot_projects)/worlds/$(arg world)"/>
+    <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
   </include>
 
   <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
