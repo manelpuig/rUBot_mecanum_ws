@@ -627,6 +627,8 @@ You can control the rUBot with the keyboard installing the following packages:
 sudo apt-get install ros-noetic-teleop-tools
 sudo apt-get install ros-noetic-teleop-twist-keyboard
 ```
+In ROS for windows, you need to make a source installation of this 2 packages. Follow the instructions in Documentation/Files folder to install source packages.
+
 Then you will be able to control the robot with the Keyboard typing:
 ```shell
 rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel

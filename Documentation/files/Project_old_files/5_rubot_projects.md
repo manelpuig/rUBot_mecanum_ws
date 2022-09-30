@@ -172,9 +172,107 @@ Launch the "follow_the_route.py" program:
 
     rosrun rubot_projects follow_the_route2.py 
 
-## **4. Line following**
+## **4. Object Detection & tracking**
 Detailed official information in: 
+- https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html
+- https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_contours/py_contours_begin/py_contours_begin.html
+- https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_contours/py_contour_features/py_contour_features.html
+- https://www.peko-step.com/es/tool/hsvrgb.html
 
+The objective of this project is:
+- From an image obtained with raspicam
+- Detect the yelow line
+- identify the contours
+- obtain the center of mass (centroids from moments)
+
+In HSV, it is more easier to represent a color than RGB color-space. 
+![](./Images/5_HSV.png)
+
+**a) Obtain a camera image**
+
+Locate the robot in the Gazebo simulated environment.
+```shell
+roslaunch rubot_projects rubot_bringup.launch
+rosrun rqt_image_view rqt_image_view
+```
+Save an image to work with. The choosen image is:
+
+![](./Images/5_road_view1.png)
+
+**b) Detect the yelow line centroid **
+
+We will try to detect the yelow line. So here is the method:
+
+- Convert from BGR to HSV color-space
+- We threshold the HSV image for a range of yelow color
+- Now extract the yelow object alone, 
+- detect the countour
+- obtain the moments
+- extract the centroid
+
+We have created a python function to convert RGB i HSV color code. To test it type and choose the RGB color to convert to HSV code:
+```shell
+rosrun rubot_projects rgb_hsv.py
+```
+Below is the code which are commented in detail :
+```python
+#!/usr/bin/env python3
+
+import cv2
+import numpy as np
+
+# terminal in the png folder
+# yelow line detection RGB=(255,255,0) or BGR=(0,255,255)
+frame = cv2.imread("road_view1.png", cv2.IMREAD_COLOR)
+cv2.imshow("Road init frame", frame)
+height, width, channels = frame.shape
+print("shape frame: width {1} height {0}".format(height,width))
+frame2 = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)#half resolution
+height, width, channels = frame2.shape
+print("shape frame2: width {1:.0f} height {0:.0f}".format(height,width))
+# Convert BGR to HSV. Yelow HSV = [30, 255, 255]
+hsv = cv2.cvtColor(frame2, cv2.COLOR_BGR2HSV)
+cv2.imshow("hsv", hsv)
+# Define range of yelow color in HSV
+# Take red H range: fom 27 to 33 
+# Take S range: from 100 to 255 (for white from 0)
+# Tahe V range: from 20 to 255 (for white from 0)
+lower_color = np.array([27,100,20])
+upper_color = np.array([33,255,255])
+# Threshold the HSV image to get only yelow color zone in B&W image
+mask = cv2.inRange(hsv, lower_color, upper_color)
+# Bitwise-AND mask and original image to obtain the image with only yelow regions
+res = cv2.bitwise_and(frame2,frame2, mask= mask)
+cv2.imshow('Road low resolution',frame2)
+cv2.imshow('mask',mask)
+cv2.imshow('res',res)
+# Find Contours
+(contours, _) = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+print("Number of centroids==>" + str(len(contours)))
+cv2.drawContours(frame2,contours,-1,(0,255,0),3)
+cv2.imshow('Contour',frame2)
+# Find Centroids
+M = cv2.moments(contours[0])
+cx = int(M['m10']/M['m00'])
+cy = int(M['m01']/M['m00'])
+cv2.circle(res, (int(cx), int(cy)), 5, (0, 255, 0), -1)
+cv2.imshow("Centroid", res)
+print("Centroid: ({0},{1})".format(cx,cy))         
+# Wait until x miliseconds or until you close all windows (0)
+cv2.waitKey(0)
+#cv2.destroyAllWindows()
+```
+![](./Images/5_road_detection1.png)
+
+Type from road.png folder:
+```hell
+rosrun rubot_projects color_detection.py
+```
+> Note the origin image is in top-left corner
+
+## **5. Line follower**
+
+Important information can be obtained here: 
 - https://www.theconstructsim.com/morpheus-chair-create-a-linefollower-with-rgb-camera-and-ros-episode-5/
 - https://www.youtube.com/watch?v=9C7Q8bRERgM
 - https://github.com/noshluk2/ROS2-Self-Driving-Car-AI-using-OpenCV
@@ -200,16 +298,15 @@ We have created different models to include in gazebo world:
 - road
 
 We will construct first these models in a specific folder:
-- .../rubot_mecanum_ws/src/rubot_mecanum_description/models
+- /media/sf_github_manelpuig/rubot_mecanum_ws/src/robot_projects/rubot_projects/models
 
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
 -  in ~/.bashrc file adding this line:
 ```xml
-export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
 ```
 > If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
 - or copy the models folder in ~/.gazebo/models/
-- or you have this folder already in your Gazebo Path if you have created a model using "Building Editor"
 
 #### **a) Traffic sign**
 Let's create a "sign board 30" model:
@@ -275,13 +372,7 @@ by this text:
 
 - you have now the turn traffic sign ready!
 
-#### **b) Road surface**
-Let's create road surface to follow the road line:
-- In Power point, create a picture with the road desired texture (proportional xy size is important)
-- Save this picture in pgn ot jpeg format
-- follow instructions in Documentation/Files/Model_Textures/Instructions_addTextures
 
-#### **c) final world**
 To add models in our world add each model in the last part of your world file (here starts with empy.world):
 
 ```xml
@@ -315,10 +406,6 @@ To add models in our world add each model in the last part of your world file (h
   </world>
 </sdf>
 ```
-Alternativelly you can open gazebo and add the desired models in proper location and save it in world format.
-```shell
-roslaunch gazebo_ros empty_world.launch
-```
 
 We spawn our robot into gazebo world:
 ```shell
@@ -329,9 +416,13 @@ To see the camera image, type:
 rosrun rqt_image_view rqt_image_view
 ```
 
-Start the node line_following_sim
+Open line_follower.py and:
+- change the camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"
+- be sure to have the "rgb_hsv.py" file in src folder
+Start the node line_follower
 ```shell
-roslaunch rubot_projects line_following.launch
+roslaunch rubot_projects line_follower_start.launch
 ```
-![](./Images/5_line_following1.png)
+![](./Images/5_line_follower1.png)
 
+see: https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html

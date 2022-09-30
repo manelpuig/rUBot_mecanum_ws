@@ -1,17 +1,16 @@
-#!/usr/bin/env python3
-import rospy
-import sys
-import numpy as np
+import rclpy
+from rclpy.node import Node
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 import cv2
 
-class camera_sub:
+class camera_sub(Node):
 
     def __init__(self):
-        self.camera_sub = rospy.Subscriber('/rubot/camera1/image_raw',Image, self.camera_cb)
-        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        super().__init__('qr_maze_solving_node')
+        self.camera_sub = self.create_subscription(Image,'/vision_rpi_bot_camera/image_raw',self.camera_cb,10)
+        self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
         self.vel_msg=Twist()
         self.bridge=CvBridge()
 
@@ -56,15 +55,14 @@ class camera_sub:
 
 
 def main(args=None):
-    rospy.init_node('line_following_sim', anonymous=True)
+    rclpy.init(args=args)
 
     sensor_sub = camera_sub()
 
-    rospy.spin()
+    rclpy.spin(sensor_sub)
+    sensor_sub.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        print ("Ending MoveForward")
+    main()
