@@ -1,5 +1,5 @@
 <launch>
-  <arg name="world" default="road3.world"/> 
+  <arg name="world" default="road2.world"/> 
   <arg name="model" default="rubot_rp.urdf"/>
   <arg name="x_pos" default="2.0"/>
   <arg name="y_pos" default="0.0"/>

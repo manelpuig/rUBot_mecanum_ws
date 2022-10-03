@@ -82,13 +82,13 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='route1'>
-      <pose frame=''>0.240702 -1.35406 0 0 -0 0</pose>
+    <model name='route2'>
+      <pose frame=''>-0.281083 0.273382 0 0 -0 0</pose>
       <link name='Wall_0'>
         <collision name='Wall_0_Collision'>
           <geometry>
             <box>
-              <size>7.85 5 0.1</size>
+              <size>15 10 0.1</size>
             </box>
           </geometry>
           <pose frame=''>0 0 0.05 0 -0 0</pose>
@@ -110,7 +110,7 @@
           <pose frame=''>0 0 0.05 0 -0 0</pose>
           <geometry>
             <box>
-              <size>7.85 5 0.1</size>
+              <size>15 10 0.1</size>
             </box>
           </geometry>
           <material>
@@ -124,7 +124,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose frame=''>-0 -0.185 0 0 -0 3.14159</pose>
+        <pose frame=''>0 0 0 0 -0 0</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -132,10 +132,10 @@
       <static>1</static>
     </model>
     <state world_name='default'>
-      <sim_time>141 856000000</sim_time>
-      <real_time>165 394334400</real_time>
-      <wall_time>1664462980 875115100</wall_time>
-      <iterations>141856</iterations>
+      <sim_time>59 307000000</sim_time>
+      <real_time>69 787888400</real_time>
+      <wall_time>1664794667 392659200</wall_time>
+      <iterations>59307</iterations>
       <model name='ground_plane'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -146,11 +146,11 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='route1'>
-        <pose frame=''>0.067388 -0.879242 0.020511 0 -0 0</pose>
+      <model name='route2'>
+        <pose frame=''>-0.281083 0.273382 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='Wall_0'>
-          <pose frame=''>0.067388 -1.06424 0.020511 0 -0 3.14159</pose>
+          <pose frame=''>-0.281083 0.273382 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -162,7 +162,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>7.75941 -8.21369 3.07559 -0 0.203643 2.2722</pose>
+        <pose frame=''>14.0532 -9.37329 21.1842 0 0.847643 2.36019</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

@@ -34,8 +34,8 @@ class camera_sub:
 
         if(len(white_index) >= 2 ):#== some times more than 2 white points 
             cv2.circle(img=edged, center = (white_index[0],200), radius = 2 , color = (255,0,0), thickness=1)
-            cv2.circle(img=edged, center = (white_index[4],200), radius = 2 , color = (255,0,0), thickness=1)
-            mid_point_line = int ( (white_index[0] + white_index[4]) /2 )
+            cv2.circle(img=edged, center = (white_index[1],200), radius = 2 , color = (255,0,0), thickness=1)
+            mid_point_line = int ( (white_index[0] + white_index[1]) /2 )
             cv2.circle(img=edged, center = (mid_point_line,200), radius = 3 , color = (255,0,0), thickness=2)
 
         mid_point_robot = [160,200]#[135,172]
