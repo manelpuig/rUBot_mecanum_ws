@@ -83,12 +83,12 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <model name='route3'>
-      <pose frame=''>-0.219013 0.015933 0 0 -0 0</pose>
+      <pose frame=''>-0.277287 0.27725 0 0 -0 0</pose>
       <link name='Wall_0'>
         <collision name='Wall_0_Collision'>
           <geometry>
             <box>
-              <size>7 5 0.1</size>
+              <size>15 10 0.1</size>
             </box>
           </geometry>
           <pose frame=''>0 0 0.05 0 -0 0</pose>
@@ -110,7 +110,7 @@
           <pose frame=''>0 0 0.05 0 -0 0</pose>
           <geometry>
             <box>
-              <size>7 5 0.1</size>
+              <size>15 10 0.1</size>
             </box>
           </geometry>
           <material>
@@ -132,10 +132,10 @@
       <static>1</static>
     </model>
     <state world_name='default'>
-      <sim_time>58 841000000</sim_time>
-      <real_time>69 238433200</real_time>
-      <wall_time>1664529545 3575300</wall_time>
-      <iterations>58841</iterations>
+      <sim_time>52 874000000</sim_time>
+      <real_time>62 156453900</real_time>
+      <wall_time>1664793562 33207400</wall_time>
+      <iterations>52874</iterations>
       <model name='ground_plane'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -147,10 +147,10 @@
         </link>
       </model>
       <model name='route3'>
-        <pose frame=''>-0.219013 0.015933 0 0 -0 0</pose>
+        <pose frame=''>-0.277287 0.27725 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='Wall_0'>
-          <pose frame=''>-0.219013 0.015933 0 0 -0 0</pose>
+          <pose frame=''>-0.277287 0.27725 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -162,7 +162,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>-0.220597 -6.13325 5.81999 0 0.787642 1.5602</pose>
+        <pose frame=''>7.05065 -11.3815 8.29225 0 0.563643 2.0682</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

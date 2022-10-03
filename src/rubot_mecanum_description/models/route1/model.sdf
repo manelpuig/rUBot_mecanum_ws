@@ -1,12 +1,12 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='route3'>
-    <pose frame=''>-1.235 -2.685 0 0 -0 0</pose>
+    <pose frame=''>0 0 0 0 0 0</pose>
     <link name='Wall_0'>
       <collision name='Wall_0_Collision'>
         <geometry>
           <box>
-            <size>7 5 0.1</size>
+            <size>15 10 0.1</size>
           </box>
         </geometry>
         <pose frame=''>0 0 0.05 0 -0 0</pose>
@@ -15,7 +15,7 @@
         <pose frame=''>0 0 0.05 0 -0 0</pose>
         <geometry>
           <box>
-            <size>7 5 0.1</size>
+            <size>15 10 0.1</size>
           </box>
         </geometry>
         <material>
