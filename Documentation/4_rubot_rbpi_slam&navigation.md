@@ -7,6 +7,9 @@ The main objectives are:
 - use SLAM (Simultaneous Localization and Mapping) techniques to generate and store a map of the hospital flor
 - use Navigation techniques to find an optimal trajectory to reach a speciffic hospital target position
 
+If the odometry localization is not reliable, the Cartographer package is a better choice:
+https://google-cartographer-ros.readthedocs.io/en/latest/compilation.html
+
 let's see how to fulfill these objectives
 
 
