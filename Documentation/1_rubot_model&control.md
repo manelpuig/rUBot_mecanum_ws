@@ -31,9 +31,10 @@ The rUBot mecanum robot we will work is represented in the picture:
 His main characteristics are: 
 - Arduino based control for sensors & actuators
   - Servomotor actuators for the 4 mecanum wheels
+  
+- RaspberryPi4 High-level onboard control with Ubuntu20 and ROS Noetic
   - RPlidar distance sensor
   - Raspicam 2D camera sensor
-- RaspberryPi4 High-level onboard control with Ubuntu20 and ROS Noetic
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
@@ -77,6 +78,9 @@ The joint definition contains:
 - origin frame
 - rotation axis
 
+The geometrical definition of our rUBot is:
+![](./Images/1_rubot_cad.png)
+
 In the case or upper left wheel:
 ```xml
 <!-- upper_left_wheel -->
@@ -109,7 +113,7 @@ In the case or upper left wheel:
 ```
 > Be careful with base_link:
 >
-> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the inertia.py program file you have in "Documentation/files/URDF".
+> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the **urdf_inertial_calculator.py** program file you have in "Documentation/files/URDF_inertial".
 Possible correct values are
   ```xml
       <inertial>
