@@ -40,24 +40,29 @@ His main characteristics are:
 
 ## **1. rUBot mecanum model generation**
 
-First of all, we have to create the "rubot_mecanum_description" package where we will create the rUBot model. In case you want to create it from scratch, type:
+The rUBot model we will use is based on the nexus robot model developed in: https://github.com/RBinsonB/nexus_4wd_mecanum_simulator
+
+![](./Images/1_nexus_4wd.png)
+
+We will use this model with some modifications to take into account the different sensors installed onboard.
+
+### **1.1 Nexus mecanum model generation**
+First of all, we have to create the "rubot_mecanum_description" package containing the nexus model. In case you want to create it from scratch, type:
 ```shell
-cd ~/Desktop/ROS_github/rubot_mecanum_ws/src
+cd ~/Desktop/rubot_mecanum_ws/src
 catkin_create_pkg rubot_mecanum_description rospy
 cd ..
 catkin_make
 ```
 Then open the .bashrc file and verify the environment variables and source to the proper workspace:
 ```shell
-source ~/Desktop/ROS_github/rubot_mecanum_ws/devel/setup.bash
+source ~/Desktop/rubot_mecanum_ws/devel/setup.bash
 ```
-> In ROS_windows: add && devel/setup.bat in command line of terminal configuration.
-
 To create our robot model, we use URDF files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
 
 We have created 2 folders for model description:
-- URDF: folder where different URDF models are located. In our case rubot_rp.urdf
-- meshes: folder where 3D body models in stl format are located. We will have rubot folder.
+- URDF: folder where different URDF models are located. In our case nexus.urdf and rubot.urdf
+- meshes: folder where 3D body models in stl format are located. We will have nexus and rubot folders.
 
 You can reduce the amount of code in a URDF file using Xacro package. With this package you can use constants, simple math and macros to create your robot model easier and compact.
 
@@ -79,37 +84,37 @@ The joint definition contains:
 
 In the case or upper left wheel:
 ```xml
-<!-- upper_left_wheel -->
-  <joint name="upper_left_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0.07 0.1 0"/>
-    <parent link="base_link"/>
-    <child link="upper_left_wheel"/>
-    <axis xyz="0 1 0"/>
-  </joint>
   <link name="upper_left_wheel">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/nexus/mecanum_wheel_left.STL" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.0505" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <mass value="0.05"/>
-      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00002"/>
+      <mass value="0.3844"/>
+      <!-- Inertia based on cylinder -->
+      <inertia ixx="0.000324824" ixy="0" ixz="0" iyy="0.000480000" iyz="0" izz="0.000324824"/>
     </inertial>
   </link>
+  <joint name="lower_left_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0 0.042 0"/>
+    <parent link="lower_left_wheel_shaft"/>
+    <child link="lower_left_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
 ```
 > Be careful with base_link:
 >
-> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the inertia.py program file you have in "Documentation/files/URDF".
+> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements.
 Possible correct values are
   ```xml
       <inertial>
@@ -133,9 +138,38 @@ Gazebo plugins give your URDF models greater functionality and compatible with R
 
 These plugins can be referenced through a URDF file, and to insert them in the URDF file, you have to follow the sintax:
 ### **Camera sensor plugin**
-This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
-
-A driver is needed to view the images.
+This sensor is integrated as a link and fixed joint for visual purposes:
+```xml
+  <!-- 2D Camera as a mesh of actual PiCamera -->
+  <link name="camera">
+    <visual>
+      <origin rpy="0 1.570795 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://rubot_mecanum_description/meshes/nexus/piCamera.stl" scale="0.0025 0.0025 0.0025"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin rpy="0 1.570795 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.075 0.025"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 1.570795 0" xyz="0 0 0"/>
+      <mass value="1e-3"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- 2D Camera JOINT base_link -->
+  <joint name="joint_camera" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.16 0 0.05"/>
+    <parent link="base_link"/>
+    <child link="camera"/>
+  </joint>
+  ```
+  A driver is needed to view the images.
 ```xml
   <!-- 2D Camera controller -->
   <gazebo reference="camera">
@@ -178,7 +212,37 @@ A driver is needed to view the images.
 > -  use rviz
 > - type rqt in a terminal and select Plugins->Visualization->Image View
 ### **LIDAR sensor plugin**
-This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
+This sensor is integrated as a link and fixed joint for visual purposes:
+```xml
+  <!-- LIDAR base_scan -->
+  <link name="base_scan">
+    <visual name="sensor_body">
+      <origin rpy="0 0 3.14" xyz="0 0 0.04"/>
+      <geometry>
+        <mesh filename="package://rubot_mecanum_description/meshes/nexus/X4.stl" scale="0.0015 0.0015 0.0015"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <cylinder length="0.01575" radius="0.0275"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.4"/>
+      <mass value="0.057"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  <!-- LIDAR base_scan JOINT base_link -->
+  <joint name="scan_joint" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 3.14" xyz="0 0 0.09"/>
+    <parent link="base_link"/>
+    <child link="base_scan"/>
+  </joint>
+```
 > Note that rpLIDAR is mounted at 180º and you need to turn the link model and the joint to reflect this in the URDF model.
 
 ![](./Images/1_ydlidar.png)
@@ -268,13 +332,13 @@ RViz only represents the robot visual features. You have available all the optio
 ```shell
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/1_rviz_rubot.png)
+![](./Images/1_nexus_urdf.png)
 
 > Colors in rviz: 
 >- are defined at the beginning
 >- Ensure the "visual" link properties have no "name"
 ```xml
-<robot name="rubot">
+<robot name="nexus">
   <material name="yellow">
     <color rgba="0.8 0.8 0.0 1.0"/>
   </material>
@@ -285,7 +349,7 @@ roslaunch rubot_mecanum_description display.launch
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/base_link.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://nexus_mecanum/meshes/nexus_base_link.STL" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="yellow"/>
     </visual>
@@ -298,11 +362,11 @@ roslaunch rubot_mecanum_description display.launch
     <material>Gazebo/Yellow</material>
   </gazebo>
 ```
+### **1.2. rUBot mecanum custom model**
 
-**Activity:**
+We can create a new model in 3D using SolidWorks and use the URDF plugin to generate the URDF file model: rubot_mecanum.urdf
 
-Design a proper model corresponding to the real rUBot_mecanum you will work with.
-![](./Images/1_osoyoo.png)
+![](./Images/1_rubot_mecanum2.png)
 
 You can use FreeCAD to design a custom model and construct manually the URDF file. 
 
@@ -310,6 +374,12 @@ For that it is important to:
 - install in VS Code the ROS extension from Microsoft
 - Press ctrl+shift+p to access the control commands 
 - type ROS and select ROS: Preview URDF
+
+**Activity:**
+
+Design a proper model corresponding to the real rUBot_mecanum you will work with.
+![](./Images/1_osoyoo.png)
+
 The main steps are:
 - Design or obtain the rubot 3D parts. We will deliver the main designed parts (structure, wheels, lidar and camera) and you will have to:
   - contruct the 3D rUBot in freecad ("Documentation/files/Freecad/mainParts")
@@ -443,7 +513,7 @@ Generate a proper world corresponding to the real world we want to spawn our rUB
 
 Save this world as maze.world
 
-### **2.2. Spawn the rUBot robot in project world**
+### **2.2. Spawn the gopigo3 robot in project world**
 
 Now, spawn the rUBot mecanum robot in our generated world. You have to create a "nexus_world.launch" file:
 ``` shell
@@ -451,7 +521,7 @@ roslaunch rubot_mecanum_description rubot_world.launch
 ```
 ![](./Images/1_rubot_world.png)
 
-## **3. rUBot mecanum navigation control in the new world environment**
+## 3. rUBot mecanum navigation control in the new world environment
 
 Once the world has been generated we will create a ROS Package "rubot_control" to perform the autonomous navigation
 ```shell
@@ -518,7 +588,7 @@ This file is:
 ```xml
 <launch>
     <arg name="world" default="square2wall.world"/> 
-    <arg name="model" default="rubot_rp.urdf" />
+    <arg name="model" default="rubot.urdf" />
     <arg name="x_pos" default="0.8"/>
     <arg name="y_pos" default="0.0"/>
     <arg name="yaw" default="1.0"/>
@@ -529,7 +599,7 @@ This file is:
     <!-- spawn nexus -->
     <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
-      args="-urdf -model rubot -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
+      args="-urdf -model nexus -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
     <!-- send fake joint values -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
       <param name="use_gui" value="False"/>
@@ -565,7 +635,7 @@ rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![Getting Started](./Images/1_rubot_bringup.png)
+![Getting Started](./Images/1_nexus_mecanum.png)
 #### **3.2.2. Python programming control**
 Diferent navigation programs are created:
 
@@ -617,7 +687,7 @@ To test the LIDAR we have generated a launch file
 roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/1_rubot_lidar_test.png)
+![](./Images/1_nexus_lidar_test.png)
 > We can see that the zero angle corresponds to the back side of the robot!
 
 #### **c) Autonomous navigation with obstacle avoidance**
@@ -631,7 +701,7 @@ roslaunch rubot_control rubot_self_nav.launch
 - we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
 - Verify in rviz you have to change the fixed frame to "odom" frame
 
-![](./Images/1_rubot_self.png)
+![](./Images/1_nexus_self.png)
 
 The algorithm description functionality is:
 - "rubot_self_nav.py": The Python script makes the robot go forward. 
@@ -679,7 +749,7 @@ roslaunch rubot_control rubot_wall_follower_gm.launch
 You can see a video for the Maze wall follower process in: 
 [![IMAGE_ALT](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
 
-![](./Images/1_rubot_wall_follower_gm.png)
+
 #### **Lidar ranges method**
 
 We have created another rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, front-left, right, left, back-right and back-left, and perform a specific actuation in function of the minimum distance readings.
@@ -694,7 +764,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 ```shell
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
-![](./Images/1_rubot_wall_follower_rg.png)
+![](./Images/1_nexus_wall_follower_rg.png)
 
 #### **Go to POSE**
 Define a specific Position and Orientation as a target point to go:
@@ -709,4 +779,4 @@ For validation type:
 ```shell
 roslaunch rubot_control rubot_go2pose.launch
 ```
-![](./Images/1_rubot_go2pose.png)
+![](./Images/1_nexus_go2pose.png)
