@@ -36,7 +36,7 @@
     <collision>
       <origin xyz="0 0 0"/>
       <geometry>
-        <box size="0.26 0.15 0.1"/>
+        <box size="0.26 0.15 0.09"/>
       </geometry>
     </collision>
     <inertial>
@@ -63,13 +63,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <mass value="0.05"/>
-      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00002"/>
+      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00002"/>
     </inertial>
   </link>
 <!-- lower_left_wheel -->
@@ -90,7 +90,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_left_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -117,7 +117,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_right_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -144,7 +144,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/lower_right_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -310,6 +310,7 @@
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
     <kp>500</kp>
+    <ki>100</ki>
     <kd>10</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.5</maxVel>
