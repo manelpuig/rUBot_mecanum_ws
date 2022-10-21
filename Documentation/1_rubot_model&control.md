@@ -585,7 +585,7 @@ The nodes and topics structure corresponds to the following picture:
 #### **a) Navigation Control**
 
 We will create now a first navigation python files in "src" folder:
-- rubot_nav.py: to define a rubot movement with linear and angular speed to reach a maximum x-distance
+- rubot_nav.py: to define a rubot movement with linear and angular speed during a time td
 
 Specific launch file have been created to launch the node and python file created above:
 ```shell

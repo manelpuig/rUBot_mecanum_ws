@@ -8,6 +8,7 @@ import sys
 robot_x = 0
 robot_y = 0
 robot_f = 0
+time_end = 0
 
 __all__=['move_rubot']
 
@@ -20,6 +21,7 @@ def odom_callback(data):
     q=[data.pose.pose.orientation.x,data.pose.pose.orientation.y,
     data.pose.pose.orientation.z,data.pose.pose.orientation.w]
     (roll, pitch, yaw)=euler_from_quaternion(q)
+    robot_f = math.degrees(yaw)
     #rospy.loginfo("Robot Odometry x= %f\n",robot_x)
     #rospy.loginfo("Robot Odometry y= %f\n",robot_y)
     #rospy.loginfo("Robot Odometry yaw= %.0f\n",math.degrees(yaw))
@@ -29,7 +31,7 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     global robot_y
     global robot_f
     time_begin = 0
-    time_end = 0
+    global time_end
     duration = 0
     duration_s = 0
     end_mov = False
