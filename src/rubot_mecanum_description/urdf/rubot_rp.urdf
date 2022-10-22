@@ -36,7 +36,7 @@
     <collision>
       <origin xyz="0 0 0"/>
       <geometry>
-        <box size="0.26 0.15 0.09"/>
+        <box size="0.26 0.15 0.12"/>
       </geometry>
     </collision>
     <inertial>
@@ -61,9 +61,9 @@
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.03" radius="0.05"/>
+        <cylinder length="0.03" radius="0.06"/>
       </geometry>
     </collision>
     <inertial>
@@ -88,9 +88,9 @@
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.03" radius="0.05"/>
+        <cylinder length="0.03" radius="0.06"/>
       </geometry>
     </collision>
     <inertial>
@@ -115,9 +115,9 @@
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.03" radius="0.05"/>
+        <cylinder length="0.03" radius="0.06"/>
       </geometry>
     </collision>
     <inertial>
@@ -142,9 +142,9 @@
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.03" radius="0.05"/>
+        <cylinder length="0.03" radius="0.06"/>
       </geometry>
     </collision>
     <inertial>
@@ -307,10 +307,10 @@
   </gazebo>
   <gazebo reference="upper_left_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <kp>500</kp>
-    <ki>100</ki>
+    <mu1>100</mu1>
+    <mu2>50</mu2>
+    <kp>1000</kp>
+    <ki>0</ki>
     <kd>10</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.5</maxVel>
@@ -318,31 +318,30 @@
   </gazebo>
   <gazebo reference="lower_left_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <kp>500</kp>
-    <kd>10.0</kd>
+    <mu1>100</mu1>
+    <mu2>50</mu2>
+    <kp>1000</kp>
+    <kd>10</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.5</maxVel>
     <fdir1>1 0 0</fdir1>
-    <mu2>0.0</mu2>
   </gazebo>
   <gazebo reference="upper_right_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <kp>500</kp>
-    <kd>10.0</kd>
+    <mu1>100</mu1>
+    <mu2>50</mu2>
+    <kp>1000</kp>
+    <kd>10</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.5</maxVel>
     <fdir1>1 0 0</fdir1>
   </gazebo>
   <gazebo reference="lower_right_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <kp>500</kp>
-    <kd>10.0</kd>
+    <mu1>100</mu1>
+    <mu2>50</mu2>
+    <kp>1000</kp>
+    <kd>10</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.5</maxVel>
     <fdir1>1 0 0</fdir1>
