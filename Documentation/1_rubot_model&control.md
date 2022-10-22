@@ -99,15 +99,15 @@ In the case or upper left wheel:
       <material name="light_grey"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/upper_left_wheel.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.03" radius="0.05"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <mass value="0.05"/>
-      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00002"/>
+      <origin rpy="-1.57 0 0" xyz="0.0 0.0 0.0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00007" ixy="0" ixz="0" iyy="0.000125" iyz="0" izz="0.00007"/>
     </inertial>
   </link>
 ```
@@ -118,8 +118,8 @@ Possible correct values are
   ```xml
       <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
-        <mass value="10"/>
-        <inertia ixx="10" ixy="0" ixz="0" iyy="10" iyz="0" izz="10"/>
+        <mass value="5"/>
+        <inertia ixx="6" ixy="0" ixz="0" iyy="6" iyz="0" izz="12"/>
       </inertial>
   ```
 The rUBot model includes different sensors and actuators:
