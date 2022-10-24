@@ -177,6 +177,10 @@ def main():
         pub_.publish(msg)
 
         rate.sleep()
+    else:
+        msg.linear.x = 0
+        msg.angular.z = 0
+        pub_.publish(msg)
 
 
 if __name__ == '__main__':

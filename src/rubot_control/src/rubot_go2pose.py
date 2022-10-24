@@ -5,7 +5,7 @@ from nav_msgs.msg import Odometry
 from math import pow, atan2, sqrt, degrees, radians
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
-class GoPiGo3:
+class rubot:
 
     def __init__(self):
         # Creates a node with name 'turtlebot_controller' and make sure it is a
@@ -116,7 +116,7 @@ class GoPiGo3:
 
 if __name__ == '__main__':
     try:
-        go = GoPiGo3()
-        go.move2pose()
+        rubot1 = rubot()
+        rubot1.move2pose()
     except rospy.ROSInterruptException:
         pass
