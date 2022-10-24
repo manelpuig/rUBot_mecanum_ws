@@ -8,9 +8,6 @@ import sys
 robot_x = 0
 robot_y = 0
 robot_f = 0
-time_end = 0
-
-__all__=['move_rubot']
 
 def odom_callback(data):
     global robot_x
@@ -31,7 +28,7 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     global robot_y
     global robot_f
     time_begin = 0
-    global time_end
+    time_end = 0
     duration = 0
     duration_s = 0
     end_mov = False
@@ -40,10 +37,11 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     rate = rospy.Rate(10) # 10hz
     vel = Twist()
     time_begin = rospy.Time.now()
+    rospy.loginfo("Time_begin = " + str(time_begin))
     while not end_mov:
-        
         if (duration_s <= time_duration):
             rospy.loginfo("Robot running")
+            rospy.loginfo("Duration_s= "+str(duration_s))
             #rospy.loginfo("Linear Vel_x = %f: Linear Vel_y = %f: Angular Vel = %f",lin_velx,lin_vely,ang_vel)
             vel.linear.x = lin_velx
             vel.linear.y = lin_vely
@@ -60,9 +58,11 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
             rate.sleep()
             
         time_end = rospy.Time.now()
+        rospy.loginfo("Time_end = " + str(time_end))
         duration = time_end - time_begin
         duration_s = duration.to_sec()
-        rospy.loginfo("Time duration " + str(duration.to_sec()) + " secs" + " from " + str(time_duration))
+        rospy.loginfo("Time_begin = " + str(time_begin))
+        rospy.loginfo("Time duration " + str(duration_s) + " secs" + " from " + str(time_duration))
 
 
 if __name__ == '__main__':

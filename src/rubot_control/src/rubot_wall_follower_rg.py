@@ -158,6 +158,7 @@ def main():
     sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
     
     rate = rospy.Rate(20)
+    stop_sim = False
     while not rospy.is_shutdown():
         msg = Twist()
         if state_ == 0:
@@ -178,10 +179,20 @@ def main():
 
         rate.sleep()
     else:
+        print("Stop!")
+        shutdown()
+        
+def shutdown():
+        """Para el robot antes de detener el nodo."""
+        msg = Twist()
         msg.linear.x = 0
         msg.angular.z = 0
         pub_.publish(msg)
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        print("Stop!")
+        shutdown()
