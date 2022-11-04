@@ -13,11 +13,10 @@
   <!-- launch rUBot mecanum   -->
     <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
       <param name="port" type="string" value="/dev/ttyACM0"/>
-      <param name="baud" type="int" value="57600"/>
+      <param name="baud" type="int" value="500000"/>
     </node>
   <!-- launch rplidar   -->
     <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
-    <param name="frame_id"            type="string" value="base_link"/>
   <!-- launch raspicam   -->
     <include file="$(find raspicam_node)/launch/camera640x480.launch">
     <arg name="enable_raw" value="true"/>
