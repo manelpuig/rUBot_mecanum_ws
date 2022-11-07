@@ -11,12 +11,6 @@ def square_path(v,td):
     move_rubot(0,-v,0,td)
 
 
-def circular_path(v,td):
-    w=5
-    for t in range(0,td,int(td/4)):
-        move_rubot(v*cos(w*t),v*sin(w*t),0,t)
-
-
 def triangular_path(v, td):
     move_rubot(v,0,0,td)
     move_rubot(-v,v,0,td/sqrt(2))
@@ -31,14 +25,12 @@ if __name__ == '__main__':
         td= rospy.get_param("~td")
         path= rospy.get_param("~path")
 
-        if path == "Circular":
-            circular_path(v,td)
-
-        elif path == "Square":
+        if path == "Square":
             square_path(v, td)
 
         elif path == "Triangular":
             triangular_path(v, td)
+
         else:
             print('Error: unknown movement')
 

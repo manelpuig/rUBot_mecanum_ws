@@ -311,8 +311,8 @@
   </gazebo>
   <gazebo reference="upper_left_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>1</mu1>
-    <mu2>10</mu2>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
     <kp>1000</kp>
     <ki>100</ki>
     <kd>1</kd>
@@ -333,8 +333,8 @@
   </gazebo>
   <gazebo reference="upper_right_wheel">
     <material>Gazebo/Grey</material>
-    <mu1>1</mu1>
-    <mu2>10</mu2>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
     <kp>1000</kp>
     <ki>100</ki>
     <kd>1</kd>
