@@ -392,6 +392,14 @@ You have now your rUBot_mecanum ready to work-with!!
 
 Almost all robots subscribe /cmd_vel topic whose message type is Twist for controlling robots.
 
+First, install PS4 or XBOX Bluetooth in Ubuntu:
+https://www.youtube.com/watch?v=UP4h7EZaqSs
+https://ros-developer.com/2017/12/14/ps4-controller-bluetooth-ubuntu/
+
+Second, install the ROS package:
+http://wiki.ros.org/joy
+
+
 Here we demonstrate how to publish Twist message to /cmd_vel using Dualshock 4 which is an official controller of PlayStation 4.
 
 Install the following packages:
@@ -413,3 +421,14 @@ Test it using:
 roslaunch teleop_twist_joy ps4_teleop.launch joy_dev:="/dev/input/js2"
 ```
 Test the /joy and /cmd_vel topic's contents
+
+### **Copy the final work-space**
+
+The best way is to copy a zip file of the final work-space (including the build and devel folders) in a pen drive and copy it to each raspberrypi robot.
+
+Usually the file properties are lost and in the ws folder you have to make all files executable:
+```shell
+cd ~/Desktop/rUBot_mecanum_ws
+sudo chmod -R +x ./*
+```
+You will have the ws ready to work with!
