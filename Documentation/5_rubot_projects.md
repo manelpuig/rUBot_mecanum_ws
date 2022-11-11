@@ -203,11 +203,15 @@ We will construct first these models in a specific folder:
 - .../rubot_mecanum_ws/src/rubot_mecanum_description/models
 
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
--  in ~/.bashrc file adding this line:
+-  When using ROS in UBUNTU: in ~/.bashrc file adding this line:
 ```xml
 export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
 ```
 > If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
+- When using ROS in WINDOWS, add in Terminal "command line":
+```xml
+&& set GAZEBO_MODEL_PATH=C:\Usuarios\puigm\Escritorio\ROS_github\rUBot_mecanum_ws\src\rubot_mecanum_description\models
+```
 - or copy the models folder in ~/.gazebo/models/
 - or you have this folder already in your Gazebo Path if you have created a model using "Building Editor"
 
@@ -277,9 +281,43 @@ by this text:
 
 #### **b) Road surface**
 Let's create road surface to follow the road line:
-- In Power point, create a picture with the road desired texture (proportional xy size is important)
-- Save this picture in pgn ot jpeg format
-- follow instructions in Documentation/Files/Model_Textures/Instructions_addTextures
+- Open Gazebo (roslaunch gazebo_ros empty_world.launch) and in Building Editor create a model "road1" using a wall with height 5cm width 10m and length 10m. Save this model in "rUBot_mecanum_ws\src\rubot_mecanum_description\models"
+- In Power point, create a picture with the road desired texture (proportional xy size is important).
+- Save this picture in pgn ot jpeg format using for exemple "Recorte" from windows
+- copy the png file to package folder C:/opt/ros/noetic/x64/share/gazebo-10/media/materials/textures
+- open package file "C:/opt/ros/noetic/x64/share/gazebo-10/media/materials/scripts/gazebo.material"
+- add this code at the end (with png file name):
+```xml
+material Gazebo/Road_custom
+{
+  technique
+  {
+    pass
+    {
+      ambient 1.0 1.0 1.0 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.2 0.2 0.2 1.0 12.5
+
+      texture_unit
+      {
+        texture road_custom_1.png
+        filtering trilinear
+      }
+    }
+  }
+}
+```
+- Some models and textures are in "rUBot_mecanum_ws/Documentation/Files/Model_Textures/"
+- In the "road1" created model ("rUBot_mecanum_ws\src\rubot_mecanum_description\models\road1"), open "model.sdf"
+- Change the material/script lines to:
+```xml
+<material>
+  <script>
+    <uri>file://media/materials/scripts/gazebo.material</uri>
+    <name>Gazebo/Road_custom</name>
+  </script>
+```
+- Open a gazebo_empty-world and create your road_custom_1.world file using the defined models
 
 #### **c) final world**
 To add models in our world add each model in the last part of your world file (here starts with empy.world):
