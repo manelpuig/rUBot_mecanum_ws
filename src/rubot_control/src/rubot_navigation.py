@@ -37,12 +37,12 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     rospy.Subscriber('/odom',Odometry, odom_callback)
     rate = rospy.Rate(7) # 10hz
     vel = Twist()
-    vel.linear.x = 0.0
-    vel.linear.y = 0.0
-    vel.angular.z = 0.0
-    pub.publish(vel)
+    
     time_begin = rospy.Time.now()
-    time_begin = rospy.Time.now()
+    if time_begin == 0:# when using software time usually returns 0
+        time_begin = rospy.Time.now()
+        n+=1
+        print(n)
     while not end_mov:
         time_end = rospy.Time.now()
         duration = time_end - time_begin

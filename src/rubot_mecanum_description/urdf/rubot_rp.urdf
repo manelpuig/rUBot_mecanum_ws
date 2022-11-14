@@ -203,6 +203,31 @@
     <parent link="base_link"/>
     <child link="base_scan"/>
   </joint>
+  <!-- Box part -->
+  <joint name="joint_part" type="fixed">
+    <origin rpy="0 0 0" xyz="-0.10 0.0 0.09"/>
+    <parent link="base_link"/>
+    <child link="part"/>
+  </joint>
+  <link name="part">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.025"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
   <!-- Mecanum drive controller -->
   <gazebo>
     <plugin name="Mecanum_controller" filename="libgazebo_ros_planar_move.so">
@@ -307,6 +332,9 @@
     <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference="camera">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="part">
     <material>Gazebo/Green</material>
   </gazebo>
   <gazebo reference="upper_left_wheel">
