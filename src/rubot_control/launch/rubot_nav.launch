@@ -4,7 +4,7 @@
     <arg name="vy" default="0.2"/>
     <arg name="w" default="0"/>
     <arg name="td" default="3"/>
-  <node name="rubot_nav" pkg="rubot_control" type="rubot_nav.py" output="screen" >
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_navigation.py" output="screen" >
     <param name="vx" value="$(arg vx)"/>
     <param name="vy" value="$(arg vy)"/>
     <param name="w" value="$(arg w)"/>
