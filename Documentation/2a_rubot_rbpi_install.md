@@ -392,34 +392,31 @@ You have now your rUBot_mecanum ready to work-with!!
 
 Almost all robots subscribe /cmd_vel topic whose message type is Twist for controlling robots.
 
-First, install PS4 or XBOX Bluetooth in Ubuntu:
-https://www.youtube.com/watch?v=UP4h7EZaqSs
-https://ros-developer.com/2017/12/14/ps4-controller-bluetooth-ubuntu/
-
-Second, install the ROS package:
-http://wiki.ros.org/joy
-
-
-Here we demonstrate how to publish Twist message to /cmd_vel using Dualshock 4 which is an official controller of PlayStation 4.
-
-Install the following packages:
+#### **PS2 device**
+Follow the steps:
+- Connect the USB to the rbp4 and push start
+- review the new device associated to the ps2
 ```shell
-sudo apt-get install ros-noetic-joy
-sudo apt-get install ros-noetic-joy-teleop
-sudo apt-get install ros-noetic-teleop-tools
-sudo apt-get install ros-noetic-teleop-twist-joy
+dmesg -w
 ```
-Optional: 
-- https://github.com/chrippa/ds4drv
-- http://wiki.ros.org/ds4_driver
-
-Follow indications in:
-https://github.com/Utagoe-robotics/Wiki/wiki/melodic-ds4-joy
-
-Test it using:
+- identify the assigned input. In raspberryPi4 appears dev/input/js0. In rock4 appears dev/hidraw1
+- change mod to "rwxrwxrw-" in dev/input/js0
 ```shell
-roslaunch teleop_twist_joy ps4_teleop.launch joy_dev:="/dev/input/js2"
+sudo chmod a+rw dev/input/js0
 ```
+- install gstest-gtk
+```shell
+sudo apt install gstest-gtk
+```
+- Install teleop-twist-joy
+```shell
+sudo apt install ros-noetic-teleop-twist-joy
+```
+- run
+```shell
+roslaunch teleop_twist_joy teleop.launch
+```
+
 Test the /joy and /cmd_vel topic's contents
 
 ### **Copy the final work-space**
