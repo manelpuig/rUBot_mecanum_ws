@@ -412,6 +412,8 @@ sudo apt install gstest-gtk
 ```shell
 sudo apt install ros-noetic-teleop-twist-joy
 ```
+- create a config folder in src and place inside the "ps3-holonomic.config.yaml" file from teleop-twist-joy package. Configure the button position as desired
+- copy the teleop.launch file from teleop-twist-joy package to launch folder of rubot_control package. Change the config folder location in the specific parameter
 - run
 ```shell
 roslaunch teleop_twist_joy teleop.launch
