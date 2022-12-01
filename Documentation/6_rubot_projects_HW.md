@@ -13,7 +13,7 @@ The different projects will be:
 
 The image processing projects will be performed using:
 - 2D raspicam
-- Webcam
+- usb-cam
 
 References OpenCV:
 - http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython
@@ -33,6 +33,19 @@ sudo apt upgrade
 sudo apt install ros-noetic-cv-bridge
 sudo apt install ros-noetic-vision-opencv
 ```
+We can install a generic USB-cam:
+```shell
+sudo apt install ros-noetic-image-transport
+sudo apt install ros-noetic-usb-cam
+```
+To test the usb-cam you can review the package in: https://github.com/ros-drivers/usb_cam
+
+Launch the test launch:
+```shell
+roslaunch usb_cam usb_cam-test.launch
+```
+![](./Images/6_usb_cam_test.png)
+
 Then we create a new package "rubot_projects" with dependencies:
 - rospy
 - sensor_msgs
