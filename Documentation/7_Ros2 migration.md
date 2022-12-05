@@ -24,8 +24,12 @@ And the ROS2 reference sites:
 - https://docs.ros.org/en/foxy/
 
 ## 1. **ROS2 Installation & Tools**
-Follow the instructions on:
-https://docs.ros.org/en/foxy/Installation.html
+Installation could be in:
+- Ubuntu 20
+- windows
+## **a) ROS2 in Ubuntu20**
+Follow instructions in:
+https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
 
 Some other installations needed:
 - python3 pip
@@ -60,17 +64,20 @@ Finally you have to reboot:
 sudo reboot
 ```
 
+## **b) ROS2 in windows**
+Follow instructions in:
+http://wiki.ros.org/Installation/Windows
+
+Complete the installation dependencies:
+```shell
+python -m pip install -U pydot PyQt5
+choco install graphviz
+```
+
 ## 2. **Create workspace**
 
 To work with ROS2 first open your ~/.bashrc and be sure you have sourced ROS2 adding the lines:
 - source /opt/ros/foxy/setup.bash
 - source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
-
-Create "self_driving_car_ws2" workspace with "src" folder
-
-Compile the ws:
-```shell
-colcon build
-```
 
 Create your first Package: https://docs.ros.org/en/foxy/Tutorials/Creating-Your-First-ROS2-Package.html
