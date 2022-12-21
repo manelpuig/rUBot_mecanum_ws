@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='road5'>
+  <model name='road1'>
     <pose frame=''>0.055 -1.95 0 0 -0 0</pose>
     <link name='Wall_0'>
       <collision name='Wall_0_Collision'>
@@ -20,10 +20,10 @@
         </geometry>
         <material>
           <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Road3</name>
+            <uri>model://road1/materials/scripts</uri>
+            <uri>model://road1/materials/textures</uri>
+            <name>road1/Diffuse</name>
           </script>
-          <ambient>1 1 1 1</ambient>
         </material>
         <meta>
           <layer>0</layer>
