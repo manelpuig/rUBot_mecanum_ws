@@ -215,7 +215,7 @@ export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_mecanum_des
 - or copy the models folder in ~/.gazebo/models/
 - or you have this folder already in your Gazebo Path if you have created a model using "Building Editor"
 
-#### **a) Traffic sign**
+#### **a) Custom model: Traffic sign**
 Let's create a "sign board 30" model:
 - Open Gazebo as superuser (sudo gazebo)
 - select edit --> Model Editor 
@@ -279,7 +279,7 @@ by this text:
 
 - you have now the turn traffic sign ready!
 
-#### **b) Road surface**
+#### **b) Road  (windows)**
 Let's create road surface to follow the road line:
 - Open Gazebo (roslaunch gazebo_ros empty_world.launch) and in Building Editor create a model "road1" using a wall with height 5cm width 10m and length 10m. Save this model in "rUBot_mecanum_ws\src\rubot_mecanum_description\models"
 - In Power point, create a picture with the road desired texture (proportional xy size is important).
