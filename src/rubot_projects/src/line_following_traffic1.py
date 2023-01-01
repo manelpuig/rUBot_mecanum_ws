@@ -11,7 +11,7 @@ import cv2
 class traffic_line:
 
     def __init__(self):
-        rospy.init_node('following_traffic_line', anonymous=True)
+        rospy.init_node('line_following_traffic', anonymous=True)
         self.camera_sub = rospy.Subscriber('/rubot/camera1/image_raw',Image, self.camera_cb)
         self.lidar_sub = rospy.Subscriber("/scan", LaserScan, self.lidar_cb)
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -59,7 +59,7 @@ class traffic_line:
         cv2.waitKey(1)
 
     def lidar_cb(self, scan):
-        closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max)
+        closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(scan.ranges))
         angleClosestDistance = (elementIndex / 2)
         if closestDistance < 0.2 and 90 < angleClosestDistance < 180:# front right
             self.vel_msg.linear.x = 0.1
