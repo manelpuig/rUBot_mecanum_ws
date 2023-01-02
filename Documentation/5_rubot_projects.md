@@ -389,7 +389,7 @@ Start the node line_following_sim
 ```shell
 roslaunch rubot_projects line_following_traffic.launch
 ```
-![](./Images/5_line_following1.png)
+![](./Images/5_line_following2.png)
 
 Image comparison:
 https://www.tutorialspoint.com/how-to-compare-two-images-in-opencv-python
