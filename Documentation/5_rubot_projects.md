@@ -357,6 +357,7 @@ Alternativelly you can open gazebo and add the desired models in proper location
 ```shell
 roslaunch gazebo_ros empty_world.launch
 ```
+### **4.2. Simple line follower**
 
 We spawn our robot into gazebo world:
 ```shell
@@ -373,3 +374,25 @@ roslaunch rubot_projects line_following.launch
 ```
 ![](./Images/5_line_following1.png)
 
+### **4.3. Traffic road follower**
+
+We spawn our robot into gazebo world:
+```shell
+roslaunch rubot_projects rubot_bringup.launch
+```
+To see the camera image, type:
+```shell
+rosrun rqt_image_view rqt_image_view
+```
+
+Start the node line_following_sim
+```shell
+roslaunch rubot_projects line_following_traffic.launch
+```
+![](./Images/5_line_following1.png)
+
+Image comparison:
+https://www.tutorialspoint.com/how-to-compare-two-images-in-opencv-python
+
+Color detection:
+https://techvidvan.com/tutorials/detect-objects-of-similar-color-using-opencv-in-python/
