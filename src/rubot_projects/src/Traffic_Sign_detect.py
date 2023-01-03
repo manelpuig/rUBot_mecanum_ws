@@ -26,7 +26,7 @@ class Dettection:
         stop2 = cv2.resize(stop1,sign_dim)
         s90_1 = cv2.imread(path1+'90.png')
         s90_2 = cv2.resize(s90_1,sign_dim)
-        sign1 = cv2.imread(path1+'signL3.png')
+        sign1 = cv2.imread(path1+'signL1.png')
         sign2 = cv2.resize(sign1,sign_dim)
         
         frame_sign = sign2
