@@ -396,3 +396,6 @@ https://www.tutorialspoint.com/how-to-compare-two-images-in-opencv-python
 
 Color detection:
 https://techvidvan.com/tutorials/detect-objects-of-similar-color-using-opencv-in-python/
+
+Square detection:
+https://www.tutorialspoint.com/how-to-detect-a-rectangle-and-square-in-an-image-using-opencv-python
