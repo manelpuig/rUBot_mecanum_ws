@@ -20,6 +20,7 @@ class traffic_line:
         self.bridge=CvBridge()
         self._r = rospy.Rate(5)
         self.traffic_sign = False
+        self.turn_time = 0
 
     def camera_cb(self, data):
         frame = self.bridge.imgmsg_to_cv2(data,desired_encoding="bgr8")
@@ -57,6 +58,7 @@ class traffic_line:
         
         if (self.traffic_sign == False):
             print("Follow right line")
+            self.turn_time=0
             if (error < 0):
                 self.vel_msg.angular.z = -0.2#0.4
                 self.vel_msg.linear.x = 0.1#0.4
@@ -71,22 +73,25 @@ class traffic_line:
             match_stop = traffic_line_following.mse(stop2,frame_sign)
             matching = np.array([match_right,match_left,match_stop])
             min_match = matching.min()
-            arg_min_match = matching.argmin()
+            #arg_min_match = matching.argmin()
+            arg_min_match=1#turn left
             print("Traffic sign detected: "+str(matching))
             
             if arg_min_match==0:
                 print("Traffic sign detected: Turn right, with error: "+str(min_match))
                 self.vel_msg.linear.x = 0.0
                 self.vel_msg.angular.z = -0.0
-                time.sleep(2)#wait 2 secionds
+                self.turn_time=0
             elif arg_min_match==1:
                 print("Traffic sign detected: Turn left, with error: "+str(min_match))
-                self.vel_msg.linear.x = 0.0
-                self.vel_msg.angular.z = -0.0
+                self.vel_msg.linear.x = 0.1
+                self.vel_msg.angular.z = 0.3
+                self.turn_time=2#wait 2 secionds
             elif arg_min_match==2:
                 print("Traffic sign detected: Stop, with error: "+str(min_match))
                 self.vel_msg.linear.x = 0.0
                 self.vel_msg.angular.z = -0.0
+                self.turn_time=0
 
        
         cv2.imshow('Frame',frame)
@@ -101,9 +106,11 @@ class traffic_line:
         angleClosestDistance = (elementIndex / 2)
         rospy.loginfo("Lidar readings...")
         print("Distance: "+str(closestDistance)+" Angle: "+str(angleClosestDistance))
-        if closestDistance < 0.5 and 90 < angleClosestDistance < 180:# front right
+        if closestDistance < 0.51 and 90 < angleClosestDistance < 180:# front right
             rospy.loginfo("Traffic sign detected!")
             self.traffic_sign=True
+        else:
+        	self.traffic_sign=False
 
     def mse(self,img1, img2):
         h, w, c = img1.shape
@@ -116,6 +123,7 @@ class traffic_line:
         while not rospy.is_shutdown():
             self.cmd_vel_pub.publish(self.vel_msg)
             self._r.sleep()
+            time.sleep(self.turn_time)#time to turn
         rospy.spin()
 
     def shutdown(self):
