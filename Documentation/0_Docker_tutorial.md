@@ -206,3 +206,20 @@ git push
 >       - performing repository modifications
 >       - typing "**git pull**" to syncronize
 
+### **1.7. Clone your repository**
+
+You can now clone any repository:
+- Open a new gnome-terminal in /home:
+```shell
+git clone https://github.com/manelpuig/rUBot_mecanum_ws
+cd rUBot_mecanum_ws
+source /opt/ros/noetic/setup.bash
+catkin_make
+```
+- Open .bashrc from /root and type at the end:
+```shell
+source /opt/ros/noetic/setup.bash
+source /home/rUBot_mecanum_ws/devel/setup.bash
+export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
+```
+- Open a new terminal from any place and verify the correct behaviour
