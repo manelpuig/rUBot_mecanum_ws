@@ -1,8 +1,8 @@
 <launch>
   <!-- Navigation Program   -->
-  <arg name="kp" default="4" />
-  <arg name="distance_reference" default="0.4" />
-  <arg name="lookahead_distance" default="0.5" />
+  <arg name="kp" default="5" />
+  <arg name="distance_reference" default="0.3" />
+  <arg name="lookahead_distance" default="0.6" />
   <arg name="theta" default="65" />
   <arg name="forward_speed" default="0.1" />
   <node name="wall_follower_controller" pkg="rubot_control" type="rubot_wall_follower_gm.py" output="screen" >
