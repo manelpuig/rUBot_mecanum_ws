@@ -3,7 +3,9 @@
 # docker built -t <image name > .
 FROM osrf/ros:noetic-desktop-full
 
+RUN sudo apt-get clean
 RUN apt-get update
+RUN sudo apt-get upgrade -y
 RUN apt-get install -y git && apt-get install -y python3-pip
 RUN echo "git and pip Installed"
 RUN apt install -y gedit
