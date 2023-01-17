@@ -223,3 +223,8 @@ source /home/rUBot_mecanum_ws/devel/setup.bash
 export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
 ```
 - Open a new terminal from any place and verify the correct behaviour
+
+### **1.8. Visual Studio Code with Docker**
+You can add Docker extension to your VS Code and connect it to a running Container:
+- Add extension "Docker"
+- Connect to running Container (fn+f1 type docker and select attach)
