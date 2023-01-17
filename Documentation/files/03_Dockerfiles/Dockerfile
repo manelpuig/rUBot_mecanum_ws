@@ -16,7 +16,6 @@ RUN apt install gnome-terminal -y
 RUN sudo apt install nautilus-actions gnome-terminal -y
 RUN echo "Nautilus File manager Installed"
 
-
 RUN cd /home/
 
 RUN echo "ALL Done"
