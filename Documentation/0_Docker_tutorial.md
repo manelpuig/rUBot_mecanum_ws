@@ -9,13 +9,14 @@ We will learn:
 - Docker getting starter
 - Docker with GUI
 - Creating custom Docker
-- Githuib sync from docker
+- Github sync from docker
 
 ### **1.1 Docker Installation**
 Installation instructions could be found in:
 - http://wiki.ros.org/docker
 - http://wiki.ros.org/docker/Tutorials/Docker
 - https://docs.docker.com/get-docker/
+- https://docs.docker.com/desktop/
 
 In windows:
 - download and install: https://docs.docker.com/desktop/install/windows-install/
@@ -105,13 +106,13 @@ Stop  container
 ```shell
 docker kill (container_id)
 ```
-### **1.4 Docker with GUI**
+### **1.4 Docker with GUI and shared folder**
 
 Running a container with GUI enabled for Windows. We need to create an environment to display the emerging grafic windows.
 
 We need to open XLaunch program and specify the DIPLAY 0. Then run a Docker with this environment:
 ```shell
-docker run --name ROS1_Noetic_osrf -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:noetic-desktop-full
+docker run --name ROS1_Noetic_osrf -e DISPLAY=host.docker.internal:0.0 --mount src="C:\Users\puigm\Desktop\ROS_github\myPC_shared",dst=/home/myDocker_shared,type=bind -it osrf/ros:noetic-desktop-full
 ```
 Run the Master
 ```shell
