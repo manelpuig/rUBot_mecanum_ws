@@ -114,7 +114,23 @@ We need to open XLaunch program and specify the DIPLAY 0. Then run a Docker with
 ```shell
 docker run --name ROS1_Noetic_osrf -e DISPLAY=host.docker.internal:0.0 --mount src="C:\Users\puigm\Desktop\ROS_github\myPC_shared",dst=/home/myDocker_shared,type=bind -it osrf/ros:noetic-desktop-full
 ```
-Run the Master
+- Open Docker Desktop
+
+- Execute the container and Connect to it within VS Code:
+    - from left-side menu choose Docker
+    - right-click on the running container and select "Attach VS Code"
+- Update your docker Container:
+```shell
+apt update
+apt upgrade
+```
+>repeat these instructions until you see "All packages are up to date"
+
+- Install some functionalities:
+```shell
+apt install -y git && apt install -y python3-pip
+```
+To test Run the Master
 ```shell
 roscore
 ```
