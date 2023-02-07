@@ -75,7 +75,7 @@ rostopic list
 ```
 
 - Then modify the "take_photo.py" python file with:
-  - the proper topic name /rubot/camera1/image_raw
+  - the proper topic name /usb_cam/image_raw
   - the proper photo filename in folder path: ./src/rubot_projects/photos/photo_sim.jpg
 - run the "take_photo.py" python file to take a photo
 
