@@ -28,11 +28,11 @@ class traffic_line:
         sign_dim = (60,40)# first is X and second Y
         frame_sign = frame[30:70,260:320] # First is Y and sencond is X
 
-        left1 = cv2.imread('/home/ubuntu/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/left.png')
+        left1 = cv2.imread('/home/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/left.png')
         left2 = cv2.resize(left1,sign_dim)
-        right1 = cv2.imread('/home/ubuntu/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/right.png')
+        right1 = cv2.imread('/home/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/right.png')
         right2 = cv2.resize(right1,sign_dim)
-        stop1 = cv2.imread('/home/ubuntu/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/stop.png')
+        stop1 = cv2.imread('/home/rUBot_mecanum_ws/src/rubot_projects/photos/Traffic_Signs/stop.png')
         stop2 = cv2.resize(stop1,sign_dim)
 
         edged = cv2.Canny(frame ,60,100 )
@@ -65,7 +65,34 @@ class traffic_line:
             else:
                 self.vel_msg.angular.z = 0.2
                 self.vel_msg.linear.x = 0.1#0.4
-        
+        else:
+            print("Reading Traffic sign")
+            
+            match_right = traffic_line_following.mse(right2,frame_sign)
+            match_left = traffic_line_following.mse(left2,frame_sign)
+            match_stop = traffic_line_following.mse(stop2,frame_sign)
+            matching = np.array([match_right,match_left,match_stop])
+            min_match = matching.min()
+            #arg_min_match = matching.argmin()
+            arg_min_match=1#turn left
+            print("Traffic sign detected: "+str(matching))
+            
+            if arg_min_match==0:
+                print("Traffic sign detected: Turn right, with error: "+str(min_match))
+                self.vel_msg.linear.x = 0.0
+                self.vel_msg.angular.z = -0.0
+                self.turn_time=0
+            elif arg_min_match==1:
+                print("Traffic sign detected: Turn left, with error: "+str(min_match))
+                self.vel_msg.linear.x = 0.1
+                self.vel_msg.angular.z = 0.3
+                self.turn_time=2#wait 2 secionds
+            elif arg_min_match==2:
+                print("Traffic sign detected: Stop, with error: "+str(min_match))
+                self.vel_msg.linear.x = 0.0
+                self.vel_msg.angular.z = -0.0
+                self.turn_time=0
+
        
         cv2.imshow('Frame',frame)
         cv2.imshow('Traffic Sign',frame_sign)
