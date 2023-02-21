@@ -73,14 +73,14 @@ class traffic_line:
             match_stop = traffic_line_following.mse(stop2,frame_sign)
             matching = np.array([match_right,match_left,match_stop])
             min_match = matching.min()
-            arg_min_match = matching.argmin()
-            #arg_min_match=1#turn left
-            print("Traffic sign detected: "+str(arg_min_match))
+            #arg_min_match = matching.argmin()
+            arg_min_match=1#turn left
+            print("Traffic sign detected: "+str(matching))
             
             if arg_min_match==0:
                 print("Traffic sign detected: Turn right, with error: "+str(min_match))
                 self.vel_msg.linear.x = 0.0
-                self.vel_msg.angular.z = -0.3
+                self.vel_msg.angular.z = -0.0
                 self.turn_time=0
             elif arg_min_match==1:
                 print("Traffic sign detected: Turn left, with error: "+str(min_match))
