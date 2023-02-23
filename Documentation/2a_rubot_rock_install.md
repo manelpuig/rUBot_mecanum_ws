@@ -17,7 +17,7 @@ The rock4 onboard is preinstalled with:
 
 First you connect to the rock4 hotspot:
 - SSID: rubot_00
-- Passworg: rUBot_Mec
+- Passworg: rockubuntu1234
 
 Second you connect to rock4 with Nomachine remote desktop:
 - IP: 10.42.0.1
@@ -60,4 +60,4 @@ Follow the instructions:
 - Select linux system for remote connection
 - type the password
 
-You will have the VS Code attached to remote machine!
+You will have the VS Code attached to remote machine (rock board)
