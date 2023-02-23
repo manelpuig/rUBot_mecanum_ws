@@ -48,7 +48,10 @@ Install the extensions.
 - Remote development
 - Git Extension Pack (in your remote 10.42.0.1 board)
 
-You will need to sign autorization to VS code to access github (will be in left-side bar menu, accounts symbol)
+The first time you connect the VS Code to the Remote machine:
+- You will need to sign autorization to VS code to access github (will be in left-side bar menu, accounts symbol)
+- When sync the changes, you will have to type your email and user name (following the git output information)
+- You can work without internet connection, but When you want to sync your repository you will need the ethernet cable connected.
 
 Follow the instructions:
 - In windows open VS Code as administrator
