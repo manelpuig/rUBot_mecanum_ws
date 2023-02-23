@@ -39,3 +39,22 @@ Open .bashrc and add:
 ```shell
 source /opt/ros/noetic/setup.bash
 ```
+## **2. Connection using VS Code**
+You need the latest version (1.75.1).
+
+First time you will need to connect the rock-board to internet with ethernet cable ti install some capabilities.
+
+Install the extensions.
+- Remote development
+- Git Extension Pack (in your remote 10.42.0.1 board)
+
+You will need to sign autorization to VS code to access github (will be in left-side bar menu, accounts symbol)
+
+Follow the instructions:
+- In windows open VS Code as administrator
+- Select the rUBot_XX wifi network 
+- From "remote Explorer" (left-side bar menu) select "Remote" and type the IP
+- Select linux system for remote connection
+- type the password
+
+You will have the VS Code attached to remote machine!
