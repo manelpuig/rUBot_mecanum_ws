@@ -9,7 +9,7 @@ Let's see how to fulfill these objectives
 
 References:
 
-## **1. Setup the rubot in rock4**
+## **1. Setup the rubot in rock4 using nomachine remote desktop**
 The rock4 onboard is preinstalled with:
 - Ubuntu 20 server 64bits
   - NoMachine remote desktop
@@ -17,7 +17,7 @@ The rock4 onboard is preinstalled with:
 
 First you connect to the rock4 hotspot:
 - SSID: rubot_00
-- Passworg: rockubuntu1234
+- Password: rockubuntu1234
 
 Second you connect to rock4 with Nomachine remote desktop:
 - IP: 10.42.0.1
