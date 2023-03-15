@@ -22,7 +22,19 @@ References:
 
 For the first time, let's follow the instructions in: https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro
 
+Follow instructions to:
+- Format a new 64GB SD card
+- Download a Jetson nano Image
+- Copy the image to the formatted SD Card using Balena Etcher
+- Place the SD Card on the proper slot and Power on the Board
 
+Some configurations will be needed:
+- User name: mpuig
+- Password: ubuntu1234
+
+Your system is ready but you need to connect an external screen, keyboard and mouse. 
+
+Our next objective is to enable a remote connection from another computer.
 ## **2. Add init with Hotspot**
 
 For remote connection we need the Jetson-nano board to start in hotspot mode. To install this performance, follow the instructions:
