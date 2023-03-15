@@ -67,7 +67,11 @@ sudo apt update
 sudo apt upgrade
 sudo apt update
 ```
-- Open "software updater"
+- Reboot and Open "software updater" and update the actual version and empty the waste
+- Open a terminal and type:
+```shell
+sudo do-release-upgrade
+```
 - Select the Ubuntu20.04 to work with ROS Noetic
 
 Follow the steps in order to properly install the Raspberrypi:
