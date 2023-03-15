@@ -20,7 +20,7 @@ References:
 
 ## **1. Setup the Jetson nano**
 
-For the first time, let's follow the instructions in: https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro
+For the first time, let's follow the instructions in: https://wiki.seeedstudio.com/J1010_Boot_From_SD_Card/
 
 Follow instructions to:
 - Format a new 64GB SD card
