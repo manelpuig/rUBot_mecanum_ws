@@ -31,7 +31,17 @@ For remote connection we need the Jetson-nano board to start in hotspot mode. To
 - Select "Use as Hotspot" and turn on.
 - Select "Network connections" from top menu and edit the wi-fi hotspot
 - Change the mode to "Hotspot"
-- Change the SSID name to "rUBot_01" for exemple and the password
+- Change the SSID name to "rUBot_01" for exemple
+- You can change the password key in:
+  - /etc/NetworkManager/system-connections/Hotspot
+  - or in terminal type:
+  ```shell
+  nm-connection-editor
+  ```
+- Restart the network manager
+```shell
+sudo systemctl restart NetworkManager
+```
 - reboot the board to start the board with hotspot
 - From another computer you can see this network and you can connect to it.
 
@@ -48,14 +58,40 @@ To select this Hotspot automatically on restart:
   ```shell
   nmcli con show Hotspot
   ```
-- Identify the IP of the rbpi4 Hotspot:
-  - type ifconfig
-  - in wlan0 you identify the inet address: 10.42.0.1
-
-## **3. Install Nomachine remote desktop**
+## **3. Install Nomachine remote desktop and setup**
 For a remote connection, download and install nomachine in PC and Board:
 - In Jetson nano Board, download Nomachine for ARMv8 DEB: https://downloads.nomachine.com/download/?id=114&distro=ARM
 - In PC, download Nomachine for windows 64bits: https://downloads.nomachine.com/download/?id=8
+
+
+**Setup**
+
+The raspberrypi4 is configured:
+- to generate a hotspot "rUBot_xx"
+- NoMachine activated 
+
+When powering the Jetson Nano, generates a hotspot you have to connect to:
+- SSID name: rUBot_01 
+- password "25d5e74416"
+
+Once you are connected to this network you will be able to connect your computer to the Jetson Nano using NoMachine viewer:
+- In PC open NoMachine viewer
+- Select the Jetson Nano IP address: 10.42.0.1
+- you have to specify:
+    - user: mpuig
+    - password: ubuntu1234
+- You will have the Jetson Nano desktop on your windows NoMachine screen
+
+![](./Images/2_nomachine.png)
+
+If you want to change the Hotspot name (one for each robot):
+- Change the Hotspot settings (name or password):
+```shell
+sudo nm-connection-editor
+```
+- Identify the IP of the rbpi4 Hotspot:
+  - type ifconfig
+  - in wlan0 you identify the inet address: 10.42.0.1
 
 ## **4. Update to ubuntu20.04**
 
@@ -109,36 +145,8 @@ nmcli con mod Hotspot connection.autoconnect yes
 ```shell
 nmcli con show Hotspot
 ```
-- Identify the IP of the rbpi4 Hotspot:
-  - type ifconfig
-  - in wlan0 you identify the inet address: 10.42.0.1
 
-**Setup**
 
-The raspberrypi4 is configured:
-- to generate a hotspot "rUBot_xx"
-- NoMachine activated 
-- raspicam activated 
-
-When powering the raspberrypi4, generates a hotspot you have to connect to:
-- SSID name: rUBot_01 
-- password "rUBot_Mec"
-
-Once you are connected to this network you will be able to connect your computer to the raspberrypi4 using NoMachine viewer:
-- In PC open NoMachine viewer
-- Select the raspberrypi IP address: 10.42.0.1
-- you have to specify:
-    - user: ubuntu
-    - password: ubuntu1234
-- You will have the raspberrypi4 desktop on your windows NoMachine screen
-
-![](./Images/2_nomachine.png)
-
-If you want to change the Hotspot name (one for each robot):
-- Change the Hotspot settings (name or password):
-```shell
-sudo nm-connection-editor
-```
 
 ### **2.4. Create your workspace**
 
