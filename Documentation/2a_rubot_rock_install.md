@@ -9,7 +9,12 @@ Let's see how to fulfill these objectives
 
 References:
 
-## **1. Setup the rubot in rock4 using nomachine remote desktop**
+## **1. Setup the rubot in rock4**
+You can connect to the rock4 onboard with:
+- Nomachine remote desktop
+- Visual Studio Code
+
+### **1.1. Setup the rubot in rock4 using nomachine remote desktop**
 The rock4 onboard is preinstalled with:
 - Ubuntu 20 server 64bits
   - NoMachine remote desktop
@@ -39,7 +44,7 @@ Open .bashrc and add:
 ```shell
 source /opt/ros/noetic/setup.bash
 ```
-## **2. Connection using VS Code**
+### **1.2. Connection using VS Code**
 You need the latest version (1.75.1).
 
 First time you will need to connect the rock-board to internet with ethernet cable ti install some capabilities.
@@ -61,3 +66,46 @@ Follow the instructions:
 - type the password
 
 You will have the VS Code attached to remote machine (rock board)
+
+## **2. Install drivers**
+You will need to install:
+- rplidar
+- usbcam
+- Rosserial
+
+First step is:
+- Setup your computer to accept software from packages.ros.org.
+```shell
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt update
+sudo apt upgrade
+```
+
+### **2.1. Install rplidar**
+You need to install the package: http://wiki.ros.org/rplidar
+
+```shell
+sudo apt install ros-noetic-rplidar-ros
+```
+
+### **2.2. Install usb-cam**
+You need to install the package: https://wiki.ros.org/usb_cam
+
+```shell
+sudo apt install ros-noetic-usb-cam
+```
+You need to test which video device is connected and change it on the launch file (usb_cam_rock.launch)
+
+### **2.3. Install Rosserial**
+You need to install the package: http://wiki.ros.org/rosserial
+
+```shell
+sudo apt-get install ros-noetic-rosserial
+```
+
+## **3. rUBot mecanum bringup**
+You can bringup your robot with:
+```shell
+roslaunch rubot_control rubot_bringup_hw.launch
+```
+You are ready to wotrk with
