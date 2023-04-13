@@ -19,7 +19,6 @@
     <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
   <!-- launch usb-cam   -->
     <include file="$(find rubot_mecanum_description)/launch/usb_cam_rock.launch">
-    <arg name="enable_raw" value="true"/>
-    <arg name="camera_frame_id" value="camera"/>
+    
     </include>
 </launch>

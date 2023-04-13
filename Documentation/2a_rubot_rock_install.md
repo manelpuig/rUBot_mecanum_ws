@@ -106,6 +106,6 @@ sudo apt-get install ros-noetic-rosserial
 ## **3. rUBot mecanum bringup**
 You can bringup your robot with:
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw.launch
 ```
 You are ready to wotrk with
