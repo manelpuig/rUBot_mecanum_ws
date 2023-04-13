@@ -17,35 +17,75 @@ You can connect to the rock4 onboard with:
 ### **1.1. Setup the rubot in rock4 using nomachine remote desktop**
 The rock4 onboard is preinstalled with:
 - Ubuntu 20 server 64bits
-  - NoMachine remote desktop
+- NoMachine remote desktop
 - ROS Noetic
 
-First you connect to the rock4 hotspot:
-- SSID: rubot_00
-- Password: rockubuntu1234
+In order to have remote access within Nomachine you have to:
 
-Second you connect to rock4 with Nomachine remote desktop:
-- IP: 10.42.0.1
-- user: pi, ubuntu, rock
-- password: rockbian, rockubuntu, rock
+- Install the package: xserver-xorg-video-dummy
+```shell
+sudo apt install xserver-xorg-video-dummy
+```
+- Create a configuration file at "/usr/share/X11/xorg.conf.d" folder
+```shell
+sudo mousepad /usr/share/X11/xorg.conf.d/20-dummy.conf
+```
+- This file has the contents:
+```python
+Section "Monitor"
+   Identifier "Monitor0"
+   HorizSync 28.0-80.0
+   VertRefresh 48.0-75.0
+   Modeline "1920x1080_60.00" 172.80 1920 2040 2248 2576 1080 1081 1084 
+1118 -HSync +Vsync
+EndSection
 
-You will need to change the Keyboard to Spanish keyboard. 
+Section "Device"
+   Identifier "Card0"
+   Driver "dummy"
+   VideoRam 256000
+EndSection
 
-Open a terminal and type:
+Section "Screen"
+   DefaultDepth 24
+   Identifier "Screen0"
+   Device "Card0"
+   Monitor "Monitor0"
+   SubSection "Display"
+     Depth 24
+     Modes "1920x1080_60.00"
+   EndSubSection
+EndSection
+```
+- reboot
+
+- In your computer choose the rock4 hotspot:
+  - SSID: rubot_00
+  - Password: rockubuntu1234
+
+- Open Nomachine and connect to rock4 with:
+  - IP: 10.42.0.1
+  - port: 4000
+  - user: pi
+  - password: rockbian
+
+- You will need to change the Keyboard to Spanish keyboard. 
 ```shell
 sudo setxkbmap -layout 'es,es' -model pc105
 setxkbmap es sundeadkeys
 ```
-Change to a bash terminal:
+- Change to a bash terminal:
 ```shell
 bash
 ```
-Open .bashrc and add:
+- Open .bashrc and add:
 ```shell
 source /opt/ros/noetic/setup.bash
 ```
+You will have remote connection within Nomachine with an optimized resolution!
 
 **Install VS Code**
+
 You need to:
 - download the linux .deb arm64 program version in: https://code.visualstudio.com/#alt-downloads
 - Install with terminal istruction:
