@@ -95,6 +95,18 @@ sudo apt install ./code_arm64.deb
   >Use the name of the deb file downloaded
 - You will see the Code program in the Ubuntu programs available
 
+**Sync your github repository with VS Code**
+
+Once updated the repository in rock4 board and with ethernet connection:
+- add "Git Extension Pack"
+- Select "source control"
+- Select the changes to sync and add commit
+- Select sync and follow the instructions
+  - accept communication with github
+  - insert your username and password of your github account
+  - accep git authorisation when prompted
+
+You will be able to update your github repository!
 ### **1.2. Connection using VS Code**
 You need the latest version (1.75.1).
 
@@ -118,6 +130,7 @@ Follow the instructions:
 
 You will have the VS Code attached to remote machine (rock board)
 
+You will be able to perform all in rock4 board but you will not have screen monitor graphic service
 ## **2. Install drivers**
 You will need to install:
 - rplidar
