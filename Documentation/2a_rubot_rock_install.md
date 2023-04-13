@@ -44,6 +44,17 @@ Open .bashrc and add:
 ```shell
 source /opt/ros/noetic/setup.bash
 ```
+
+**Install VS Code**
+You need to:
+- download the linux .deb arm64 program version in: https://code.visualstudio.com/#alt-downloads
+- Install with terminal istruction:
+```shell
+sudo apt install ./code_arm64.deb
+```
+  >Use the name of the deb file downloaded
+- You will see the Code program in the Ubuntu programs available
+
 ### **1.2. Connection using VS Code**
 You need the latest version (1.75.1).
 
@@ -108,4 +119,4 @@ You can bringup your robot with:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw.launch
 ```
-You are ready to wotrk with
+You are ready to work with
