@@ -20,6 +20,8 @@ The rock4 onboard is preinstalled with:
 - NoMachine remote desktop
 - ROS Noetic
 
+> **Important!**: in order to have available all the USB connectors, commute the switch to the position closer to USB3. This control the USB mode from Device to Host.
+
 **Remote desktop**
 
 In order to have remote access within Nomachine you have to:
