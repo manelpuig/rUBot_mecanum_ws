@@ -20,6 +20,8 @@ The rock4 onboard is preinstalled with:
 - NoMachine remote desktop
 - ROS Noetic
 
+**Remote desktop**
+
 In order to have remote access within Nomachine you have to:
 
 - Install the package: xserver-xorg-video-dummy
@@ -84,11 +86,18 @@ source /opt/ros/noetic/setup.bash
 ```
 You will have remote connection within Nomachine with an optimized resolution!
 
+**Wifi access**
+
+In order to have wifi access we will use a generic wifi dongle and install a specific driver:
+- https://github.com/morrownr/8821au-20210708
+
+Follow instructions for installation within Ubuntu.
+
 **Install VS Code**
 
 You need to:
 - download the linux .deb arm64 program version in: https://code.visualstudio.com/#alt-downloads
-- Install with terminal istruction:
+- Install with terminal instruction:
 ```shell
 sudo apt install ./code_arm64.deb
 ```
@@ -170,6 +179,6 @@ sudo apt-get install ros-noetic-rosserial
 ## **3. rUBot mecanum bringup**
 You can bringup your robot with:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 You are ready to work with
