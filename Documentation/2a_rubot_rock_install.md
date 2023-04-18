@@ -142,7 +142,45 @@ Follow the instructions:
 You will have the VS Code attached to remote machine (rock board)
 
 You will be able to perform all in rock4 board but you will not have screen monitor graphic service
-## **2. Install drivers**
+
+
+## **2. Setup the rubot in rock5**
+
+The rock5 image is preinstalled with:
+- Ubuntu 20 server 64bits
+
+You will need to install:
+- Ubuntu-desktop
+- nomachine
+- Access to Remote desktop
+
+### **2.1. Install Ubuntu-desktop**
+In the terminal, type:
+```shell
+sudo apt-get install ubuntu-desktop
+```
+
+### **2.2. Install nomachine**
+You have to install ARM version: https://downloads.nomachine.com/download/?id=114&distro=ARM
+
+In the terminal, type:
+```shell
+sudo 
+```
+### **2.3. Access to Remote desktop**
+In order to have remote access within Nomachine you have to:
+
+- Install the package: xserver-xorg-video-dummy
+```shell
+sudo apt install xserver-xorg-video-dummy
+```
+- Create a configuration file at "/usr/share/X11/xorg.conf.d" folder
+```shell
+sudo mousepad /usr/share/X11/xorg.conf.d/20-dummy.conf
+```
+>Copy the same contents as the rock4 case
+
+## **3. Install drivers**
 You will need to install:
 - rplidar
 - usbcam
@@ -156,14 +194,14 @@ sudo apt update
 sudo apt upgrade
 ```
 
-### **2.1. Install rplidar**
+### **3.1. Install rplidar**
 You need to install the package: http://wiki.ros.org/rplidar
 
 ```shell
 sudo apt install ros-noetic-rplidar-ros
 ```
 
-### **2.2. Install usb-cam**
+### **3.2. Install usb-cam**
 You need to install the package: https://wiki.ros.org/usb_cam
 
 ```shell
@@ -171,14 +209,14 @@ sudo apt install ros-noetic-usb-cam
 ```
 You need to test which video device is connected and change it on the launch file (usb_cam_rock.launch)
 
-### **2.3. Install Rosserial**
+### **3.3. Install Rosserial**
 You need to install the package: http://wiki.ros.org/rosserial
 
 ```shell
 sudo apt-get install ros-noetic-rosserial
 ```
 
-## **3. rUBot mecanum bringup**
+## **4. rUBot mecanum bringup**
 You can bringup your robot with:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
