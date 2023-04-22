@@ -155,6 +155,14 @@ You will need to install:
 - Access to Remote desktop
 
 ### **2.1. Install Ubuntu-desktop**
+
+First of all we have to update the public key of radxa apt. The one used before is expired. You can execute the following command to get the new available.
+```shell
+sudo apt-get install -y wget
+export DISTRO=buster-stable
+wget -O - apt.radxa.com/$DISTRO/public.key | sudo apt-key add -
+sudo apt-get update
+```
 In the terminal, type:
 ```shell
 sudo apt update
