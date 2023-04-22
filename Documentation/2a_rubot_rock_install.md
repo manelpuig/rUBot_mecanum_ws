@@ -157,17 +157,50 @@ You will need to install:
 ### **2.1. Install Ubuntu-desktop**
 In the terminal, type:
 ```shell
+sudo apt update
 sudo apt-get install ubuntu-desktop
 ```
+Now reboot
 
-### **2.2. Install nomachine**
+### **2.2. Hotspot configuration**
+In Ubuntu desktop, select "Configuration settings" --> "network" and select "hotspot"
+
+If you want to change the Hotspot name (one for each robot):
+
+Change the Hotspot settings (name or password):
+```shell
+sudo nm-connection-editor
+```
+To select this Hotspot automatically on restart:
+
+- open a terminal and see all the connection names:
+```shell
+nmcli con show
+```
+- Make the connection "Hotspot" start automatically:
+```shell
+nmcli con mod Hotspot connection.autoconnect yes
+```
+- Verify listing all the Hotspot parameters including "autoconnect"
+```shell
+nmcli con show Hotspot
+```
+
+- Identify the IP of the rbpi4 Hotspot: 
+  - type ifconfig
+  - in wlan0 you identify the inet address: 10.42.0.1
+
+
+### **2.3. Install nomachine**
 You have to install ARM version: https://downloads.nomachine.com/download/?id=114&distro=ARM
 
 In the terminal, type:
 ```shell
-sudo 
+sudo dpkg -i nomachine_8.4.2_1_arm64.deb
 ```
-### **2.3. Access to Remote desktop**
+>Verify the correct syntax of nomachine version
+
+### **2.4. Access to Remote desktop**
 In order to have remote access within Nomachine you have to:
 
 - Install the package: xserver-xorg-video-dummy
