@@ -149,6 +149,23 @@ You will be able to perform all in rock4 board but you will not have screen moni
 The rock5 image is preinstalled with:
 - Ubuntu 20 server 64bits
 
+Insert the SD card in rock4 C+ board and power it. 
+
+You will be asked for:
+- login: rock
+- password: rock
+
+Now we have to update the public key of radxa apt. The one used before is expired. (https://github.com/radxa/apt)
+
+You can execute the following command to get the new available.
+```shell
+sudo apt-get install -y wget
+export DISTRO=focal-stable
+wget -O - apt.radxa.com/$DISTRO/public.key | sudo apt-key add -
+sudo apt update
+sudo apt upgrade
+```
+
 You will need to install:
 - Ubuntu-desktop
 - nomachine
@@ -156,13 +173,6 @@ You will need to install:
 
 ### **2.1. Install Ubuntu-desktop**
 
-First of all we have to update the public key of radxa apt. The one used before is expired. You can execute the following command to get the new available.
-```shell
-sudo apt-get install -y wget
-export DISTRO=buster-stable
-wget -O - apt.radxa.com/$DISTRO/public.key | sudo apt-key add -
-sudo apt-get update
-```
 In the terminal, type:
 ```shell
 sudo apt update
