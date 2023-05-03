@@ -463,3 +463,10 @@ https://techvidvan.com/tutorials/detect-objects-of-similar-color-using-opencv-in
 
 Square detection:
 https://www.tutorialspoint.com/how-to-detect-a-rectangle-and-square-in-an-image-using-opencv-python
+
+### **4.4. Traffic signs identification**
+
+We will use identification techniques to identify if there is a signal in the road, and identify which signal is.
+The information related to this process is:
+https://github.com/RoboticaUB2023/rUBot_gopigo_ws/blob/master/Documentation/7_ObjectRecognition.md
+
