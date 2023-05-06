@@ -2,11 +2,15 @@
 
 We have designed and assembles a custom mecanum robot.
 
-The mechanical structure is descrived bellow:
+The mechanical structure is descrived below:<br>
 ![](./Images/rubot_custom/1_osoyoo.png)
 
 His main characteristics are: 
-- xxx
+- Arduino based control for sensors & actuators
+    - Servomotr actuartos for the 4 mecanum wheels
+- As onboard controll it's used RaspberryPi4 (due to out of stock, can be used other controller board such as ROCK PI 4)
+    - RPlidar distance sensor
+    - Two logitech C270 to capture the image and realize the line following and traffic sign detection
 - yyy
 
 In this document we will describe:
