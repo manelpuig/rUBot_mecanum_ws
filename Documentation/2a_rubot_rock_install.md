@@ -231,6 +231,17 @@ sudo mousepad /usr/share/X11/xorg.conf.d/20-dummy.conf
 ```
 >Copy the same contents as the rock4 case
 
+## **2.5. Install VS Code**
+Open web browser and find VS Code DEB version for Ubuntu in ARM64
+- Download and install:
+```shell
+sudo apt install ./codexxx.deb
+```
+- Clone the repository to work with
+- Make changes and sync
+- Follow instructions to insert your email and name
+- when syncing you will have to insert ypur github account name and password
+
 ## **3. Install drivers**
 You will need to install:
 - rplidar
