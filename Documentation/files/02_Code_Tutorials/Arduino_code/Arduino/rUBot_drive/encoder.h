@@ -7,7 +7,8 @@
 //Encoder *encB=new Encoder(3, 49);
 //Encoder *encA=new Encoder(2,23);//rev
 
-Encoder *encD=new Encoder(2, 23);
+//Encoder *encD=new Encoder(2, 23);
+Encoder *encD=new Encoder(2, 1);
 Encoder *encC=new Encoder(3, 49);//rev
 Encoder *encB=new Encoder(19, 38);
 Encoder *encA=new Encoder(18,31);//rev

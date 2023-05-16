@@ -19,6 +19,7 @@
 #if !defined(HDW_DEBUG)
 ros::NodeHandle nh;
 //ros::NodeHandle_<ArduinoHardware, 5, 5, 512, 1024> nh;
+//ros::NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> nh;
 tf::TransformBroadcaster broadcaster;
 
 
