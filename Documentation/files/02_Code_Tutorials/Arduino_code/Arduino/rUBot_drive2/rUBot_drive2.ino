@@ -8,7 +8,7 @@
 #include<std_msgs/Bool.h>
 
 
-#include "src/RoboticsUB.h"
+//#include "src/RoboticsUB.h"
 #include "encoder.h"
 #include "kinematics.hpp"
 #include "motor.h"
@@ -89,7 +89,7 @@ void setup()
   nh.subscribe(sub);
   nh.subscribe(resub);
   nh.advertise(odom_pub);
-  nh.advertise(imu_pub);
+  //nh.advertise(imu_pub);
   lastctrl=millis();
 }
 
@@ -150,18 +150,18 @@ void loop(){
   odom_pub.publish(&odom);
 
   // IMU
-  if (digitalRead(PIN_IMU_INT) == HIGH)
-  {
-    imu.ReadSensor();
-    q = imu.GetQuaternion();
-  }
-  imu_msg.header.stamp = nh.now();
-  imu_msg.orientation.x = q[0]
-  imu_msg.orientation.y = q[0]
-  imu_msg.orientation.z = q[0]
-  imu_msg.orientation.w = q[0]
+  //if (digitalRead(PIN_IMU_INT) == HIGH)
+  //{
+  //  imu.ReadSensor();
+  //  q = imu.GetQuaternion();
+  //}
+  //imu_msg.header.stamp = nh.now();
+  //imu_msg.orientation.x = q[0]
+  //imu_msg.orientation.y = q[0]
+  //imu_msg.orientation.z = q[0]
+  //imu_msg.orientation.w = q[0]
 
-  imu_pub.publish(&imu_msg);
+  //imu_pub.publish(&imu_msg);
   
 
   if((millis()-lastctrl)>1000*ctrlrate){
