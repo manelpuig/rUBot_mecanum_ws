@@ -149,7 +149,7 @@ You will be able to perform all in rock4 board but you will not have screen moni
 The rock5 image is preinstalled with:
 - Ubuntu 20 server 64bits
 
-Insert the SD card in rock4 C+ board and power it. 
+Insert the SD card in rock5b board and power it. 
 
 You will be asked for:
 - login: rock
@@ -176,11 +176,17 @@ You will need to install:
 In the terminal, type:
 ```shell
 sudo apt update
-sudo apt-get install ubuntu-desktop
+sudo apt install ubuntu-desktop
 ```
 Now reboot
 
+
 ### **2.2. Hotspot configuration**
+With internet connection, install hostapd
+```shell
+sudo apt install hostapd
+```
+
 In Ubuntu desktop, select "Configuration settings" --> "network" and select "hotspot"
 
 If you want to change the Hotspot name (one for each robot):
@@ -242,11 +248,33 @@ sudo apt install ./codexxx.deb
 - Follow instructions to insert your email and name
 - when syncing you will have to insert ypur github account name and password
 
+## **2.6. Install Arduino**
+Open web browser and download the linux arm64bits version
+```shell
+https://www.arduino.cc/en/software
+```
+After downloading the zip file, realocate it and unzip it in the Tools folder: ~/Desktop/Arduino. From this directory, open a terminal and execute the following commands:
+
+```shell
+sudo ./install.sh
+cd ~
+gedit .bashrc
+export PATH=$PATH:$HOME/Desktop/Arduino
+```
+Save and close the file and install rosserial for ROS Noetic using:
+```shell
+sudo apt-get install ros-noetic-rosserial-arduino
+sudo apt-get install ros-noetic-rosserial
+```
+Go to ~/Desktop/Arduino-1.8.18/libraries directory and remove ros_lib folder. From this directory execute:
+```shell
+rosrun rosserial_arduino make_libraries.py .
+```
+
 ## **3. Install drivers**
 You will need to install:
 - rplidar
 - usbcam
-- Rosserial
 
 First step is:
 - Setup your computer to accept software from packages.ros.org.
