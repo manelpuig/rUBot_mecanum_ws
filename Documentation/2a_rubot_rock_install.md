@@ -232,11 +232,11 @@ sudo apt install xserver-xorg-video-dummy
 ```
 - Create a configuration file at "/usr/share/X11/xorg.conf.d" folder
 ```shell
-sudo mousepad /usr/share/X11/xorg.conf.d/20-dummy.conf
+sudo gedit /usr/share/X11/xorg.conf.d/20-dummy.conf
 ```
 >Copy the same contents as the rock4 case
 
-## **2.5. Install VS Code**
+### **2.5. Install VS Code**
 Open web browser and find VS Code DEB version for Ubuntu in ARM64
 - Download and install:
 ```shell
@@ -247,7 +247,7 @@ sudo apt install ./codexxx.deb
 - Follow instructions to insert your email and name
 - when syncing you will have to insert ypur github account name and password
 
-## **2.6. Install Arduino**
+### **2.6. Install Arduino**
 Open web browser and download the linux arm64bits version
 ```shell
 https://www.arduino.cc/en/software
@@ -265,10 +265,13 @@ Save and close the file and install rosserial for ROS Noetic using:
 sudo apt-get install ros-noetic-rosserial-arduino
 sudo apt-get install ros-noetic-rosserial
 ```
-Go to ~/Desktop/Arduino-1.8.18/libraries directory and remove ros_lib folder. From this directory execute:
+Go to ~/Desktop/Arduino/libraries directory and remove ros_lib folder. From this directory execute:
 ```shell
 rosrun rosserial_arduino make_libraries.py .
 ```
+### **2.7. Install ROS Noetic**
+Open web browser in: http://wiki.ros.org/noetic/Installation/Ubuntu
+
 
 ## **3. Install drivers**
 You will need to install:
