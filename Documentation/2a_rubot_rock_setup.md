@@ -56,7 +56,7 @@ In Ubuntu desktop, select "Configuration settings" --> "network" and select the 
 
 Select the wifi you want to connect to and type the password. You will now have internet access when you are connected to the rUBot!
 
-### **1.3. Clone the updated rUBot github repository**
+## **2. Clone the updated rUBot github repository**
 
 The updated version of rUBot repository is located in:https://github.com/manelpuig/rUBot_mecanum_ws
 
