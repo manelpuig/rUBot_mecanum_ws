@@ -40,13 +40,18 @@ docker pull arvinskushwaha/ros-noetic-desktop-vnc:latest
 - A new window appear in your web browser with the graphical interface:
 ![](./Images/00_Docker/00_Docker_container_vnc.png)
 
-The best way to work with this docker container is to use Visual studio Code.
+You will have now a graphical interface working properly in windows and MAC
 
 ## **2. Visual Studio Code with Docker**
 
 The best way to work with ROS within Docker is to use Visual Studio Code
 
-- Execute the container and Connect to it within VS Code:
+The following extensions have to be installed:
+- Docker from Microsoft
+- Dev Container from Microsoft
+
+
+Execute the container and Connect to it within VS Code:
     - from left-side menu choose Docker
     - right-click on the running container and select "Attach VS Code"
 - Update your docker Container:
@@ -60,17 +65,21 @@ apt upgrade
 ```shell
 apt install -y git && apt install -y python3-pip
 ```
+Open the file ".bashrc" on root folder and add the lines at the end
+```shell
+source /opt/ros/noetic/setup.bash
+```
 To test Run the Master
 ```shell
 roscore
 ```
+
 Start another terminal in the same container ID and open turtlesim node.
 ```shell
-docker exec -it (container_id) bash
 source /opt/ros/noetic/setup.bash
 rosrun turtlesim turtlesim_node
 ```
-> Xlaunch has to be opened in lower task menu. Ik errors you have to delete the file CVXServer.0 in C:\Users\HP\AppData\Local\Temp. For that you have to close all applications and restert the computer.
+
 
 ### **1.5. Creating custom Docker**
 
