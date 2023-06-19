@@ -1,0 +1,11 @@
+<launch>
+  <!-- Define the needed parameters -->
+  <arg name="model" default="rubot_rp.urdf" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+  <!-- Spawn the robot -->
+  <!-- Robot URDF definition -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)"/>
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
+    args="-urdf -model rUBot -param robot_description"/>
+</launch>
