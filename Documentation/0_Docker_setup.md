@@ -80,92 +80,10 @@ source /opt/ros/noetic/setup.bash
 rosrun turtlesim turtlesim_node
 ```
 
+## **3. Clone and syncronize your repository**
 
-### **1.5. Creating custom Docker**
-
-In Visual Studio code, install the docker extensions:
-- Docker (Microsoft)
-
-Then create a new "Dockerfile" with the image configuration:
-```python
-# This is an example Docker File
-#  Command to build it
-# docker built -t <image name > .
-FROM osrf/ros:noetic-desktop-full
-
-RUN apt-get update
-RUN apt-get install -y git && apt-get install -y python3-pip
-RUN echo "git and pip Installed"
-RUN apt install -y gedit
-RUN apt install -y gedit-plugins
-RUN echo "gedit Installed"
-RUN apt install nautilus -y
-RUN apt install gnome-terminal -y
-RUN sudo apt install nautilus-actions gnome-terminal -y
-RUN echo "Nautilus File manager Installed"
-
-RUN cd /home/
-
-RUN echo "ALL Done"
-```
-Open a Power Shell terminal in the Dockerfile location and type:
-```shell
-docker build -t ros1_noetic_mpuig .
-```
-The Dockerfile is a text file that will produce a Docker Image
-
-Run the image:
-```shell
-docker run --name ROS1_mpuig -e DISPLAY=host.docker.internal:0.0 -it ros1_noetic_mpuig:latest
-```
-A "ROS1_mpuig" new container is created. 
-
-For successive times, you have to run direcly the container from Docker Desktop, and open in terminal.
-
-Open Nautilus
-```shell
-nautilus
-```
-In a gnome terminal 1 type:
-```shell
-source /opt/ros/noetic/setup.bash
-roscore
-```
-In a gnome terminal 2 type:
-```shell
-source /opt/ros/noetic/setup.bash
-rosrun turtlesim turtlesim_node
-```
-The Turtlesim appears in screen
-
-### **1.6. Github sync from docker**
-
-When finished, **syncronize** the changes with your github. 
-- Open a terminal in your local repository and type the first time:
-```shell
-git config --global user.email mail@alumnes.ub.edu
-git config --global user.name 'your github username'
-git config --global credential.helper store
-```
-- for succesive times, you only need to do:
-```shell
-git add -A
-git commit -a -m 'message'
-git push
-```
-- you will need to insert the username and the saved PAT password
-- syncronize your repository several times to save your work in your github account
-> - You can **update** your repository either in your local or **remote repository**:
->   - Local: with the previous instructions
->   - Remote: using web-based Visual Studio Code:
->       - pressing "·" key
->       - performing repository modifications
->       - typing "**git pull**" to syncronize
-
-### **1.7. Clone your repository**
-
-You can now clone any repository:
-- Open a new gnome-terminal in /home:
+You can now **clone** any repository:
+- Open a new terminal in /home:
 ```shell
 git clone https://github.com/manelpuig/rUBot_mecanum_ws
 cd rUBot_mecanum_ws
@@ -180,13 +98,19 @@ export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/mo
 ```
 - Open a new terminal from any place and verify the correct behaviour
 
-### **1.8. Visual Studio Code with Docker**
-You can add Docker extension to your VS Code and connect it to a running Container:
-- Add extension "Docker" and "Dev Container"
-- Select Docker item in left side
-- Select the Docker container you want to connect to
-- right-click and select "Attach Visual Studio Code"
+When finished, **syncronize** the changes with your github. 
+- Select "Source control" to see the changes you have made
+- Select all changes and add a commit message
+- When you will Push them, the first time you will be asked to link the repository to your github account:
+- Open a terminal in VS Code and type the first time:
+```shell
+git config --global user.email mail@alumnes.ub.edu
+git config --global user.name 'your github username'
+```
+- for succesive times, you only need to select changes, Commit a message and Push
 
-A new VS Code windows appears with the runnin container
-
-You can syncronize the changes within github inside VS Code.
+>You can **update** your repository using web-based Visual Studio Code:
+>
+>       - pressing "·" key (or add .dev extension)
+>       - performing repository modifications
+>       - typing "**git pull**" to syncronize
