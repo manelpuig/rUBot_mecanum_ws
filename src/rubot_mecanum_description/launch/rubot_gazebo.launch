@@ -1,6 +1,6 @@
 <launch>
   <!-- Define the needed parameters -->
-  <arg name="model" default="rubot_rp.urdf" />
+  <arg name="model" default="rubot.urdf" />
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
   <!-- Spawn the robot -->

@@ -29,14 +29,14 @@ His main characteristics are:
 
 First of all, we have to create the "rubot_mecanum_description" package where we will create the rUBot model. In case you want to create it from scratch, type:
 ```shell
-cd ~/Desktop/rubot_mecanum_ws/src
+cd ~/home/rubot_mecanum_ws/src
 catkin_create_pkg rubot_mecanum_description rospy
 cd ..
 catkin_make
 ```
 Then open the .bashrc file and verify the environment variables and source to the proper workspace:
 ```shell
-source ~/Desktop/rubot_mecanum_ws/devel/setup.bash
+source ~/home/rubot_mecanum_ws/devel/setup.bash
 ```
 
 To create our robot model, we use URDF files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
@@ -282,12 +282,26 @@ In robotics research, always before working with a real robot, we simulate the r
 Gazebo is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
 
 We will create a new spawn.launch file to spawn the robot in an empty world:
+```xml
+<launch>
+  <!-- Define the needed parameters -->
+  <arg name="model" default="rubot.urdf" />
 
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+  <!-- Spawn the robot -->
+  <!-- Robot URDF definition -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)"/>
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
+    args="-urdf -model rUBot -param robot_description"/>
+</launch>
+```
+Open a new terminal and launch this file:
 ```shell
 roslaunch rubot_mecanum_description rubot_gazebo.launch
 ```
-![](./Images/1_rubot_gazebo.png)
+![](./Images/01_SW_Model_Control/1_rubot_gazebo.png)
 
+You will see in Rviz the camera is receiving now images!
 > Colors in gazebo: 
 >- are defined at the end of urdf file:
 ```xml
@@ -298,36 +312,28 @@ roslaunch rubot_mecanum_description rubot_gazebo.launch
 ```
 You can create a very simple world "rubot.world" using gazebo:
 
+- Close first gazebo process in a new terminal
+  ```shell
+  pkill gzserver && pkill gzclient
+  ```
 - Type: sudo gazebo
 - add some objects in the empty world
 - save the final world to "worlds" folder
+- quit in gazebo application
 
-The robot could be spawn in a predefined position inside this new created world using this new rubot_world.launch file.
+The robot could be spawn in a predefined position and orientation inside this new created world using this new rubot_world.launch file.
 
 Type the following to spawn the robot inside the world and test the sensor values using rviz:
 ```shell
 roslaunch rubot_mecanum_description rubot_world.launch
 roslaunch rubot_mecanum_description display.launch
 ```
+![](./Images/01_SW_Model_Control/1_rubot_test_world.png)
+
 You can see the nodes and topics generated using rqt_graph
+![](./Images/01_SW_Model_Control/1_rubot_test_rqt.png)
 
-**Activity:**
-
-Design a proper model corresponding to the real rUBot_mecanum you will work with:
-- Customized model colors (rviz and gazebo)
-- Add a number part on top with a fixed joint
-
-To verify the final frame orientations:
-```shell
-roslaunch rubot_mecanum_description rubot_world.launch
-roslaunch rubot_mecanum_description display.launch
-```
-![](./Images/1_rubot_gazebo.png)
-![](./Images/1_rviz_rubot.png)
 > To see the frames you have to add TF in rviz
-- In order to kill the previous Gazebo process, type:
-
-    pkill gzserver && pkill gzclient
 
 >Carefull:
 - Perhaps is needed to setup your Keys again:
@@ -336,6 +342,20 @@ roslaunch rubot_mecanum_description display.launch
   sudo apt get update
   sudo apt get upgrade
   ```
+
+**Activity:**
+
+Design a proper model corresponding to the real rUBot_mecanum you will work with:
+- Customized model colors (rviz and gazebo)
+- Add a number part on top with a fixed joint
+
+To verify the final frame orientations (modify the launch files accordingly):
+```shell
+roslaunch rubot_mecanum_description rubot_world.launch
+roslaunch rubot_mecanum_description display.launch
+```
+![](./Images/01_SW_Model_Control/1_rubot_number.png)
+
 
 ## **2. Design the project world**
 
@@ -347,12 +367,10 @@ Open gazebo as superuser:
 ```shell
 sudo gazebo
 ```
-In ROS windows:
-```shell
-roslaunch gazebo_ros empty_world.launch
-```
+
 You can build your world using "Building Editor" in Edit menu
-![](./Images/1_BuildingWorld1_1.png)
+![](./Images/01_SW_Model_Control/1_BuildingWorld.png)
+
 You can save:
 - the generated model in a model folder (without extension)
 
@@ -370,29 +388,21 @@ Once you finish is better to close the terminal you have work as superuser
 #### **Create world with model parts**
 You can create model parts like walls of 90cm or 60cm with a geometry and color, using building editor. These parts can be saved:
 - in ~/.gazebo/models/
-- in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_projects/models), if you add this line in .bashrc file:
+- in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models), if you add this line in .bashrc file:
   ```xml
-  export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
-  ```
-- in ROS windows terminal
-  ```xml
-  set GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_projects/models
+  export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 - When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
 
 You will have acces in gazebo insert section. Then you can construct your world adding parts.
 
 This is an exemple:
-![](./Images/1_BuildingEditor.png)
+![](./Images/01_SW_Model_Control/1_BuildingEditor.png)
 
-### **Exercise:**
-Generate a proper world corresponding to the real world we want to spawn our rUBot mecanum robot in. For exemple a maze.
 
-Save this world as maze.world
+### **Bringup the rUBot in project world**
 
-### **2.2. Spawn the rUBot robot in project world**
-
-Now, spawn the rUBot mecanum robot in our generated world. You have to create a "nexus_world.launch" file:
+Now, spawn the rUBot mecanum robot in our generated world. You have to modify the world argument in "rubot_world.launch" file:
 ``` shell
 roslaunch rubot_mecanum_description rubot_world.launch
 ```
@@ -407,6 +417,7 @@ catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msg
 cd ..
 catkin_make
 ```
+
 ### **3.1 Kinematics model of mecanum robot**
 The first concept we are going to go through is kinematic models. So, we know what kinematics are, but, what is a kinematic model?
 
@@ -419,13 +430,13 @@ We will define the Kinematic model for Holonomic Mecanum wheeled robot:
 Omnidirectional wheeled mobile robots typically employ either omniwheels or mecanum wheels, which are typical wheels augmented with rollers on their outer circumference. These rollers spin freely and they allow sideways sliding while the wheel drives forward or backward without slip in that direction.
 
 The different movements our car can perform are:
-![](./Images/1_mecanum_kine1.png)
+![](./Images/01_SW_Model_Control/1_mecanum_kine1.png)
 
 The forces involved define the robot linear and angular movement:
-![](./Images/1_mecanum_kine2.png)
+![](./Images/01_SW_Model_Control/1_mecanum_kine2.png)
 
 The forward Kinematic's equations are defined below:
-![](./Images/1_mecanum_kine3.png)
+![](./Images/01_SW_Model_Control/1_mecanum_kine3.png)
 
 where
 
@@ -445,10 +456,10 @@ In our case we want to apply a robot movement defined by:
 - we need to calculate the 4 wheel speeds needed to obtain this robot velocity
 
 This corresponds to an Inverse Kinematics defined by the following expressions:
-![](./Images/1_mecanum_kine4.png)
+![](./Images/01_SW_Model_Control/1_mecanum_kine4.png)
 With the information of (uf,ul,w) Gazebo plugin calculates to obtain the Odometry.
 The analytical expressions are explained graphically in the picture:
-![](./Images/1_odom_mecanum.png)
+![](./Images/01_SW_Model_Control/1_odom_mecanum.png)
 
 In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
 
@@ -457,44 +468,6 @@ We can control the movement of our robot using:
 - the keyboard or a joypad
 - pragramatically in python creating a "/rubot_nav" node
 
-In any case the first step is to "bringup" our robot in the desired virtual environment. We will create a rubot_bringup.launch file to:
-- Open gazebo with the desired virtual world
-- spawn our robot model in a speciffic position
-
-This file is:
-```xml
-<launch>
-    <arg name="world" default="square2wall.world"/> 
-    <arg name="model" default="rubot_rp.urdf" />
-    <arg name="x_pos" default="0.8"/>
-    <arg name="y_pos" default="0.0"/>
-    <arg name="yaw" default="1.0"/>
-    <!-- spawn world -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-      <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
-    </include>
-    <!-- spawn nexus -->
-    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
-      args="-urdf -model rubot -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
-    <!-- send fake joint values -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      <param name="use_gui" value="False"/>
-    </node>
-    <!-- Combine joint values -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    <!-- Show in Rviz   -->
-    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_control)/rviz/rubot_nav.rviz"/>
-  </launch>
-  ```
-  type:
-  ```shell
-roslaunch rubot_control rubot_bringup.launch
-  ```
-  ![](./Images/1_mecanum_bringup.png)
-  > In bringup file we open rviz to see the sensor messages.
-  >
-  > The fixed frame is now odom, then the world will not move with robot movements. We find odom frame in rviz because joint_state_publisher and robot_state_publisher are launched!
 
 We are now ready to launch control actions
 
