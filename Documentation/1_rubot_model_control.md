@@ -402,13 +402,17 @@ This is an exemple:
 
 ### **Bringup the rUBot in project world**
 
-Now, spawn the rUBot mecanum robot in our generated world. You have to modify the world argument in "rubot_world.launch" file:
+The first step in robotics is to bringup the rUBot mecanum robot in our generated world. This means:
+- spawn our robot in the designed environment 
+- and opened Rviz to see the topic messages.
 ``` shell
-roslaunch rubot_mecanum_description rubot_world.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
-![](./Images/1_rubot_world.png)
+![](./Images/01_SW_Model_Control/1_mecanum_bringup.png)
 
-## **3. rUBot mecanum navigation control in the new world environment**
+Now we are ready to control our robot in this virtual environment!
+
+## **3. rUBot mecanum navigation control in virtual environment**
 
 Once the world has been generated we will create a ROS Package "rubot_control" to perform the autonomous navigation
 ```shell
@@ -468,7 +472,6 @@ We can control the movement of our robot using:
 - the keyboard or a joypad
 - pragramatically in python creating a "/rubot_nav" node
 
-
 We are now ready to launch control actions
 
 #### **3.2.1. Keyboard control**
@@ -477,15 +480,18 @@ You can control the rUBot with the keyboard installing the following packages:
 sudo apt-get install ros-noetic-teleop-tools
 sudo apt-get install ros-noetic-teleop-twist-keyboard
 ```
-In ROS for windows, you need to make a source installation of this 2 packages. Follow the instructions in Documentation/Files folder to install source packages.
 
 Then you will be able to control the robot with the Keyboard typing:
+``` shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+```
 ```shell
 rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![Getting Started](./Images/1_rubot_bringup.png)
+![](./Images/01_SW_Model_Control/1_rubot_bringup.png)
+
 #### **3.2.2. Python programming control**
 Diferent navigation programs are created:
 
@@ -496,7 +502,7 @@ Diferent navigation programs are created:
 - go to POSE: attend a specific position and orientation
 
 The nodes and topics structure corresponds to the following picture:
-![Getting Started](./Images/1_nodes_topics.png)
+![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
 
 #### **a) Navigation Control**
 
