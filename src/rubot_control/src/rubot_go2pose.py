@@ -70,7 +70,7 @@ class rubot:
                 
         # Please, insert tolerances a number slightly greater than 0 (e.g. 0.01).
         distance_tolerance = 0.1
-        angle_tolerance = 0.02
+        angle_tolerance = 0.1
 
         vel_msg = Twist()
 
