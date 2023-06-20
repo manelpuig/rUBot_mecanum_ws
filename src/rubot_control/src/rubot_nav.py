@@ -36,12 +36,9 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     rospy.Subscriber('/odom',Odometry, odom_callback)
     rate = rospy.Rate(10) # 10hz
     vel = Twist()
+    rospy.sleep(0.0) #needed in sw time to ensure good time reading
     time_begin = rospy.Time.now()
-    if time_begin == 0:# when using software time usually returns 0
-        time_begin = rospy.Time.now()
-        n+=1
-        print(n)
-    rospy.loginfo("Time_begin = " + str(time_begin))
+    
     while not end_mov:
         if (duration_s <= time_duration):
             rospy.loginfo("Robot running")

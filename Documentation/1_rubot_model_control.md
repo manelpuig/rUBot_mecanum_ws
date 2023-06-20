@@ -410,6 +410,10 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 ![](./Images/01_SW_Model_Control/1_mecanum_bringup.png)
 
+>Careful:
+- we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
+- Verify in rviz you have to change the fixed frame to "odom" frame
+
 Now we are ready to control our robot in this virtual environment!
 
 ## **3. rUBot mecanum navigation control in virtual environment**
@@ -511,6 +515,7 @@ We will create now a first navigation python files in "src" folder:
 
 Specific launch file have been created to launch the node and python file created above:
 ```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_nav.launch
 ```
 
@@ -540,10 +545,11 @@ rospy.spin()
 ```
 To test the LIDAR we have generated a launch file
 ```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/1_rubot_lidar_test.png)
+![](./Images/01_SW_Model_Control/1_rubot_lidar_test.png)
 > We can see that the zero angle corresponds to the back side of the robot!
 
 #### **c) Autonomous navigation with obstacle avoidance**
@@ -551,31 +557,16 @@ We will use now the created world to test the autonomous navigation with obstacl
 
 We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
 ```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_self_nav.launch
 ```
->Careful:
-- we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
-- Verify in rviz you have to change the fixed frame to "odom" frame
 
-![](./Images/1_rubot_self.png)
+![](./Images/01_SW_Model_Control/1_rubot_self.png)
 
 The algorithm description functionality is:
 - "rubot_self_nav.py": The Python script makes the robot go forward. 
     - LIDAR is allways searching the closest distance and the angle
     - when this distance is lower than a threshold, the robot goes backward with angular speed in the oposite direction of the minimum distance angle.
-
-> Note the 180 degrees turn due to the rpLIDAR orientation in rUBot:
-```python
-    def callbackLaser(self, scan):
-
-        closestDistance, elementIndex = min(
-            (val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max
-        )
-        angleClosestDistance = self.__wrapAngle((elementIndex / 2)-180) # RPLidar zero angle in backside
-
-        rospy.loginfo("Closest distance of %5.2f m at %5.1f degrees.",
-                      closestDistance, angleClosestDistance)
-```
 
 #### **d) Wall Follower**
 Follow the wall accuratelly is an interesting challenge to make a map with precision to apply SLAM techniques for navigation purposes.
@@ -584,45 +575,26 @@ There are 2 main tasks:
 - Create a python file "rubot_wall_follower.py" to perform the wall follower in the maze of our gopigo3 robot
 - Create a launch file to initialyse all the needed nodes in our system for this control task
 
-We have developed 2 different methods for wall follower:
-- Geometrical method
-- Lidar ranges method
-
-#### **Geometrical method**
-
 Follow the instructions to perform the rubot_wall_follower_gm.py python program are in the notebook: 
 https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
 
 The algorithm is based on:
 
-![](./Images/1_wall_follower_gm.png)
+![](./Images/01_SW_Model_Control/1_wall_follower_gm.png)
 
-A rubot_wall_follower_gm.launch is generated to test the node within a specified world
+You will have to tune the proper parameter set for a good wall following process
 ```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_wall_follower_gm.launch
 ```
 
 You can see a video for the Maze wall follower process in: 
 [![IMAGE_ALT](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
 
-![](./Images/1_rubot_wall_follower_gm.png)
-#### **Lidar ranges method**
+![](./Images/01_SW_Model_Control/1_rubot_wall_follower_gm.png)
 
-We have created another rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, front-left, right, left, back-right and back-left, and perform a specific actuation in function of the minimum distance readings.
 
-Follow the instructions to create the rubot_wall_follower_rg.py python file: https://www.theconstructsim.com/wall-follower-algorithm/
-
-![](./Images/1_wall_follower_rg.png)
-
-The algorith is based on laser ranges test and depends on the LIDAR type:
-![](./Images/1_lidar_type.png)
-
-```shell
-roslaunch rubot_control rubot_wall_follower_rg.launch
-```
-![](./Images/1_rubot_wall_follower_rg.png)
-
-#### **Go to POSE**
+#### **e) Go to POSE**
 Define a specific Position and Orientation as a target point to go:
 
 - x target point
@@ -633,6 +605,7 @@ Modify the python script developed in turlesim control package according to the 
 
 For validation type:
 ```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_go2pose.launch
 ```
-![](./Images/1_rubot_go2pose.png)
+![](./Images/01_SW_Model_Control/1_rubot_go2pose.png)
