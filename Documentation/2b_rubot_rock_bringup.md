@@ -2,7 +2,7 @@
 The hardware bringup file will contain:
 - launch the rUBot node in Arduino-Mega board
 - launch the LIDAR node
-- launch the raspicam node
+- launch the usb_cam node
 
 Graphically, the final node structure will be:
 ![Getting Started](./Images/2_nodes_topics.png)

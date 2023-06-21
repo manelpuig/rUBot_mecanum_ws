@@ -13,11 +13,10 @@ The rock5b onboard is preinstalled with:
 - NoMachine remote desktop
 - ROS Noetic
 - Arduino
-- rUBot workspace version
 
 Insert the SD card in rock5b board and power it. 
 - A hotspot will be created:
-  - SSID: rock5_tplink
+  - SSID: rock_tplink
   - Pass: rock1234
 - Connect your computer to this Hotspot
 - Install in your computer Nomachine remote desktop: https://www.nomachine.com/es
@@ -40,11 +39,13 @@ In Ubuntu desktop, select "Configuration settings" --> "network" and select "hot
 
 You will have to change the Hotspot name (one for each robot):
 
-Change the Hotspot settings (name or password):
+Alternativelly you can change the Hotspot settings (name or password) with:
 ```shell
 sudo nm-connection-editor
 ```
-You will be able to change the name and password. Change only the name to rUBotXX (with the robot number)
+You will be able to change:
+- the name: from rock_tplink to rUBot_xx
+- The password maintain rock1234
 
 ### **1.2. wifi configuration**
 
@@ -61,15 +62,26 @@ Select the wifi you want to connect to and type the password. You will now have 
 The updated version of rUBot repository is located in:https://github.com/manelpuig/rUBot_mecanum_ws
 
 You will have to:
-- Fork this repository to your github account
-- Clone your github rUBot workspace in the rUBot Desktop:
-  - Delete the older "rUBot_mecanum_ws" folder
-  - open a new terminal in Desktop 
-  - type:
+- In your PC: 
+  - Fork this repository to your github account
+- In rUBot remote desktop:
+  - Open VS Code
+  - Clone your github rUBot workspace:
+    - Delete the older "rUBot_mecanum_ws" folder
+    - open a new terminal in /home/Rock 
+    - type:
+    ```shell
+    cd /home/Rock
+    git clone https://github.com/your_github_name/rUBot_mecanum_ws
+    cd rUBot_mecanum_ws
+    catkin_make
+    ```
+  - Open the .bashrc file in home folder
+  - copy these lines at the end
   ```shell
-  git clone https://github.com/your_github_mane/rUBot_mecanum_ws
-  cd /Home/Desktop/rUBot_mecanum_ws
-  catkin_make
+  source /opt/ros/noetic/setup.bash
+  source /home/rUBot_mecanum_ws/devel/setup.bash
+  export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/ models:$GAZEBO_MODEL_PATH
   ```
 
   You are ready to work with your robot!
