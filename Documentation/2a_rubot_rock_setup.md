@@ -71,7 +71,7 @@ You will have to:
     - open a new terminal in /home/Rock 
     - type:
     ```shell
-    cd /home/Rock
+    cd /home/rock
     git clone https://github.com/your_github_name/rUBot_mecanum_ws
     cd rUBot_mecanum_ws
     catkin_make
@@ -80,8 +80,8 @@ You will have to:
   - copy these lines at the end
   ```shell
   source /opt/ros/noetic/setup.bash
-  source /home/rUBot_mecanum_ws/devel/setup.bash
-  export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/ models:$GAZEBO_MODEL_PATH
+  source /home/rock/rUBot_mecanum_ws/devel/setup.bash
+  export GAZEBO_MODEL_PATH=/home/rock/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 
   You are ready to work with your robot!
