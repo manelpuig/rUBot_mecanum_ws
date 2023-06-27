@@ -113,4 +113,19 @@ git config --global user.name 'your github username'
 >
 >       - pressing "·" key (or add .dev extension)
 >       - performing repository modifications
->       - typing "**git pull**" to syncronize
+>       - typing "git pull" to syncronize
+
+## **4. roboDK Software install within Docker**
+
+Mainly for MAC users, you can install roboDK within docker:
+- download the ubuntu version roboDK from: https://robodk.com/download
+- Extract executable to /home/roboDK (create first the roboDK folder)
+- roboDK icon will appear in Desktop. You can double click to start
+- Locate path to python and editor
+```shell
+which python3
+which idle
+```
+- Place the paths to "Tools --> Options --> Python"
+
+You are ready to use roboDK with python in your Container!
