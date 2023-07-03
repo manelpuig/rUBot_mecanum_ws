@@ -81,3 +81,9 @@ To work with ROS2 first open your ~/.bashrc and be sure you have sourced ROS2 ad
 - source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
 
 Create your first Package: https://docs.ros.org/en/foxy/Tutorials/Creating-Your-First-ROS2-Package.html
+
+## **3. Create your own robot**
+
+Bibliography:
+- https://automaticaddison.com/how-to-simulate-a-robot-using-gazebo-and-ros-2/
+- https://www.theconstructsim.com/spawning-multiple-robots-in-gazebo-with-ros2/
