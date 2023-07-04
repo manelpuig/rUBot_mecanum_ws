@@ -115,9 +115,23 @@ git config --global user.name 'your github username'
 >       - performing repository modifications
 >       - typing "git pull" to syncronize
 
-## **4. roboDK Software install within Docker**
+## **4. Alternative ROS environment**
 
-Mainly for MAC users, you can install roboDK within docker:
+Mainly for MAC users, if the graphical interface is not working properly, we suggest to use the ROS environment developed by "The Construct" (https://app.theconstructsim.com/), enterprise working on ROS academia and development and located in Barcelona.
+- Open the link: https://app.theconstructsim.com/
+- Create a free user account
+- Select "myRosjects"
+![](./Images/00_Docker/myRosjects.png)
+- Create a New Project
+![](./Images/00_Docker/ROBIO_Ros1.png)
+You will have 2GB Virtual machine with Ubuntu 20 and ROS Noetic installed for free!!
+
+## **5. Software install within Ubuntu Image**
+
+One you have ubuntu image working properly, mainly for MAC users, you can inatall SW based on Ubuntu:
+
+### **5.1. roboDK**
+Mainly for MAC users, you can install roboDK:
 - download the ubuntu version roboDK from: https://robodk.com/download
 - Extract executable to /home/roboDK (create first the roboDK folder)
 - roboDK icon will appear in Desktop. You can double click to start
