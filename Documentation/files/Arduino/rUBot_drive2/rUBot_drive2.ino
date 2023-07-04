@@ -37,6 +37,13 @@ MPID PIDB(encB,KP,KI,KD,false);
 MPID PIDC(encC,KP,KI,KD,true);
 MPID PIDD(encD,KP,KI,KD,false);
 
+//per assegurar que les vxi s'actualitzen quan deixem de publicar al fer ctrl+C al terminal 
+//Global variables vxi vyi omegai;
+//o potser WA Wb WC WD
+//float *vxi;
+//float *vyi;
+//float *omegai;
+
 //IMU imu;
 //float *rpw;
 //float *q;
