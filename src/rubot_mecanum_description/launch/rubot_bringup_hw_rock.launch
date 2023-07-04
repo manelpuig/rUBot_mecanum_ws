@@ -1,5 +1,5 @@
 <launch>
-    <arg name="model" default="rubot_rp.urdf" />
+    <arg name="model" default="rubot.urdf" />
   <!-- spawn rubot_rp -->
     <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
   <!-- send joint values -->

@@ -5,6 +5,7 @@ import rospy
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 import sys
+import time
 robot_x = 0
 robot_y = 0
 robot_f = 0
@@ -57,6 +58,7 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
             pub.publish(vel)
             end_mov = True
             rate.sleep()
+            #time.sleep(10);
             
         time_end = rospy.Time.now()
         rospy.loginfo("Time_end = " + str(time_end))
