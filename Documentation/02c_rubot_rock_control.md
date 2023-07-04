@@ -1,4 +1,4 @@
-# **rUBot mecanum in Raspberrypi4 Control**
+# **2. rUBot mecanum Control**
 
 The main objectives are to control the rUBot movements:
 - self navigation
@@ -6,15 +6,15 @@ The main objectives are to control the rUBot movements:
 - go to pose
 
 ### **Setup your workspace**
-The raspberrypi4 onboard is preinstalled with:
+The rock5b onboard is preinstalled with:
 - Ubuntu 20 server 32bits
   - NoMachine remote desktop
 - ROS Noetic
-- rubot_rbpi4_ws repository is located in /home/pi/Desktop folder 
+- rUBot_mecanum_ws repository is located in /home/ubuntu folder 
 
 We will create a "rubot_control" package to perform the rUBot_mecanum control movements:
 ```shell
-cd ~/Desktop/rubot_rbpi4_ws/src
+cd ~/rUBot_mecanum_ws/src
 catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msgs
 cd ..
 catkin_make
@@ -25,18 +25,23 @@ catkin_make
 
 First of all you need to bringup the rubot_mecanum robot.
 
-### **Bringup rubot_mecanum**
+## **2.1. Bringup rubot_mecanum**
 
 The bringup consists to:
 - launch the rUBot node in Arduino-Mega board
 - launch the LIDAR node
-- launch the raspicam node
+- launch the usb_cam node
 
-You will launch first "rubot_bringup_hw.launch" file to setup the rUBot_mecanum.
+You will launch first "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw.launch
 ```
+## **2.2. Movement control rubot_mecanum**
+
+We will control the rUBot_mecanum using:
+- The keyboard
+- With a custom node created in a speciffic python program 
 
 ### **Movement control using keyboard**
 
@@ -57,9 +62,9 @@ or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
-## **Movement control with python script**
+### **Movement control with python script**
 
-From the "rubot_rbpi4_ws" workspace, the src/rubot_control folder has 2 new folders:
+From the "rUBot_mecanum_ws" workspace, the src/rubot_control folder has 2 new folders:
 - scrip folder: with the python programs for specific movement control
 - launch folder: with programs to launch the movement control
 
@@ -85,7 +90,7 @@ A "node_nav.launch" file is created to launch the node and python file created a
 To properly perform a especific movement control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the specific movement control.
 ```shell
@@ -99,7 +104,7 @@ In order to navigate autonomously and avoid obstacles, we will use a specific rp
 To properly perform a especific movement control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the rpLIDAR test. We have created specific python file and launch file for this test control
 ```shell
@@ -116,7 +121,7 @@ This performance is defined in "rubot_self_nav.py"
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the self-navigation. We have created specific python file and launch file for this navigation control
 ```shell
@@ -146,8 +151,6 @@ In rviz, select the fixed frame to "odom", and add Camera and LaserScan with the
 
 You can then save the config file as laserscan.rviz name and use it in the launch file
 
-![](./Images/2_self_nav.png)
-
 A launch file is created to integrate all the needed roslaunch parameters but you can change the defauld values with this syntax:
 ```shell
 roslaunch rubot_control rubot_self_nav.launch distance_laser:=0.5 speed_factor:=0.5
@@ -156,10 +159,6 @@ roslaunch rubot_control rubot_self_nav.launch distance_laser:=0.5 speed_factor:=
 
 This control task consist on find a wall and follow it at a certain distance. We will see that this is an important control task because this will be used later to make accurate maps of working environments.
 
-We have developed 2 different methods for wall follower:
-- Geometrical method
-- Lidar ranges method
-
 #### **Geometrical method**
 In src folder you create the python file for wall follower purposes
 
@@ -167,12 +166,12 @@ The instructions to perform the python program are in the notebook:
 
 https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
 
-![](./Images/2_wall_follower_gm.png)
+![](./Images/02_rubot_rock/2c_wall_follower_gm.png)
 
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the wall-follower. We have created specific python file and launch file for this navigation control
 ```shell
@@ -200,36 +199,7 @@ You can see the video result:
 
 [![Click here to watch the video](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
 
-#### **b) ranges method**
-In src folder you create the python file for wall follower purposes
 
-The algorith is based on laser ranges test and depends on the LIDAR type:
-
-![](./Images/2_wall_follower_rg1.png)
-
-Take into account that:
-- RP LIDAR has 180º rotation
-- YDlidar in front direction has 2 different ranges [660:719] and [0:60]
-- YDlidar sends some 0 values due to wrong readings. They have to be changed to high value to be able to take the minimum falue from the desired range.
-
-To properly perform a especific self-navigation control we have first to:
-- Bringup rUBot_mecanum
-```shell
-roslaunch rubot_control rubot_bringup_hw.launch
-```
-- Then open a new terminal to launch the rUBot_nav node to perform the wall-follower. We have created specific python file and launch file for this navigation control
-```shell
-roslaunch rubot_control rubot_wall_follower_rg.launch
-```
-The launch file has no parameters to modify:
-
-```xml
-<launch>
-  <!-- launch follow wall   -->
-  <node name="wall_follow" pkg="rubot_control" type="rubot_wall_follower_rg.py" output="screen" >
-  </node>
-</launch>
-```
 ### **E) Go to POSE**
 
 The objective is to program the robot to reach a speciffic target POSE defining:
@@ -240,7 +210,7 @@ The objective is to program the robot to reach a speciffic target POSE defining:
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal to launch the rUBot_nav node to perform the go 2 pose control. We have created specific python file and launch file for this navigation control
 ```shell

@@ -68,7 +68,7 @@ You will have to:
   - Open VS Code
   - Clone your github rUBot workspace:
     - Delete the older "rUBot_mecanum_ws" folder
-    - open a new terminal in /home/Rock 
+    - open a new terminal in /home/rock 
     - type:
     ```shell
     cd /home/rock
