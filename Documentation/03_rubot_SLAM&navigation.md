@@ -16,7 +16,7 @@ sudo apt install ros-noetic-slam-gmapping
 ```
 Open the .bashrc file and verify to source to the proper workspace:
 ```shell
-source /media/sf_github_manelpuig/rUBot_mecanum_ws_/devel/setup.bash
+source /home/ubuntu/rUBot_mecanum_ws_/devel/setup.bash
 ```
 > change the path correcponding to your ws
 ## **What do you need to perform robot navigation with ROS?**
@@ -34,9 +34,9 @@ To navigate with rUBot mecanum robot in a custom maze we have first to create a 
 - geometry_msgs
 - nav_msgs
 
-The package "nexus_slam" is already created. Copy this folder to the src directory of your workspace and compile again your repository.
+The package "rubot_slam" is already created. Copy this folder to the src directory of your workspace and compile again your repository.
 
-This repository is essentially the one corresponding to turtlebot3 adapted for the nexus robot prototype:
+This repository is essentially the one corresponding to turtlebot3 adapted for the rUBot robot prototype:
 
  https://github.com/ROBOTIS-GIT/turtlebot3 
 
@@ -68,7 +68,7 @@ rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 ```
 Or use the navigation program you have designed to follow the walls for exemple to properly generate the map.
 ```shell
-roslaunch rubot_control node_wall_follower_gm.launch
+roslaunch rubot_control rubot_wall_follower_gm.launch
 ```
 > Take care to launch only the wall_follower node
 

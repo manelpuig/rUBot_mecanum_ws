@@ -1,4 +1,4 @@
-
+// Program rUBot mecanum
 #include <ros.h>
 #include <ros/time.h>
 #include <tf/tf.h>
@@ -24,29 +24,23 @@ nav_msgs::Odometry odom;
 ros::Publisher odom_pub("odom", &odom);
 //ros::Publisher imu_pub("imu",&imu_msg);
 
+// Global Variables
 float ctrlrate=1.0;
 unsigned long lastctrl;
-double x=0,y=0,theta=0;
-// IMU Pin
+float x=0,y=0,theta=0;
+float vx=0,vy=0,w=0;
+float vxi=0,vyi=0,omegai=0;
+// IMU
 const int PIN_IMU_INT = 18;
-
-
+//float *rpw;
+//float *q;
+// Motors PID
 float KP=0.3,KI=0.2,KD=0.2;
 MPID PIDA(encA,KP,KI,KD,true);
 MPID PIDB(encB,KP,KI,KD,false);
 MPID PIDC(encC,KP,KI,KD,true);
 MPID PIDD(encD,KP,KI,KD,false);
 
-//per assegurar que les vxi s'actualitzen quan deixem de publicar al fer ctrl+C al terminal 
-//Global variables vxi vyi omegai;
-//o potser WA Wb WC WD
-//float *vxi;
-//float *vyi;
-//float *omegai;
-
-//IMU imu;
-//float *rpw;
-//float *q;
 
 void cmdVelCb( const geometry_msgs::Twist& twist_msg){
   float vx=twist_msg.linear.x;
@@ -107,6 +101,9 @@ void loop(){
   float wB=0;
   float wC=0;
   float wD=0;
+  float x,y,theta;
+  float vx,vy,w;
+  float vxi,vyi,omegai;
 
   PIDA.tic();
   wA=PIDA.getWheelRotatialSpeed();
@@ -124,13 +121,20 @@ void loop(){
   wD=PIDD.getWheelRotatialSpeed();
   PIDD.toc();
 
-  float vxi=0,vyi=0,omegai=0;
+  // Twist vector transition
   ForwardKinematic(wA,wB,wC,wD,vxi,vyi,omegai);
   float dt=PIDA.getDeltaT();
-  // Odom
-  x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
-  y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
-  theta+=omegai*dt;
+  // Odom with transition vxi, vyi
+  //x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
+  //y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
+  //theta+=omegai*dt;
+  //if(theta > 3.14)
+  //  theta=-3.14;
+  
+  // Odom with transition vx, vy
+  x+=vx*cos(theta)*dt-vy*sin(theta)*dt;
+  y+=vx*sin(theta)*dt+vy*cos(theta)*dt;
+  theta+=w*dt;
   if(theta > 3.14)
     theta=-3.14;
     
@@ -150,9 +154,12 @@ void loop(){
   odom.pose.pose.position.y = y;
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-  odom.twist.twist.linear.x = vxi;
-  odom.twist.twist.linear.y = vyi;
-  odom.twist.twist.angular.z = omegai;
+  //odom.twist.twist.linear.x = vxi;
+  odom.twist.twist.linear.x = vx;
+  //odom.twist.twist.linear.y = vyi;
+  odom.twist.twist.linear.y = vy;
+  //odom.twist.twist.angular.z = omegai;
+  odom.twist.twist.angular.z = w;
 
   odom_pub.publish(&odom);
 

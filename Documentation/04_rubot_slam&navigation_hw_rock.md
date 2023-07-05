@@ -1,4 +1,4 @@
-# **SLAM & Navigation rUBot mecanum in RaspberryPi**
+# **SLAM & Navigation rUBot mecanum with Rock5b**
 Autonomous navigation refers that the robot is able to move autonomously around the environment avoiding any obstacle.
 
 In a hospital, a delivery robot carries samples or food from one room to another. 
@@ -7,13 +7,10 @@ The main objectives are:
 - use SLAM (Simultaneous Localization and Mapping) techniques to generate and store a map of the hospital flor
 - use Navigation techniques to find an optimal trajectory to reach a speciffic hospital target position
 
-If the odometry localization is not reliable, the Cartographer package is a better choice:
-https://google-cartographer-ros.readthedocs.io/en/latest/compilation.html
-
 let's see how to fulfill these objectives
 
 
-## **Method 1: Using Odometry for AMCL localization**
+## **Using Odometry for AMCL localization**
 
 To perform SLAM & Navigation, we need to create a specific "rubot_slam" package.
 
@@ -26,7 +23,7 @@ This package is already created in the simulation ws. Take the same "rubot_slam"
 To generate the map we need first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Launch the rubot_slam file
 ```shell
@@ -53,12 +50,12 @@ You will get two files in the specified folder of your workspace: hospital1map.p
 
 Provided with the map, we are ready to perform robot navigation with the rUBot_mecanum robot.
 
-### **2. navigate to speciffic target points within the map**
+### **2. Navigate to speciffic target points within the map**
 
 To navigate within the map we need first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Launch the rubot_navigation file
 ```shell
@@ -123,45 +120,3 @@ DWAPlannerROS:
 ```
 
 You can see the optimized trajectory. The gopigo starts to follow this trajectory and if an obstacle appears, the robot avoid this obstacle and find in realtime the new optimal trajectory to the target point. 
-
-## **Method 2: Using LIDAR Cartographer**
-Cartographer is a system that provides real-time simultaneous localization and mapping (SLAM) in 2D and 3D across multiple platforms and sensor configurations.
-https://github.com/cartographer-project/cartographer_ros
-
-To install this package, follow the steps:
-- Install Cartographer from source: https://google-cartographer-ros.readthedocs.io/en/latest/compilation.html
-- Add source lines in .bashrc file:
-```shell
-source ~/Desktop/rUBot:mecanum_ws/devel/setup.bash
-source ~/Desktop/cartographer_ws/devel_isolated/setup.bash
-```
-To perform SLAM & Navigation, we will use the same "rubot_slam" package.
-
-### **2.1. Generate the map**
-
-To generate the map we need first to:
-- Bringup rUBot_mecanum
-```shell
-roslaunch rubot_control rubot_bringup_hw.launch
-```
-- Launch the rubot_slam file
-```shell
-roslaunch rubot_slam rubot_cartographer_slam.launch 
-```
-- Generate the map using teleop_twist package
-```shell
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-```
-- In the map folder of "rubot_slam" create the map:
-```shell
-rosservice call /finish_trajectory 0
-rosservice call /write_state "{filename: '$HOME/Desktop/rUBot_mecanum_ws/src/rubot_slam/map/test2.pbstream', include_unfinished_submaps: "true"}"
-```
-
-### **2.2. Navigate in the map**
-
-We have first to close the terminal where we have made the map generation.
-- To Navigate in this map, we will open a new terminal:
-```shell
-roslaunch rubot_slam rubot_cartographer_navigation.launch 
-```
