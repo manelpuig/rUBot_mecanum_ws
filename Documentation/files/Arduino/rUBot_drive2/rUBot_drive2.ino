@@ -7,7 +7,6 @@
 #include <nav_msgs/Odometry.h>
 #include<std_msgs/Bool.h>
 
-
 //#include "src/RoboticsUB.h"
 #include "encoder.h"
 #include "kinematics.hpp"
@@ -29,7 +28,7 @@ float ctrlrate=1.0;
 unsigned long lastctrl;
 float x=0,y=0,theta=0;
 float vx=0,vy=0,w=0;
-float vxi=0,vyi=0,omegai=0;
+
 // IMU
 const int PIN_IMU_INT = 18;
 //float *rpw;
@@ -43,9 +42,9 @@ MPID PIDD(encD,KP,KI,KD,false);
 
 
 void cmdVelCb( const geometry_msgs::Twist& twist_msg){
-  float vx=twist_msg.linear.x;
-  float vy=twist_msg.linear.y;
-  float w=twist_msg.angular.z;
+  vx=twist_msg.linear.x;
+  vy=twist_msg.linear.y;
+  w=twist_msg.angular.z;
 
   float pwma=0,pwmb=0,pwmc=0,pwmd=0;
   InverseKinematic(vx,vy,w,pwma,pwmb,pwmc,pwmd);
@@ -97,13 +96,10 @@ void setup()
 void loop(){
   //float ax,ay,az,gx,gy,gz;
   //delay(10);
-  float wA=0;
-  float wB=0;
-  float wC=0;
-  float wD=0;
-  float x,y,theta;
-  float vx,vy,w;
-  float vxi,vyi,omegai;
+  float wA,wB,wC,wD;
+  float vxi,vyi,wi;
+  
+  //float vxi,vyi,omegai;
 
   PIDA.tic();
   wA=PIDA.getWheelRotatialSpeed();
@@ -122,7 +118,7 @@ void loop(){
   PIDD.toc();
 
   // Twist vector transition
-  ForwardKinematic(wA,wB,wC,wD,vxi,vyi,omegai);
+  //ForwardKinematic(wA,wB,wC,wD,vxi,vyi,wi);
   float dt=PIDA.getDeltaT();
   // Odom with transition vxi, vyi
   //x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
@@ -132,15 +128,15 @@ void loop(){
   //  theta=-3.14;
   
   // Odom with transition vx, vy
-  x+=vx*cos(theta)*dt-vy*sin(theta)*dt;
-  y+=vx*sin(theta)*dt+vy*cos(theta)*dt;
   theta+=w*dt;
   if(theta > 3.14)
     theta=-3.14;
-    
+  x+=vx*cos(theta)*dt-vy*sin(theta)*dt;
+  y+=vx*sin(theta)*dt+vy*cos(theta)*dt;
+  
   t.header.stamp = nh.now();
   t.header.frame_id = "odom";
-  t.child_frame_id = "base_link";
+  t.child_frame_id = "base_footprint";
   t.transform.translation.x = x;
   t.transform.translation.y = y;
   t.transform.rotation = tf::createQuaternionFromYaw(theta);
@@ -149,7 +145,7 @@ void loop(){
   
   odom.header.stamp = nh.now();
   odom.header.frame_id = "odom";
-  odom.child_frame_id = "base_link";
+  odom.child_frame_id = "base_footprint";
   odom.pose.pose.position.x = x;
   odom.pose.pose.position.y = y;
   odom.pose.pose.position.z = 0.0;
