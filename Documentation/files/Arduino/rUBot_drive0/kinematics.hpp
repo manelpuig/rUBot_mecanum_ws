@@ -32,10 +32,10 @@ void InverseKinematic(float vx,float vy,float omega, float &pwmA,float &pwmB,flo
 //  SERIAL.println(pwmD);
 }
 
-void ForwardKinematic(float wA,float wB,float wC,float wD,float &vx,float &vy,float &w){
+void ForwardKinematic(float wA,float wB,float wC,float wD,float &vx,float &vy,float &omega){
   vx=r/4.0*(wA+wB+wC+wD);
   vy=r/4.0*(+wA-wB-wC+wD);
-  w=r/(4.0*K)*(-wA+wB-wC+wD);
+  omega=r/(4.0*K)*(-wA+wB-wC+wD);
 }
 
 #endif
