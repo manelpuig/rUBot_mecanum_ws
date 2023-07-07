@@ -5,14 +5,14 @@
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
-#include<std_msgs/Bool.h>
+#include <std_msgs/Bool.h>
 
 //#include "src/RoboticsUB.h"
 #include "encoder.h"
 #include "kinematics.hpp"
 #include "motor.h"
 #include "pid.hpp"
-#include "imu.hpp"
+//#include "imu.hpp"
 
 ros::NodeHandle nh;
 
@@ -28,6 +28,7 @@ float ctrlrate=1.0;
 unsigned long lastctrl;
 float x=0,y=0,theta=0;
 float vx=0,vy=0,w=0;
+float vxi=0,vyi=0,wi=0;
 
 // IMU
 const int PIN_IMU_INT = 18;
@@ -50,12 +51,10 @@ void cmdVelCb( const geometry_msgs::Twist& twist_msg){
   InverseKinematic(vx,vy,w,pwma,pwmb,pwmc,pwmd);
   
   PIDA.tic();PIDB.tic();PIDC.tic();PIDD.tic();
-  
   MotorA(PIDA.getPWM(pwma));
   MotorB(PIDB.getPWM(pwmb));
   MotorC(PIDC.getPWM(pwmc));  
   MotorD(PIDD.getPWM(pwmd));
-  
   PIDA.toc();PIDB.toc();PIDC.toc();PIDD.toc();
 
   lastctrl=millis();
@@ -71,7 +70,6 @@ void resetCb(const std_msgs::Bool& reset){
 
 ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", cmdVelCb );
 ros::Subscriber<std_msgs::Bool> resub("reset_odom", resetCb );
-
 
 void setup()
 {
@@ -94,12 +92,8 @@ void setup()
 }
 
 void loop(){
-  //float ax,ay,az,gx,gy,gz;
-  //delay(10);
+
   float wA,wB,wC,wD;
-  float vxi,vyi,wi;
-  
-  //float vxi,vyi,omegai;
 
   PIDA.tic();
   wA=PIDA.getWheelRotatialSpeed();
@@ -118,21 +112,15 @@ void loop(){
   PIDD.toc();
 
   // Twist vector transition
-  //ForwardKinematic(wA,wB,wC,wD,vxi,vyi,wi);
+  ForwardKinematic(wA,wB,wC,wD,vxi,vyi,wi);
   float dt=PIDA.getDeltaT();
+
   // Odom with transition vxi, vyi
-  //x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
-  //y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
-  //theta+=omegai*dt;
-  //if(theta > 3.14)
-  //  theta=-3.14;
-  
-  // Odom with transition vx, vy
-  theta+=w*dt;
+  theta+=wi*dt;
   if(theta > 3.14)
     theta=-3.14;
-  x+=vx*cos(theta)*dt-vy*sin(theta)*dt;
-  y+=vx*sin(theta)*dt+vy*cos(theta)*dt;
+  x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
+  y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
   
   t.header.stamp = nh.now();
   t.header.frame_id = "odom";
@@ -140,7 +128,6 @@ void loop(){
   t.transform.translation.x = x;
   t.transform.translation.y = y;
   t.transform.rotation = tf::createQuaternionFromYaw(theta);
-
   broadcaster.sendTransform(t);
   
   odom.header.stamp = nh.now();
@@ -150,13 +137,9 @@ void loop(){
   odom.pose.pose.position.y = y;
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-  //odom.twist.twist.linear.x = vxi;
-  odom.twist.twist.linear.x = vx;
-  //odom.twist.twist.linear.y = vyi;
-  odom.twist.twist.linear.y = vy;
-  //odom.twist.twist.angular.z = omegai;
-  odom.twist.twist.angular.z = w;
-
+  odom.twist.twist.linear.x = vxi;
+  odom.twist.twist.linear.y = vyi;
+  odom.twist.twist.angular.z = wi;
   odom_pub.publish(&odom);
 
   // IMU
@@ -170,9 +153,7 @@ void loop(){
   //imu_msg.orientation.y = q[0]
   //imu_msg.orientation.z = q[0]
   //imu_msg.orientation.w = q[0]
-
   //imu_pub.publish(&imu_msg);
-  
 
   if((millis()-lastctrl)>1000*ctrlrate){
     STOP();

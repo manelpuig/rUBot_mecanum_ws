@@ -5,14 +5,12 @@
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
-#include<std_msgs/Bool.h>
+#include <std_msgs/Bool.h>
 
-//#include "src/RoboticsUB.h"
 #include "encoder.h"
 #include "kinematics.hpp"
 #include "motor.h"
 #include "pid.hpp"
-#include "imu.hpp"
 
 ros::NodeHandle nh;
 
@@ -21,7 +19,6 @@ geometry_msgs::TransformStamped t;
 geometry_msgs::Twist twist;
 nav_msgs::Odometry odom;
 ros::Publisher odom_pub("odom", &odom);
-//ros::Publisher imu_pub("imu",&imu_msg);
 
 // Global Variables
 float ctrlrate=1.0;
@@ -29,17 +26,12 @@ unsigned long lastctrl;
 float x=0,y=0,theta=0;
 float vx=0,vy=0,w=0;
 
-// IMU
-const int PIN_IMU_INT = 18;
-//float *rpw;
-//float *q;
 // Motors PID
 float KP=0.3,KI=0.2,KD=0.2;
 MPID PIDA(encA,KP,KI,KD,true);
 MPID PIDB(encB,KP,KI,KD,false);
 MPID PIDC(encC,KP,KI,KD,true);
 MPID PIDD(encD,KP,KI,KD,false);
-
 
 void cmdVelCb( const geometry_msgs::Twist& twist_msg){
   vx=twist_msg.linear.x;
@@ -50,12 +42,10 @@ void cmdVelCb( const geometry_msgs::Twist& twist_msg){
   InverseKinematic(vx,vy,w,pwma,pwmb,pwmc,pwmd);
   
   PIDA.tic();PIDB.tic();PIDC.tic();PIDD.tic();
-  
   MotorA(PIDA.getPWM(pwma));
   MotorB(PIDB.getPWM(pwmb));
   MotorC(PIDC.getPWM(pwmc));  
   MotorD(PIDD.getPWM(pwmd));
-  
   PIDA.toc();PIDB.toc();PIDC.toc();PIDD.toc();
 
   lastctrl=millis();
@@ -75,9 +65,7 @@ ros::Subscriber<std_msgs::Bool> resub("reset_odom", resetCb );
 
 void setup()
 {
-  //pinMode(PIN_IMU_INT, INPUT_PULLUP);
-  //imu.Install();
-  
+
   IO_init();
   PIDA.init();
   PIDB.init();
@@ -89,18 +77,13 @@ void setup()
   nh.subscribe(sub);
   nh.subscribe(resub);
   nh.advertise(odom_pub);
-  //nh.advertise(imu_pub);
   lastctrl=millis();
 }
 
 void loop(){
-  //float ax,ay,az,gx,gy,gz;
-  //delay(10);
-  float wA,wB,wC,wD;
-  float vxi,vyi,wi;
   
-  //float vxi,vyi,omegai;
-
+  float wA,wB,wC,wD;
+  
   PIDA.tic();
   wA=PIDA.getWheelRotatialSpeed();
   PIDA.toc();
@@ -117,17 +100,9 @@ void loop(){
   wD=PIDD.getWheelRotatialSpeed();
   PIDD.toc();
 
-  // Twist vector transition
-  //ForwardKinematic(wA,wB,wC,wD,vxi,vyi,wi);
   float dt=PIDA.getDeltaT();
-  // Odom with transition vxi, vyi
-  //x+=vxi*cos(theta)*dt-vyi*sin(theta)*dt;
-  //y+=vxi*sin(theta)*dt+vyi*cos(theta)*dt;
-  //theta+=omegai*dt;
-  //if(theta > 3.14)
-  //  theta=-3.14;
-  
-  // Odom with transition vx, vy
+    
+  // Odom with vx, vy, w
   theta+=w*dt;
   if(theta > 3.14)
     theta=-3.14;
@@ -140,7 +115,6 @@ void loop(){
   t.transform.translation.x = x;
   t.transform.translation.y = y;
   t.transform.rotation = tf::createQuaternionFromYaw(theta);
-
   broadcaster.sendTransform(t);
   
   odom.header.stamp = nh.now();
@@ -150,33 +124,13 @@ void loop(){
   odom.pose.pose.position.y = y;
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-  //odom.twist.twist.linear.x = vxi;
   odom.twist.twist.linear.x = vx;
-  //odom.twist.twist.linear.y = vyi;
   odom.twist.twist.linear.y = vy;
-  //odom.twist.twist.angular.z = omegai;
   odom.twist.twist.angular.z = w;
-
   odom_pub.publish(&odom);
-
-  // IMU
-  //if (digitalRead(PIN_IMU_INT) == HIGH)
-  //{
-  //  imu.ReadSensor();
-  //  q = imu.GetQuaternion();
-  //}
-  //imu_msg.header.stamp = nh.now();
-  //imu_msg.orientation.x = q[0]
-  //imu_msg.orientation.y = q[0]
-  //imu_msg.orientation.z = q[0]
-  //imu_msg.orientation.w = q[0]
-
-  //imu_pub.publish(&imu_msg);
-  
 
   if((millis()-lastctrl)>1000*ctrlrate){
     STOP();
   }
   nh.spinOnce();
- 
 }
