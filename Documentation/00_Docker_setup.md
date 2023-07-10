@@ -114,7 +114,6 @@ git config --global user.name 'your github username'
 >       - pressing "·" key (or add .dev extension)
 >       - performing repository modifications
 >       - typing "git pull" to syncronize
-        - etc
 
 ## **4. Alternative ROS environment**
 
