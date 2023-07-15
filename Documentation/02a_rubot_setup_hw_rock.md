@@ -24,7 +24,7 @@ Insert the SD card in rock5b board and power it.
   - Name: the rUBot name
   - Host: 10.42.0.1
   - Port: 4000
-  Protocol: NX
+  - Protocol: NX
 - You will be asked for:
   - login: rock
   - password: rock
@@ -37,9 +37,7 @@ You will need to perform some configurations:
 
 In Ubuntu desktop, select "Configuration settings" --> "network" and select "hotspot"
 
-You will have to change the Hotspot name (one for each robot):
-
-Alternativelly you can change the Hotspot settings (name or password) with:
+You will have to change the Hotspot name (one for each robot). Change the name and password with:
 ```shell
 sudo nm-connection-editor
 ```
@@ -49,7 +47,7 @@ You will be able to change:
 
 ### **1.2. wifi configuration**
 
-The rock5b board have a wireless module (https://es.rs-online.com/web/p/complementos-para-placas-rock/2563901) able to:
+The rock5b board has a wireless module (https://es.rs-online.com/web/p/complementos-para-placas-rock/2563901) able to:
 - configure a Hotspot
 - and a wifi connection
 

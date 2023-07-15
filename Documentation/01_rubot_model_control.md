@@ -390,7 +390,7 @@ You can create model parts like walls of 90cm or 60cm with a geometry and color,
 - in ~/.gazebo/models/
 - in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models), if you add this line in .bashrc file:
   ```xml
-  export GAZEBO_MODEL_PATH=/media/sf_github_manelpuig/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
+  export GAZEBO_MODEL_PATH=/home/rock/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 - When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
 
@@ -443,7 +443,7 @@ The different movements our car can perform are:
 The forces involved define the robot linear and angular movement:
 ![](./Images/01_SW_Model_Control/1_mecanum_kine2.png)
 
-The forward Kinematic's equations are defined below:
+The **Forward Kinematics** equations are defined below:
 ![](./Images/01_SW_Model_Control/1_mecanum_kine3.png)
 
 where
@@ -459,13 +459,13 @@ where
 
 >(see [Lynch & Park, 2017] for a complete derivation of this model).
 
-In our case we want to apply a robot movement defined by:
+In the **Inverse Kinematics** we want to apply a robot movement defined by:
 - a linear and angular velocity using a Twist message type published in a /cmd_vel topic. 
 - we need to calculate the 4 wheel speeds needed to obtain this robot velocity
 
-This corresponds to an Inverse Kinematics defined by the following expressions:
+This is defined by the following expressions:
 ![](./Images/01_SW_Model_Control/1_mecanum_kine4.png)
-With the information of (uf,ul,w) Gazebo plugin calculates to obtain the Odometry.
+To obtain the **Odometry** we use the information of (uf,ul,w) and Gazebo plugin calculates the POSE of our robot.
 The analytical expressions are explained graphically in the picture:
 ![](./Images/01_SW_Model_Control/1_odom_mecanum.png)
 

@@ -27,7 +27,6 @@ The "rubot_mecanum.ino" arduino program is located on /Documentation/files/ardui
 This final code contains:
 - Subscriber to /cmd_vel topic 
 - Publisher to /odom topic
-- Publisher to /imu topic
 
 >Take care about:
 >- Motor connections
@@ -121,10 +120,13 @@ rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 
 ## **2. Launch LIDAR node**
 
-To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi and execute:
+To launch the rpLIDAR sensor, connect the LIDAR sensor to rock5b and execute:
 ```shell
 roslaunch rubot_mecanum_description rplidar_rock.launch
 ```
+Verify:
+- the port to: /dev/ttyUSB0
+- the frame_id to: base_scan
 
 ## **3. Launch usb_cam node**
 We have created a speciffic launch file to open properly the camera
@@ -132,36 +134,15 @@ To launch the raspicam sensor, execute:
 ```shell
 roslaunch rubot_mecanum_description usb_cam_rock.launch
 ```
+Verify:
+- the video_device param to: "/dev/video1"
+- the camera_frame_id param to: "usb_cam"
+- the <remap from="image" to="/usb_cam/image_raw"/>
 
 ## **Final bringup launch file**
 
 We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
-```xml
-<launch>
-    <arg name="model" default="rubot_rp.urdf" />
-  <!-- spawn rubot_rp -->
-    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
-  <!-- send joint values -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      <param name="use_gui" value="False"/>
-    </node>
-  <!-- Combine joint values -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-  <!-- Show in Rviz   -->
-    <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_mecanum_description)/rviz/rubot_rock.rviz"/>
-  <!-- launch rUBot mecanum   -->
-    <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
-      <param name="port" type="string" value="/dev/ttyACM0"/>
-      <param name="baud" type="int" value="500000"/>
-    </node>
-  <!-- launch rplidar   -->
-    <include file="$(find rubot_mecanum_description)/launch/rplidar_rock.launch"/>
-  <!-- launch usb-cam   -->
-    <include file="$(find rubot_mecanum_description)/launch/usb_cam_rock.launch"/>
-</launch>
-
-```
 To launch the bringup file type:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
@@ -180,6 +161,7 @@ To view the image is better to use:
 ```shell
 rqt_image_view
 ```
+> This is usually done in the bringup file
 
 ## **2. Lidar reference frame and ranges**
 the LIDAR reference-frame is by default "base_scan". When using rplidar mounted back-side, the "base_scan" frame is looking to the back-side. Then you see the lidar red-points in RVIZ 180deg rotated. You have to change the reference-frame to "odom" frame to see the obstacles in the right orientation. You have to open the "rplidar.launch" file and change the line:
