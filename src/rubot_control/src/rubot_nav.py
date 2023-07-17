@@ -39,7 +39,11 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
     vel = Twist()
     rospy.sleep(0.0) #needed in sw time to ensure good time reading
     time_begin = rospy.Time.now()
-    
+    rospy.sleep(0.0) # needed in SW to avoid race conditions
+    if time_begin == 0:# when using software time usually returns 0
+        time_begin = rospy.Time.now()
+        n+=1
+        print(n)
     while not end_mov:
         if (duration_s <= time_duration):
             rospy.loginfo("Robot running")
@@ -58,7 +62,6 @@ def move_rubot(lin_velx,lin_vely,ang_vel,time_duration):
             pub.publish(vel)
             end_mov = True
             rate.sleep()
-            #time.sleep(10);
             
         time_end = rospy.Time.now()
         rospy.loginfo("Time_end = " + str(time_end))

@@ -117,7 +117,12 @@ git config --global user.name 'your github username'
 
 ## **4. Alternative ROS environment**
 
-Mainly for MAC users, if the graphical interface is not working properly, we suggest to use the ROS environment developed by "The Construct" (https://app.theconstructsim.com/), enterprise working on ROS academia and development and located in Barcelona.
+Mainly for MAC users, if the graphical interface is not working properly, we suggest 2 different solutions:
+- Ready to use limited performances web environment
+- Use a Virtual machine with virtual box
+
+### **4.1. Ready to use web environment**
+You can use the ROS environment developed by "The Construct" (https://app.theconstructsim.com/), enterprise working on ROS academia and development and located in Barcelona.
 - Open the link: https://app.theconstructsim.com/
 - Create a free user account
 - Select "myRosjects"
@@ -126,9 +131,19 @@ Mainly for MAC users, if the graphical interface is not working properly, we sug
 ![](./Images/00_Docker/ROBIO_Ros1.png)
 You will have 2GB Virtual machine with Ubuntu 20 and ROS Noetic installed for free!!
 
+### **4.2. Virtual machine with ROS**
+You can always install a ROS virtual machine with Virtual Box for MAC
+- Download Virtual Box for macOS systems (https://www.virtualbox.org/wiki/Downloads)
+- Install Virtual Box in your computer
+- Download the ROS virtual machine in this link:
+- and Add this ROS virtual machine choosing file-->Import appliance (and follow instructions)
+
+You will have a ready to use ROS environment
+
+
 ## **5. Software install within Ubuntu Image**
 
-One you have ubuntu image working properly, mainly for MAC users, you can inatall SW based on Ubuntu:
+Once you have ubuntu image working properly, mainly for MAC users, you can install SW based on Ubuntu:
 
 ### **5.1. roboDK**
 Mainly for MAC users, you can install roboDK:

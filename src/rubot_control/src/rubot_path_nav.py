@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from rubot_navigation import move_rubot
+from rubot_nav import move_rubot
 from math import sqrt,sin,cos
 
 

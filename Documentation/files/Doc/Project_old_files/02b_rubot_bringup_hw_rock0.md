@@ -5,7 +5,7 @@ The hardware bringup file will contain:
 - launch the usb_cam node
 
 Graphically, the final node structure will be:
-![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
+![Getting Started](./Images/02_rubot_rock/2b_nodes_topics.png)
 
 The bringup launch file will prepare the rUBot to comunicate with /rUBot_nav node for specific control actions.
 
@@ -167,7 +167,7 @@ rqt_image_view
 > This is usually done in the bringup file
 
 ## **2. Lidar reference frame and ranges**
-the LIDAR reference-frame is by default "base_scan". When using rplidar mounted back-side, in that case review the urdf model and be sure the "base_scan" frame is looking to the front. If not, you have to change the reference-frame to "odom" frame to see the obstacles in the right orientation. You have to open the "rplidar.launch" file and change the line:
+the LIDAR reference-frame is by default "base_scan". When using rplidar mounted back-side, the "base_scan" frame is looking to the back-side. Then you see the lidar red-points in RVIZ 180deg rotated. You have to change the reference-frame to "odom" frame to see the obstacles in the right orientation. You have to open the "rplidar.launch" file and change the line:
 ```xml
 <param name="frame_id" type="string" value="base_scan"/>
 ```
@@ -175,8 +175,6 @@ to the param value:
 ```xml
 <param name="frame_id" type="string" value="odom"/>
 ```
-Once you have made the bringup, verify in RVIZ that the obstacles detected by laser beams are in the correct orientation!
-
 In function of lidar module, there are 720 or more laser beams.
 We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
 ```shell
@@ -195,3 +193,33 @@ roscore
 rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
+
+## **4. Odometry**
+The arduino program publishes the odometry values in real-time. These values are obtained according to the theoretical expressions.
+
+To test the odometry values, type:
+```shell
+rostopic echo /odom
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0, 0, 0]' '[0, 0, 0]'
+```
+To reset the odometry values, type:
+```shell
+rostopic pub /rest_odom 
+```
+
+## **5. DC motor linear velocity and position**
+When you apply a wheel velocity value, you will see that the velocity value increases progressivelly and stablishes to a final desired value after a period of time. The same occurs when we stop the wheel. This is due to the closed-loop PID-based wheel velocity control system designed.
+
+We suggest you:
+- Use the "rubot_PIDtest.py" file to test the velocity and odometry evolution with time for speciffic PID parameters
+```shell
+roslaunch rubot_control node_PIDtest.launch
+```
+  > Use the rqt_plot tool to view the vx and x evolution with time
+- define the maximum overshoot and setling time
+- optimize the PID control values to accomplish the desired transient values
+- verify experimentally these transient behaviour with the created python file
+
+The final desired transient behaviour will be graphically the following.
+![](./Images/02_rubot_rock/2b_odom_pid1.png)

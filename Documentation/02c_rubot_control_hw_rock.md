@@ -1,9 +1,10 @@
 # **2. rUBot mecanum Control**
 
 The main objectives are to control the rUBot movements:
-- self navigation
-- follow wall
-- go to pose
+- Navigation
+- Self navigation
+- Follow wall
+- Go to specific pose
 
 ### **Setup your workspace**
 The rock5b onboard is preinstalled with:
@@ -19,9 +20,7 @@ catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msg
 cd ..
 catkin_make
 ```
->Carefull!: Some actions have to be done:
->- review the ~/.bashrc: source to the ws and delete the environment variables
->- make executable the python files
+>- review the ~/.bashrc: source to the ws
 
 First of all you need to bringup the rubot_mecanum robot.
 
@@ -35,7 +34,7 @@ The bringup consists to:
 You will launch first "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 ## **2.2. Movement control rubot_mecanum**
 
@@ -53,7 +52,7 @@ sudo apt-get install ros-noetic-teleop-twist-keyboard
 Proceed with:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_control rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
 - Then open a new terminal and type:
 ```shell
@@ -61,29 +60,30 @@ rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
+You are now able to move your robot using keyboard
 
-### **Movement control with python script**
+### **Movement control with custom node**
 
 From the "rUBot_mecanum_ws" workspace, the src/rubot_control folder has 2 new folders:
 - scrip folder: with the python programs for specific movement control
 - launch folder: with programs to launch the movement control
 
-Diferent navigation programs are created:
+Different navigation programs are created:
 
-- Navigation control: to define a desired robot velocity
+- Navigation control: to define a desired robot velocity twist vector
 - Lidar test: to verify the LIDAR readings and angles
 - Autonomous navigation: to perform a simple algorithm for navigation with obstacle avoidance using the LIDAR
 - Wall follower: at a fixed distance to perform a good map
 - go to POSE: attend a specific position and orientation
 
 The nodes and topics structure corresponds to the following picture:
-![Getting Started](./Images/2_nodes_topics.png)
+![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
 
 ### **a) Navigation control**
 
 We have created a first navigation python files in "src" folder:
 
-- rubot_nav.py: to define the movement with vx, vy and w to reach a maximum distance in x or y
+- rubot_nav.py: to define the movement with vx, vy and w for a time period
 
 A "node_nav.launch" file is created to launch the node and python file created above.
 
@@ -111,6 +111,9 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
+**Activity**
+
+Modify this "rubot_lidar_test.py" file to measure the number of laser beams and convert the beam index in Degrees yaw angle.
 
 ### **c) Autonomous navigation and obstacle avoidance**
 
@@ -127,29 +130,6 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```shell
 roslaunch rubot_control rubot_self_nav.launch
 ```
-The launch file contains some parameters you can modify:
-```xml
-<launch>
-  <!-- launch obstacle avoidance   -->
-    <arg name="distance_laser" default="0.3" />
-    <arg name="speed_factor" default="0.1"/>
-    <arg name="forward_speed" default="2" />
-    <arg name="backward_speed" default="-1" />
-    <arg name="rotation_speed" default="20" />
-    <node name="rubot_nav" pkg="rubot_control" type="rubot_self_nav.py" output="screen" >
-        <param name="distance_laser" value="$(arg distance_laser)"/>
-        <param name="speed_factor" value="$(arg speed_factor)"/>
-        <param name="forward_speed" value="$(arg forward_speed)"/>
-        <param name="backward_speed" value="$(arg backward_speed)"/>
-        <param name="rotation_speed" value="$(arg rotation_speed)"/>
-    </node>    
-</launch>
-```
-In order to see the rubot with the topics information we will use rviz. Open rviz in a new terminal.
-
-In rviz, select the fixed frame to "odom", and add Camera and LaserScan with the corresponding topics names.
-
-You can then save the config file as laserscan.rviz name and use it in the launch file
 
 A launch file is created to integrate all the needed roslaunch parameters but you can change the defauld values with this syntax:
 ```shell
@@ -162,12 +142,6 @@ This control task consist on find a wall and follow it at a certain distance. We
 #### **Geometrical method**
 In src folder you create the python file for wall follower purposes
 
-The instructions to perform the python program are in the notebook: 
-
-https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
-
-![](./Images/02_rubot_rock/2c_wall_follower_gm.png)
-
 To properly perform a especific self-navigation control we have first to:
 - Bringup rUBot_mecanum
 ```shell
@@ -177,28 +151,7 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```shell
 roslaunch rubot_control rubot_wall_follower_gm.launch
 ```
-The launch file contains different parameters you can modify:
-```xml
-<launch>
-  <!-- launch follow wall   -->
-  <arg name="kp" default="5" />
-  <arg name="distance_reference" default="0.3" />
-  <arg name="lookahead_distance" default="0.4" />
-  <arg name="forward_speed" default="0.04" />
-  <arg name="theta" default="50.0" />
-  <node name="wall_follower_controller" pkg="gopigo_control" type="rubot_wall_follower_gm.py" output="screen" >
-    <param name="kp" value="$(arg kp)"/>
-    <param name="distance_reference" value="$(arg distance_reference)"/>
-    <param name="lookahead_distance" value="$(arg lookahead_distance)"/>
-    <param name="forward_speed" value="$(arg forward_speed)"/>
-    <param name="theta" value="$(arg theta)"/>
-  </node>
-</launch>
-```
-You can see the video result:
-
-[![Click here to watch the video](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
-
+Modify the paramenters to obtain proper wall follower navigation performances.
 
 ### **E) Go to POSE**
 
@@ -216,18 +169,4 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```shell
 roslaunch rubot_control rubot_go2pose.launch
 ```
-The launch file has no parameters to modify:
 
-```xml
-<launch>
-<!-- run navigation program  -->
-    <arg name="x" default="0.7"/>
-    <arg name="y" default="0.7"/>
-    <arg name="f" default="120"/>
-    <node pkg="nexus_control" type="rubot_go2pose.py" name="nexus_control" output="screen" >
-      <param name="x" value="$(arg x)"/>
-      <param name="y" value="$(arg y)"/>
-      <param name="f" value="$(arg f)"/>
-    </node>
-</launch>
-```
