@@ -1,11 +1,9 @@
 # **SLAM & Navigation rUBot mecanum with Rock5b**
 Autonomous navigation refers that the robot is able to move autonomously around the environment avoiding any obstacle.
 
-In a hospital, a delivery robot carries samples or food from one room to another. 
-
 The main objectives are:
-- use SLAM (Simultaneous Localization and Mapping) techniques to generate and store a map of the hospital flor
-- use Navigation techniques to find an optimal trajectory to reach a speciffic hospital target position
+- use SLAM (Simultaneous Localization and Mapping) techniques to generate and store a map of the room
+- use Navigation techniques to find an optimal trajectory to reach a speciffic target position
 
 let's see how to fulfill these objectives
 
@@ -23,7 +21,7 @@ This package is already created in the simulation ws. Take the same "rubot_slam"
 To generate the map we need first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
+roslaunch rubot_slam rubot_bringup_slam_hw_rock.launch
 ```
 - Launch the rubot_slam file
 ```shell
@@ -42,11 +40,11 @@ roslaunch rubot_control rubot_wall_follower_gm.launch
 
 - Once you have finish the map, you need to launch the map_saver program from map_server package:
 ```shell
-rosrun map_server map_saver -f hospital1map
+rosrun map_server map_saver -f room1map
 ```
 The map files will be saved in local directory
 
-You will get two files in the specified folder of your workspace: hospital1map.pgm and hospital1map.yaml.
+You will get two files in the specified folder of your workspace: room1map.pgm and room1map.yaml.
 
 Provided with the map, we are ready to perform robot navigation with the rUBot_mecanum robot.
 
@@ -55,7 +53,7 @@ Provided with the map, we are ready to perform robot navigation with the rUBot_m
 To navigate within the map we need first to:
 - Bringup rUBot_mecanum
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
+roslaunch rubot_slam rubot_bringup_slam_hw_rock.launch
 ```
 - Launch the rubot_navigation file
 ```shell
@@ -67,7 +65,7 @@ roslaunch rubot_slam rubot_navigation.launch
 
 - Using "omni" drive performances, the robot is able to move also in y direction and the mobility is much better.
 
-- You need to modify the "dwa_local_planner_params_burger.yaml parameters. An exemple of possible parameters set is:
+- You need to modify the "dwa_local_planner_params.yaml" parameters. An exemple of possible parameters set is:
 ```xml
 DWAPlannerROS:
 

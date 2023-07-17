@@ -13,22 +13,11 @@ The different projects will be:
 - 3. Go to specific point in the map and take a photo
 - 4. Line follower
 
-The image processing projects will be performed using:
-
-- 2D raspicam
-- 3D Inter Realsense camera
-
 References OpenCV:
 
 - http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython
 - https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html
 - https://github.com/Akshay594/OpenCV/tree/master/tutorials
-
-References InterRealSense:
-
-- https://dev.intelrealsense.com/docs/ros-wrapper
-- https://www.youtube.com/watch?v=GhHvuAoFC6I
-- https://intel.github.io/robot_devkit_doc/pages/rs_slam.html
 
 References for webcam:
 
@@ -67,10 +56,10 @@ Important information is taken from: https://learn.turtlebot.com/2015/02/04/3/
 
 Follow the procedure:
 
-- Identify the topic name where raspicam publishes the photo as a mesage of type sensor_msgs:
+- Identify the topic name where usb_cam publishes the photo as a mesage of type sensor_msgs:
 
 ```shell
-roslaunch nexus_slam rubot_world.launch 
+roslaunch rubot_slam rubot_bringup_slam_sw.launch 
 rostopic list
 ```
 
@@ -85,7 +74,7 @@ rosrun rubot_projects take_photo.py
 
 - Open the "photos" folder and you will see the photo1.jpg created
 
-![](./Images/5_photo1.png)
+![](./Images/05_rubot_projects/1_photo1.png)
 
 ## **2. Go to specific point in the map**
 
@@ -101,19 +90,18 @@ For this purpose we need to use the **move_base node**. This node:
 - subscribes to move_base_simple/goal (geometry_msgs/PoseStamped)
 - publishes to cmd_vel (geometry_msgs/Twist)
 
-![](./Images/5_move_base.png)
 
 Follow the procedure:
 
-- Launch Gazebo:
+- Launch bringup:
 
   ```shell
-  roslaunch nexus_slam rubot_world.launch
+  roslaunch rubot_slam rubot_bringup_slam_sw.launch
   ```
 - Launch the navigation:
 
   ```shell
-  roslaunch nexus_slam rubot_navigation.launch
+  roslaunch rubot_slam rubot_navigation.launch
   ```
 - Choose a target point in RVIZ using "Publish point" and select the target coordinates (i.e. x=2.0 y=-0.7)
 - open "go_to_specific_point_on_map.py" and specify the target point
@@ -126,7 +114,7 @@ Follow the procedure:
   rosrun rubot_projects go_to_specific_point_on_map.py
   ```
 
-![](./Images/5_go2point.png)
+![](./Images/05_rubot_projects/2_go2point.png)
 
 ## **3. Go to specific point in the map and take a photo**
 
@@ -160,12 +148,12 @@ Proceed with the following steps:
 - Launch Gazebo:
 
   ```shell
-  roslaunch nexus_slam rubot_world.launch
+  roslaunch rubot_slam rubot_bringup_slam_sw.launch
   ```
 - Run the navigation demo:
 
   ```shell
-  roslaunch nexus_slam rubot_navigation.launch
+  roslaunch rubot_slam rubot_navigation.launch
   ```
 - Specify a "route.yaml" file with the points to follow and take photo:
 
@@ -181,7 +169,7 @@ Proceed with the following steps:
 > Careful!:
 > Be sure to execute the rosrun instruction inside the "rubot_mecanum_ws" folder. Review the the absolute path or relative path to the yaml file and the picture path destination.
 
-![](./Images/5_follow_route2.png)
+![](./Images/05_rubot_projects/3_follow_route2.png)
 
 Improvement!:
 
@@ -191,8 +179,9 @@ Improvement!:
   - {filename: './src/gopigo3_projects/photos/room33.png', position: { x: 1.7, y: 0.5}, angle: {fi: 0}}
 
 Launch the "follow_the_route.py" program:
-
-    rosrun rubot_projects follow_the_route2.py
+  ```shell
+  rosrun rubot_projects follow_the_route2.py
+  ```
 
 ## **4. Line following**
 

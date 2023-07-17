@@ -44,7 +44,7 @@ Now you can follow the next steps:
 ### **1. Spawn the robot in our custom made maze**
 We open a new terminal and type:
 ```shell
-roslaunch rubot_slam rubot_world.launch
+roslaunch rubot_slam rubot_bringup_slam_sw.launch
 ```
 ### **2. Generate the MAP**
 We will start the slam_gmapping node. This node is highly configurable and has lots of parameters you can change in order to improve the mapping performance. (http://wiki.ros.org/gmapping)
@@ -72,10 +72,7 @@ roslaunch rubot_control rubot_wall_follower_gm.launch
 ```
 > Take care to launch only the wall_follower node
 
-![](./Images/3_nexus_map1.png)
-
-[![IMAGE_ALT](https://img.youtube.com/vi/I6WwQv63Txw/maxresdefault.jpg)](https://youtu.be/I6WwQv63Txw)
-
+![](./Images/03_rubot_slam/1_rubot_map1.png)
 
 ### **3. Open the MAP saver and save the map**
 We can open now the map_saver file in map_server package to save the map in the local directory:
@@ -90,11 +87,9 @@ The map is generated with two files:
 Provided with the map, we are ready to perform robot navigation with the rUBot mecanum.
 
 ### **4. Robot Navigation**
-When the robot moves around a map, it needs to know which is its POSE within the map.
+When the robot moves around a map, it needs to know its POSE within the map.
 
 The AMCL (Adaptive Monte Carlo Localization) package provides the amcl node, which uses the MCL system in order to track the localization of a robot moving in a 2D space. This node subscribes to the data of the laser, the laser-based map, and the transformations of the robot, and publishes its estimated position in the map. 
-
-On startup, the amcl node initializes its particle filter according to the parameters provided.
 
 This AMCL node is also highly customizable and we can configure many parameters in order to improve its performance. (http://wiki.ros.org/amcl)
 
@@ -110,13 +105,13 @@ Let's have a look at some of the most important parameters in "amcl.launch" file
 - odom_model_type (default: "diff"): It puts the odometry model to use. It can be "diff", "omni", "diff-corrected", or "omni-corrected".
 - base_frame_id (default: "base_link"): Indicates the frame associated with the robot base.
 
-We can use the nexus robot as a Differential drive robot model without available lateral movements or Omni drive allowing lateral movements to improve the navigation performances.
+We can use the mecanum robot as a Differential drive robot model without available lateral movements or Omni drive allowing lateral movements to improve the navigation performances.
 
 #### **Costmap Parameters**
 
 These parameters will allow you to configure the way that the navigation is performed and are located in "costmap_common_params.yaml" file:
 - footprint: dimensions of the base_footprint for colision information
-- Inflation radius: increase dimensions of obstacles to prevent colisions
+- Inflation radius: increase dimensions of obstacle borders to prevent colisions
 - cost scaling factor: to define allowed regions among obstacles to define the optimal trajectory.
 
 
@@ -149,7 +144,7 @@ So, basically, we have to do the following:
 
 - Open the rUBot in Hospital3 world (if you have closed it before)
 ```shell
-roslaunch rubot_slam rubot_world.launch
+roslaunch rubot_slam rubot_bringup_slam_sw.launch
 ```
 
 - Open Navigation launch file including the map location:
@@ -158,20 +153,15 @@ roslaunch rubot_slam rubot_navigation.launch
 ```
 > Take care in launch file to read the correct map file in "maps" folder
 
-![](./Images/3_nav1_gopigo.png)
 - set up an initial pose by using the 2D Pose Estimate tool (which published that pose to the /initialpose topic).
-
-![](./Images/3_nav2_gopigo.png)
 
 - To obtain a proper localisation of your robot, move it right and left using the key_teleop.
 ```shell
 rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 ```
-
-![](./Images/3_nav3_nexus.png)
+![](./Images/03_rubot_slam/2_rubot_nav1.png)
 
 - Select the target goal to navigate with the tool "2D-Nav-Goal"
-
 
 You can see some videos of Navigation process inside Hospital plant:
 
@@ -181,7 +171,7 @@ You can see some videos of Navigation process inside Hospital plant:
 
 The movement is more complicate in the small room! the mobility is limited to forward and rotations. Sometimes the target navigation pose is not feasible like in the following exemple:
 
-![](./Images/3_nav3_nexus_abort.png)
+![](./Images/03_rubot_slam/3_rubot_abort.png)
 
 Using "omni" drive performances, the robot is able to move also in y direction and the mobility is much better.
 
@@ -238,4 +228,4 @@ DWAPlannerROS:
   publish_cost_grid_pc: true
 ```
 In that case you can see a very good and fast mobility!!!
-![](./Images/3_nav3_nexus_lateral.png)
+![](./Images/03_rubot_slam/4_rubot_lateral.png)
