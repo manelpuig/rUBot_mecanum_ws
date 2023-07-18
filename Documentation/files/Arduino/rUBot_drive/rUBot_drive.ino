@@ -119,9 +119,9 @@ void loop(){
   odom.pose.pose.position.y = y;
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation =tf::createQuaternionFromYaw(theta);;
-  odom.twist.twist.linear.x = vx;
-  odom.twist.twist.linear.y = vy;
-  odom.twist.twist.angular.z = w;
+  //odom.twist.twist.linear.x = vx;
+  //odom.twist.twist.linear.y = vy;
+  //odom.twist.twist.angular.z = w;
   odom_pub.publish(&odom);
 
   if((millis()-lastctrl)>1000*ctrlrate){
