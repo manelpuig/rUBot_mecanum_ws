@@ -229,11 +229,6 @@ export GAZEBO_MODEL_PATH=/home/rUBot_mecanum_ws/src/rubot_mecanum_description/mo
 
 > If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
 
-- When using ROS in WINDOWS, add in Terminal "command line":
-
-```xml
-&& set GAZEBO_MODEL_PATH=C:\Usuarios\puigm\Escritorio\ROS_github\rUBot_mecanum_ws\src\rubot_mecanum_description\models
-```
 
 - or copy the models folder in ~/.gazebo/models/
 - or you have this folder already in your Gazebo Path if you have created a model using "Building Editor"
@@ -310,50 +305,14 @@ by this text:
 
 - you have now the turn traffic sign ready!
 
-#### **b) Road  (windows)**
+#### **b) Road**
 
 Let's create road surface to follow the road line:
 
 - Open Gazebo (roslaunch gazebo_ros empty_world.launch) and in Building Editor create a model "road1" using a wall with height 5cm width 10m and length 10m. Save this model in "rUBot_mecanum_ws\src\rubot_mecanum_description\models"
 - In Power point, create a picture with the road desired texture (proportional xy size is important).
-- Save this picture in pgn ot jpeg format using for exemple "Recorte" from windows
-- copy the png file to package folder C:/opt/ros/noetic/x64/share/gazebo-10/media/materials/textures
-- open package file "C:/opt/ros/noetic/x64/share/gazebo-10/media/materials/scripts/gazebo.material"
-- add this code at the end (with png file name):
-
-```xml
-material Gazebo/Road_custom
-{
-  technique
-  {
-    pass
-    {
-      ambient 1.0 1.0 1.0 1.0
-      diffuse 1.0 1.0 1.0 1.0
-      specular 0.2 0.2 0.2 1.0 12.5
-
-      texture_unit
-      {
-        texture road_custom_1.png
-        filtering trilinear
-      }
-    }
-  }
-}
-```
-
-- Some models and textures are in "rUBot_mecanum_ws/Documentation/Files/Model_Textures/"
-- In the "road1" created model ("rUBot_mecanum_ws\src\rubot_mecanum_description\models\road1"), open "model.sdf"
-- Change the material/script lines to:
-
-```xml
-<material>
-  <script>
-    <uri>file://media/materials/scripts/gazebo.material</uri>
-    <name>Gazebo/Road_custom</name>
-  </script>
-```
-
+- Save this picture in pgn or jpeg format using for exemple "Recorte" from windows
+- proceed with the same way as for trafic sign
 - Open a gazebo_empty-world and create your road_custom_1.world file using the defined models
 
 #### **c) final world**
@@ -418,7 +377,7 @@ Start the node line_following_sim
 roslaunch rubot_projects line_following_traffic.launch
 ```
 
-![](./Images/5_line_following1.png)
+![](./Images/05_rubot_projects/4_line_following1.png)
 
 ### **4.3. Traffic road follower**
 
@@ -440,9 +399,9 @@ Start the node line_following_sim
 roslaunch rubot_projects line_following_traffic.launch
 ```
 
-![](./Images/5_line_following2.png)
+![](./Images/05_rubot_projects/5_line_following2.png)
 
-![](./Images/5_line_following3.png)
+![](./Images/05_rubot_projects/6_line_following3.png)
 
 Image comparison:
 https://www.tutorialspoint.com/how-to-compare-two-images-in-opencv-python

@@ -19,6 +19,9 @@ geometry_msgs::TransformStamped t;
 geometry_msgs::Twist twist;
 nav_msgs::Odometry odom;
 ros::Publisher odom_pub("odom", &odom);
+ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", cmdVelCb );
+ros::Subscriber<std_msgs::Bool> resub("reset_odom", resetCb );
+
 
 // Global Variables
 float ctrlrate=1.0;
@@ -59,13 +62,8 @@ void resetCb(const std_msgs::Bool& reset){
   }
 }
 
-ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", cmdVelCb );
-ros::Subscriber<std_msgs::Bool> resub("reset_odom", resetCb );
-
-
 void setup()
 {
-
   IO_init();
   PIDA.init();
   PIDB.init();
@@ -81,21 +79,17 @@ void setup()
 }
 
 void loop(){
-  
   float wA,wB,wC,wD;
   
   PIDA.tic();
   wA=PIDA.getWheelRotatialSpeed();
   PIDA.toc();
-
   PIDB.tic();
   wB=PIDB.getWheelRotatialSpeed();
   PIDB.toc();
-
   PIDC.tic();
   wC=PIDC.getWheelRotatialSpeed();
   PIDC.toc();
-
   PIDD.tic();
   wD=PIDD.getWheelRotatialSpeed();
   PIDD.toc();
