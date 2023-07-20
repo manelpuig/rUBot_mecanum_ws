@@ -16,7 +16,7 @@ The rock5b onboard is preinstalled with:
 
 Insert the SD card in rock5b board and power it. 
 - A hotspot will be created:
-  - SSID: rock_tplink
+  - SSID: rUBot_xx
   - Pass: rock1234
 - Connect your computer to this Hotspot
 - Install in your computer Nomachine remote desktop: https://www.nomachine.com/es
@@ -26,7 +26,7 @@ Insert the SD card in rock5b board and power it.
   - Port: 4000
   - Protocol: NX
 - You will be asked for:
-  - login: rock
+  - login/user: rock
   - password: rock
 
 After few seconds you will have the rUBot desktop in your computer screen!
@@ -42,7 +42,7 @@ You will have to change the Hotspot name (one for each robot). Change the name a
 sudo nm-connection-editor
 ```
 You will be able to change:
-- the name: from rock_tplink to rUBot_xx
+- the name (corresponding to your number): rUBot_xx
 - The password maintain rock1234
 
 ### **1.2. wifi configuration**
