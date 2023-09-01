@@ -81,7 +81,9 @@ void loop(){
   ```
 
 > Increase the communication baudrate:
-> - The default baudrate to communicate with Arduino board is 57600. In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino library to change this default baudrate:
+> - The default baudrate to communicate with Arduino board is 57600. I suggest to maintain the Baudrate to 57600!
+>
+>In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
 ```python
 class ArduinoHardware {
   public:
