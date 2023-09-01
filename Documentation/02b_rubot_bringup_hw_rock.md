@@ -106,6 +106,7 @@ class ArduinoHardware {
       baud_ = 115200;
     }
 ```
+> Important!: This changes have to be made in the library files where Arduino is installed (/home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
 
 To **test your rubot_mecanum arduino program** you need to:
 - open arduino IDE
