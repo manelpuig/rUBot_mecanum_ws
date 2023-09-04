@@ -535,7 +535,7 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_lidar_test.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/01_SW_Model_Control/1_rubot_lidar_test.png)
+![](./Images/01_SW_Model_Control/18_rubot_lidar_test.png)
 > We can see that the zero angle corresponds to the back side of the robot!
 
 #### **c) Autonomous navigation with obstacle avoidance**
@@ -547,7 +547,7 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_self_nav.launch
 ```
 
-![](./Images/01_SW_Model_Control/1_rubot_self.png)
+![](./Images/01_SW_Model_Control/19_rubot_self.png)
 
 The algorithm description functionality is:
 - "rubot_self_nav.py": The Python script makes the robot go forward. 
@@ -558,7 +558,7 @@ The algorithm description functionality is:
 Follow the wall accuratelly is an interesting challenge to make a map with precision to apply SLAM techniques for navigation purposes.
 
 There are 2 main tasks:
-- Create a python file "rubot_wall_follower.py" to perform the wall follower in the maze of our gopigo3 robot
+- Create a python file "rubot_wall_follower_gm.py" to perform the wall follower in the maze of our mecanum robot
 - Create a launch file to initialyse all the needed nodes in our system for this control task
 
 Follow the instructions to perform the rubot_wall_follower_gm.py python program are in the notebook: 
@@ -566,7 +566,7 @@ https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20co
 
 The algorithm is based on:
 
-![](./Images/01_SW_Model_Control/1_wall_follower_gm.png)
+![](./Images/01_SW_Model_Control/20_wall_follower_gm.png)
 
 You will have to tune the proper parameter set for a good wall following process
 ```shell
@@ -577,7 +577,7 @@ roslaunch rubot_control rubot_wall_follower_gm.launch
 You can see a video for the Maze wall follower process in: 
 [![IMAGE_ALT](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
 
-![](./Images/01_SW_Model_Control/1_rubot_wall_follower_gm.png)
+![](./Images/01_SW_Model_Control/21_rubot_wall_follower_gm.png)
 
 
 #### **e) Go to POSE**
@@ -594,4 +594,4 @@ For validation type:
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_go2pose.launch
 ```
-![](./Images/01_SW_Model_Control/1_rubot_go2pose.png)
+![](./Images/01_SW_Model_Control/22_rubot_go2pose.png)
