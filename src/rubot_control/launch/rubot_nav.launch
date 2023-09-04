@@ -1,7 +1,7 @@
 <launch>
  <!-- Navigation Program   -->
-    <arg name="vx" default="0.1"/>
-    <arg name="vy" default="0.0"/>
+    <arg name="vx" default="0.0"/>
+    <arg name="vy" default="0.2"/>
     <arg name="w" default="0"/>
     <arg name="td" default="2"/>
   <node name="rubot_nav" pkg="rubot_control" type="rubot_nav.py" output="screen" >

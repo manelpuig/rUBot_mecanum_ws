@@ -346,7 +346,7 @@ roslaunch rubot_mecanum_description display.launch
 
 Here we have first to design the project world, for exemple a maze from where our rUBot mecanum has to navigate autonomously.
 
-There is a very useful and simple tool to design a proper world: "Building editor" in gazebo.
+There is a very useful and simple tool to design a proper world: "**Building editor**" in gazebo.
 
 Open gazebo as superuser:
 ```shell
@@ -354,7 +354,7 @@ sudo gazebo
 ```
 
 You can build your world using "Building Editor" in Edit menu
-![](./Images/01_SW_Model_Control/1_BuildingWorld.png)
+![](./Images/01_SW_Model_Control/08_BuildingWorld.png)
 
 You can save:
 - the generated model in a model folder (without extension)
@@ -366,23 +366,23 @@ Once you finish is better to close the terminal you have work as superuser
 
 #### ***Modify a created world***
 - Open a terminal where you have the world you want to modify
-- type: sudo gazebo ./maze1.world
+- type: sudo gazebo ./test.world
 - make modifications
 - save your world in a Desktop directory
 - close gazebo and the terminal
 #### **Create world with model parts**
-You can create model parts like walls of 90cm or 60cm with a geometry and color, using building editor. These parts can be saved:
+You can create model parts like walls of 90cm or 60cm or 20cm with a geometry and color, using building editor. These parts can be saved:
 - in ~/.gazebo/models/
 - in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models), if you add this line in .bashrc file:
   ```xml
-  export GAZEBO_MODEL_PATH=/home/rock/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
+  export GAZEBO_MODEL_PATH=/home/user/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 - When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
 
 You will have acces in gazebo insert section. Then you can construct your world adding parts.
 
 This is an exemple:
-![](./Images/01_SW_Model_Control/1_BuildingEditor.png)
+![](./Images/01_SW_Model_Control/09_BuildingEditor.png)
 
 
 ### **Bringup the rUBot in project world**
@@ -393,7 +393,7 @@ The first step in robotics is to bringup the rUBot mecanum robot in our generate
 ``` shell
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
-![](./Images/01_SW_Model_Control/1_mecanum_bringup.png)
+![](./Images/01_SW_Model_Control/10_mecanum_bringup.png)
 
 >Careful:
 - we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
@@ -403,7 +403,7 @@ Now we are ready to control our robot in this virtual environment!
 
 ## **3. rUBot mecanum navigation control in virtual environment**
 
-Once the world has been generated we will create a ROS Package "rubot_control" to perform the autonomous navigation
+Once the world has been generated we will create a ROS Package "rubot_control" to perform the navigation control nodes
 ```shell
 cd ~/rubot_mecanum_ws/src
 catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msgs
@@ -412,24 +412,24 @@ catkin_make
 ```
 
 ### **3.1 Kinematics model of mecanum robot**
-The first concept we are going to go through is kinematic models. So, we know what kinematics are, but, what is a kinematic model?
+The first concept we are going to see is kinematic models. 
 
 Wheeled mobile robots may be classified in two major categories, holonomic (omnidirectional) and nonholonomic. 
-- Nonholonomic mobile robots, such as conventional cars, employ conventional wheels, which prevents cars from moving directly sideways.
-- Holonomic mobile robots, such as mecanum cars, employ omni or mecanum wheels, which allow lateral and diagonal movements
+- **Nonholonomic mobile robots**, such as conventional cars, employ conventional wheels, which prevents cars from moving directly sideways.
+- **Holonomic mobile robots**, such as mecanum cars, employ omni or mecanum wheels, which allow lateral and diagonal movements
 
 We will define the Kinematic model for Holonomic Mecanum wheeled robot:
 
-Omnidirectional wheeled mobile robots typically employ either omniwheels or mecanum wheels, which are typical wheels augmented with rollers on their outer circumference. These rollers spin freely and they allow sideways sliding while the wheel drives forward or backward without slip in that direction.
+Omnidirectional wheeled mobile robots typically employ either omni wheels or mecanum wheels, which are typical wheels augmented with rollers on their outer circumference. These rollers spin freely and they allow sideways sliding while the wheel drives forward or backward without slip in that direction.
 
-The different movements our car can perform are:
-![](./Images/01_SW_Model_Control/1_mecanum_kine1.png)
+The **different movements** our car can perform are:
+![](./Images/01_SW_Model_Control/11_mecanum_kine1.png)
 
-The forces involved define the robot linear and angular movement:
-![](./Images/01_SW_Model_Control/1_mecanum_kine2.png)
+The **forces** involved define the robot linear and angular movement:
+![](./Images/01_SW_Model_Control/12_mecanum_kine2.png)
 
 The **Forward Kinematics** equations are defined below:
-![](./Images/01_SW_Model_Control/1_mecanum_kine3.png)
+![](./Images/01_SW_Model_Control/13_mecanum_kine3.png)
 
 where
 
@@ -449,10 +449,11 @@ In the **Inverse Kinematics** we want to apply a robot movement defined by:
 - we need to calculate the 4 wheel speeds needed to obtain this robot velocity
 
 This is defined by the following expressions:
-![](./Images/01_SW_Model_Control/1_mecanum_kine4.png)
+![](./Images/01_SW_Model_Control/14_mecanum_kine4.png)
 To obtain the **Odometry** we use the information of (uf,ul,w) and Gazebo plugin calculates the POSE of our robot.
+
 The analytical expressions are explained graphically in the picture:
-![](./Images/01_SW_Model_Control/1_odom_mecanum.png)
+![](./Images/01_SW_Model_Control/15_odom_mecanum.png)
 
 In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
 
@@ -479,19 +480,19 @@ rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/01_SW_Model_Control/1_rubot_bringup.png)
+![](./Images/01_SW_Model_Control/16_rubot_bringup.png)
 
 #### **3.2.2. Python programming control**
 Diferent navigation programs are created:
 
-- Navigation control: to define a desired robot velocity
-- Lidar test: to verify the LIDAR readings and angles
-- Autonomous navigation: to perform a simple algorithm for navigation with obstacle avoidance using the LIDAR
-- Wall follower: at a fixed distance to perform a good map
-- go to POSE: attend a specific position and orientation
+- **Navigation control**: to define a desired robot velocity
+- **Lidar test**: to verify the LIDAR readings and angles
+- **Autonomous navigation**: to perform a simple algorithm for navigation with obstacle avoidance using the LIDAR
+- **Wall follower**: at a fixed distance to perform a good map
+- **Go to POSE**: attend a specific position and orientation
 
 The nodes and topics structure corresponds to the following picture:
-![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
+![](./Images/01_SW_Model_Control/17_nodes_topics.png)
 
 #### **a) Navigation Control**
 
