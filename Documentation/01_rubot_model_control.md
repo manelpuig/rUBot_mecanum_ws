@@ -1,26 +1,15 @@
 # **rUBot mecanum model & control**
 
 The objectives of this chapter are:
-- Create a model of our rUBot 
-- use rviz package to view the different topics and nodes
-- create a model of the virtual environment
-- use gazebo package to simulate the robot kinematics and dynamics
-- locate the robot in our created environment
-- create our firsts programs to control the robot movement with obstacle avoidance
+- Create a robot model of our rUBot 
+- Create a world model of the virtual environment
+- Create Nodes to control the robot movement, obstacle avoidance, wall follower and line follower.
 
 
 The final model represents the real rUBot we will use in the laboratory
 
 The rUBot mecanum robot we will work is represented in the picture:
 ![](./Images/01_SW_Model_Control/1_osoyoo.png)
-
-His main characteristics are: 
-- Arduino based control for sensors & actuators
-  - Servomotor actuators for the 4 mecanum wheels
-  
-- High-level onboard control with Ubuntu20 and ROS Noetic
-  - RPlidar distance sensor
-  - Raspicam 2D camera sensor
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
@@ -29,26 +18,26 @@ His main characteristics are:
 
 First of all, we have to create the "rubot_mecanum_description" package where we will create the rUBot model. In case you want to create it from scratch, type:
 ```shell
-cd ~/home/rubot_mecanum_ws/src
+cd ~/home/user/rubot_mecanum_ws/src
 catkin_create_pkg rubot_mecanum_description rospy
 cd ..
 catkin_make
 ```
 Then open the .bashrc file and verify the environment variables and source to the proper workspace:
 ```shell
-source ~/home/rubot_mecanum_ws/devel/setup.bash
+source ~/home/user/rubot_mecanum_ws/devel/setup.bash
 ```
 
-To create our robot model, we use URDF files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
+To create our robot model, we use **URDF** files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
 
 We have created 2 folders for model description:
-- URDF: folder where different URDF models are located. In our case rubot_rp.urdf
+- URDF: folder where different URDF models are located. In our case rubot.urdf
 - meshes: folder where 3D body models in stl format are located. We will have rubot folder.
 
 The main parts of URDF model are:
 - links: diferent bodies/plastic elements
 - joints: connection between 2 links 
-- sensors & actuators plugins (2D camera, LIDAR and DC motors)
+- sensors & actuators plugins (2D camera, LIDAR and 4-wheels mecanum-drive)
 
 The link definition contains:
 - visual properties: the origin, geometry and material
@@ -62,7 +51,7 @@ The joint definition contains:
 - rotation axis
 
 The geometrical definition of our rUBot is:
-![](./Images/01_SW_Model_Control/1_rubot_cad.png)
+![](./Images/01_SW_Model_Control/01_rubot_cad.png)
 
 In the case or upper left wheel:
 ```xml
@@ -101,17 +90,18 @@ In the case or upper left wheel:
 The rUBot model includes different sensors and actuators:
 
 Sensors:
-- a two-dimensional camera: correspondas to RBPi camera
+- a two-dimensional camera: correspondas to USB camera
 - a 360º RPLidar A1M8 (https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html)
 
 Actuator:
 - Mecanum drive actuator: based on 4 DC motors with encoders to obtain the Odometry information
 
-The full model contains also information about the sensor and actuator controllers using specific Gazebo plugins (http://gazebosim.org/tutorials?tut=ros_gzplugins#Tutorial:UsingGazebopluginswithROS). 
+The full model contains also information about the sensor and actuator controllers using specific **Gazebo plugins** (http://gazebosim.org/tutorials?tut=ros_gzplugins#Tutorial:UsingGazebopluginswithROS). 
 
 Gazebo plugins give your URDF models greater functionality and compatible with ROS messages and service calls for sensor output and motor input. 
 
 These plugins can be referenced through a URDF file, and to insert them in the URDF file, you have to follow the sintax:
+
 ### **Camera sensor plugin**
 This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
 
@@ -155,7 +145,7 @@ A driver is needed to view the images.
 > ```xml
 ><visualize>true</visualize>"
 > ```
-> -  use rviz
+> - use rviz
 > - type rqt in a terminal and select Plugins->Visualization->Image View
 >
 >Alternativelly with false in plugin, you can allways call the image typing in a new terminal:
@@ -167,7 +157,7 @@ A driver is needed to view the images.
 This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
 > Note that rpLIDAR is mounted at 180º and you need to turn the link model and the joint to reflect this in the URDF model.
 
-![](./Images/01_SW_Model_Control/1_lidar.png)
+![](./Images/01_SW_Model_Control/02_lidar.png)
 
 A driver is needed to see the 720 laser distance points:
 ```xml
@@ -237,8 +227,8 @@ This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: ht
   </gazebo>
   ```
 In this gazebo plugin, the kinematics of the robot configuration is defined:
-- Forward kinematics: obtains the robot velocity (linear and angular in /cmd_vel) and POSE (odometry) for speciffic robot wheel speeds
-- Inverse kinematics: obtains the robot wheels speeds for a desired robot velocity (linear and angular in /cmd_vel)
+- **Forward kinematics**: obtains the robot velocity (linear and angular in /cmd_vel) and POSE (odometry) for speciffic robot wheel speeds
+- **Inverse kinematics**: obtains the robot wheels speeds for a desired robot velocity (linear and angular in /cmd_vel)
 
 We use a specific "display.launch" launch file where we specify the robot model we want to open in rviz with a configuration specified in "urdf.rviz":
 ```xml
@@ -251,11 +241,12 @@ We use a specific "display.launch" launch file where we specify the robot model 
 </launch>
 ```
 Launch the ROS visualization tool to check that the model is properly built. 
+
 RViz only represents the robot visual features. You have available all the options to check every aspect of the appearance of the model
 ```shell
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/1_rviz_rubot.png)
+![](./Images/01_SW_Model_Control/03_rviz_rubot.png)
 
 > Colors in rviz: 
 >- are defined at the beginning
@@ -279,7 +270,7 @@ roslaunch rubot_mecanum_description display.launch
 ```
 In robotics research, always before working with a real robot, we simulate the robot behaviour in a virtual environment close to the real one.
 
-Gazebo is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
+**Gazebo** is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
 
 We will create a new spawn.launch file to spawn the robot in an empty world:
 ```xml
@@ -298,8 +289,9 @@ We will create a new spawn.launch file to spawn the robot in an empty world:
 Open a new terminal and launch this file:
 ```shell
 roslaunch rubot_mecanum_description rubot_gazebo.launch
+roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/1_rubot_gazebo.png)
+![](./Images/01_SW_Model_Control/04_rubot_gazebo.png)
 
 You will see in Rviz the camera is receiving now images!
 > Colors in gazebo: 
@@ -310,28 +302,17 @@ You will see in Rviz the camera is receiving now images!
     <material>Gazebo/Yellow</material>
   </gazebo>
 ```
-You can create a very simple world "rubot.world" using gazebo:
+You can create a very **simple world** "rubot.world" using gazebo:
 
-- Close first gazebo process in a new terminal
-  ```shell
-  pkill gzserver && pkill gzclient
-  ```
-- Type: sudo gazebo
+- Maintain the Gazebo and RVIZ screens opened
 - add some objects in the empty world
-- save the final world to "worlds" folder
-- quit in gazebo application
 
-The robot could be spawn in a predefined position and orientation inside this new created world using this new rubot_world.launch file.
+Now in RVIZ you will see the objects with the USB camera and Lidar
 
-Type the following to spawn the robot inside the world and test the sensor values using rviz:
-```shell
-roslaunch rubot_mecanum_description rubot_world.launch
-roslaunch rubot_mecanum_description display.launch
-```
-![](./Images/01_SW_Model_Control/1_rubot_test_world.png)
+![](./Images/01_SW_Model_Control/05_rubot_test_world.png)
 
 You can see the nodes and topics generated using rqt_graph
-![](./Images/01_SW_Model_Control/1_rubot_test_rqt.png)
+![](./Images/01_SW_Model_Control/06_rubot_test_rqt.png)
 
 > To see the frames you have to add TF in rviz
 
@@ -342,6 +323,10 @@ You can see the nodes and topics generated using rqt_graph
   sudo apt get update
   sudo apt get upgrade
   ```
+- To close the Gazebo is better to type in a new terminal:
+  ```shell
+  pkill gzserver && pkill gzclient
+  ```
 
 **Activity:**
 
@@ -351,10 +336,10 @@ Design a proper model corresponding to the real rUBot_mecanum you will work with
 
 To verify the final frame orientations (modify the launch files accordingly):
 ```shell
-roslaunch rubot_mecanum_description rubot_world.launch
+roslaunch rubot_mecanum_description rubot_gazebo.launch
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/1_rubot_number.png)
+![](./Images/01_SW_Model_Control/07_rubot_number.png)
 
 
 ## **2. Design the project world**
