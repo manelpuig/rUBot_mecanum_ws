@@ -5,7 +5,7 @@ The hardware bringup file will contain:
 - launch the usb_cam node
 
 Graphically, the final node structure will be:
-![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
+![Getting Started](./Images/02_rubot_rock/01b_nodes_topics.png)
 
 The bringup launch file will prepare the rUBot to comunicate with /rUBot_nav node for specific control actions.
 
@@ -18,7 +18,7 @@ To bringup we need to run the driver designed for rubot_mecanum robot. The drive
 - Read the LIDAR and USB-Camera
 - interface with all the other sensors/actuators connected to arduino-mega board
 
-The "rubot_mecanum.ino" arduino program is located on /Documentation/files/arduino/ folder
+The "rUBot_drive.ino" arduino program is located on /Documentation/files/arduino/ folder
 
 >Carefull!:
 >
@@ -31,18 +31,18 @@ This final code contains:
 >Take care about:
 >- Motor connections
 
-![](./Images/02_rubot_rock/2b_motor.png)
+![](./Images/02_rubot_rock/02b_motor.png)
 
 >- Shield schematics
 
-![](./Images/02_rubot_rock/2b_shield.png)
+![](./Images/02_rubot_rock/03b_shield.png)
 
 >- Pin number of encoders, PWM and DIR in config.h and encoder.h files
 
-![](./Images/02_rubot_rock/2b_pinout.png)
+![](./Images/02_rubot_rock/04b_pinout.png)
 
 >- Inverse Kinematics expressions in kinematics.hpp library according to:
-![](./Images/02_rubot_rock/2b_mecanum_kine4.png)
+![](./Images/02_rubot_rock/05b_mecanum_kine4.png)
 The kinematics.hpp has to include the correct expressions:
 ```python
 //wABCD m/s
@@ -53,7 +53,7 @@ void InverseKinematic(float vx,float vy,float omega, float &pwmA,float &pwmB,flo
   pwmD=speed2pwm(vx-vy+K*omega); 
 ```
 >- The Odometry expression is calculated according to:
-![](./Images/02_rubot_rock/2b_odom_mecanum.png)
+![](./Images/02_rubot_rock/06b_odom_mecanum.png)
 > This is implemented in the main loop of arduino program:
 ```python
 void loop(){
