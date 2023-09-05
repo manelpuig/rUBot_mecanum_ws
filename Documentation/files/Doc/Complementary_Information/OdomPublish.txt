@@ -1,4 +1,0 @@
-Link:
-https://forum.arduino.cc/t/building-a-cheap-ros-arduino-turtlebot-need-help-with-code-hardware/876026
-template:
-https://www.intorobotics.com/template-for-a-ros-publisher-using-rosserial-on-arduino/
