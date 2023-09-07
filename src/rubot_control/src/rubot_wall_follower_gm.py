@@ -36,14 +36,12 @@ class WallFollower:
 
         # Propiedades secundarias
 
-        # Tenemos operando dos versiones de Lidar que devuelven 360 0 720 puntos.
-        # Para que el codigo sea compatible con cualquiera de los dos, aplicaremos
-        # este factor de correccion en los angulos/indices de scan.ranges.
+        # Our Lidar has more than 720 laser beams and not all the Lidars have the same number
         # Se debe de calcular en la primera ejecucion de __callbackLaser(). Esta
         # variable sirve para asegurar que solo se ejecuta este calculo del
         # factor de correccion una sola vez.
-        self.__isScanRangesLengthCorrectionFactorCalculated = False
-        self.__scanRangesLengthCorrectionFactor = 1
+        #self.__isScanRangesLengthCorrectionFactorCalculated = False
+        #self.__scanRangesLengthCorrectionFactor = 2
 
         # Definicion del mensaje
         self.__msg = Twist()
@@ -66,11 +64,8 @@ class WallFollower:
     def __callbackLaser(self, scan):
         """Funcion ejecutada cada vez que se recibe un mensaje en /scan."""
 
-        # En la primera ejecucion, calculamos el factor de correcion
-        if not self.__isScanRangesLengthCorrectionFactorCalculated:
-            self.__scanRangesLengthCorrectionFactor = int(
-                len(scan.ranges) / 360)
-            self.__isScanRangesLengthCorrectionFactorCalculated = True
+        # En la primera ejecucion, calculamos el factor de correcion del lidar
+ 
         # wrong readings deliver 0 value in range
         """ newRange = []
         for val in scan.ranges:
@@ -80,20 +75,20 @@ class WallFollower:
                 newRange.append(val) """
         # Obtenemos las mediciones de A y B y las guardamos en variables locales
         """zero angle is on th back --> angle-180 """
-        A = scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor]
+        A = scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * 2]
         B = scan.ranges[(self.__unWrapAngle(90)) *
-                        self.__scanRangesLengthCorrectionFactor]
+                        2]
 
         rospy.loginfo_once('Ángulo derecha:\t%d, Ángulo theta:\t%d',
-            (self.__unWrapAngle(90)) * self.__scanRangesLengthCorrectionFactor,
-            int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * self.__scanRangesLengthCorrectionFactor)
+            (self.__unWrapAngle(90)) * 2,
+            int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta)))) * 2)
             
         rospy.loginfo("LIDAR: Delante:\t%.2f, Atrás:\t%.2f, Izquierda:\t%.2f, Derecha:\t%.2f, Theta:\t%.2f",
-            scan.ranges[self.__unWrapAngle(180) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[self.__unWrapAngle(0) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[self.__unWrapAngle(-90) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[self.__unWrapAngle(90) * self.__scanRangesLengthCorrectionFactor],
-            scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta))) * self.__scanRangesLengthCorrectionFactor)])
+            scan.ranges[self.__unWrapAngle(180) * 2],
+            scan.ranges[self.__unWrapAngle(0) * 2],
+            scan.ranges[self.__unWrapAngle(-90) * 2],
+            scan.ranges[self.__unWrapAngle(90) * 2],
+            scan.ranges[int(round(self.__unWrapAngle(90 + np.rad2deg(self.__theta))) * 2)])
 
         # Si el valor leido de A no es NaN ni infinito y da entre 0.1 y 16 m (limites del Lidar),
         # actualizamos la propiedad self.__A con el nuevo valor. wrong readings deliver 0 value in range

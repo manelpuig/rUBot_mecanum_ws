@@ -26,14 +26,12 @@ class rUBot:
         
         # Propiedades secundarias
 
-        # Tenemos operando dos versiones de Lidar que devuelven 360 0 720 0 1080 puntos.
-        # Para que el codigo sea compatible con cualquiera de los dos, aplicaremos
-        # este factor de correccion en los angulos/indices de scan.ranges.
+        # Our Lidar has more than 720 laser beams and not all the Lidars have the same number
         # Se debe de calcular en la primera ejecucion de __callbackLaser(). Esta
         # variable sirve para asegurar que solo se ejecuta este calculo del
         # factor de correccion una sola vez.
-        self.__isScanRangesLengthCorrectionFactorCalculated = False
-        self.__scanRangesLengthCorrectionFactor = 1
+        #self.__isScanRangesLengthCorrectionFactorCalculated = False
+        #self.__scanRangesLengthCorrectionFactor = 2
 
     def start(self):
 
@@ -43,16 +41,10 @@ class rUBot:
 
     def callbackLaser(self, scan):
         """Funcion ejecutada cada vez que se recibe un mensaje en /scan."""
-        # En la primera ejecucion, calculamos el factor de correcion
-        if not self.__isScanRangesLengthCorrectionFactorCalculated:
-            self.__scanRangesLengthCorrectionFactor = int(len(scan.ranges) / 360)
-            self.__isScanRangesLengthCorrectionFactorCalculated = True
-            rospy.loginfo("Scan Ranges correction %5.2f we have,%5.2f points.", self.__scanRangesLengthCorrectionFactor, len(scan.ranges))
-        
-        
+        # En la primera ejecucion, calculamos el factor de correcion del Lidar
+                
         closestDistance, elementIndex = min((val, idx) for (idx, val) in enumerate(scan.ranges) if scan.range_min < val < scan.range_max)
-        angleClosestDistance = (elementIndex / self.__scanRangesLengthCorrectionFactor)  
-        rospy.loginfo("Degree div factor %5.2f ",(elementIndex / self.__scanRangesLengthCorrectionFactor))
+        angleClosestDistance = (elementIndex / 2)  
 
         angleClosestDistance= self.__wrapAngle(angleClosestDistance)
         rospy.loginfo("Degree wraped %5.2f ",(angleClosestDistance))
