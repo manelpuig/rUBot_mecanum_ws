@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from rubot_nav import move_rubot
+from rubot_navigation import move_rubot
 from math import sqrt,sin,cos
 
 
@@ -9,6 +9,12 @@ def square_path(v,td):
     move_rubot(0,v,0,td)
     move_rubot(-v,0,0,td)
     move_rubot(0,-v,0,td)
+
+
+def circular_path(v,td):
+    w=5
+    for t in range(0,td,int(td/4)):
+        move_rubot(v*cos(w*t),v*sin(w*t),0,t)
 
 
 def triangular_path(v, td):
@@ -30,7 +36,6 @@ if __name__ == '__main__':
 
         elif path == "Triangular":
             triangular_path(v, td)
-
         else:
             print('Error: unknown movement')
 
