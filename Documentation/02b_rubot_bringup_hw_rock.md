@@ -114,12 +114,12 @@ To **test your rubot_mecanum arduino program** you need to:
 - Open 3 new terminals and type:
 ```shell
 roscore
-rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
-> /dev/arduino is the port to which the Arduino is connected, change it in case yours is different (usually /dev/ttyACM0)
+> the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
 
-> The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]', you should only change vx, vy and wz values as the others do not apply. As it is an holonomic robot, if all the values are 0.0 except for wz (angular velocity in z axis) you will obtain a movement in which the robot spins on itself.
+> The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]'
 
 ## **2. Launch LIDAR node**
 
@@ -144,6 +144,7 @@ Verify:
   ```shell
   <remap from="image" to="/usb_cam/image_raw"/>
   ```
+  > This is in case you want to open "Image View". By default is not activated (commented)
 
 ## **Final bringup launch file**
 
@@ -170,7 +171,11 @@ rqt_image_view
 > This is usually done in the bringup file
 
 ## **2. Lidar reference frame and ranges**
-the LIDAR reference-frame is by default "base_scan". When using rplidar mounted back-side, in that case review the urdf model and be sure the "base_scan" frame is looking to the front. If not, you have to change the reference-frame to "odom" frame to see the obstacles in the right orientation. You have to open the "rplidar.launch" file and change the line:
+The LIDAR reference-frame is by default "**base_scan**". When using rplidar mounted back-side, the urdf model is made with the "base_scan" frame looking to the back-side. As a consequence, in rviz we will see the obstacles 180º shifted.
+
+The node programs we have made in package "rubot_control" takes into account that the zero-angle is in the back. This means we have noting to change if we want to use these nodes.
+
+In the next section when we will work with SLAN techniques for navigation, we will have to make a correction to see the obstacles in the correct orientation. You will have to change the Lidar reference-frame to "**odom**" frame. You will have to open the "rplidar_rock.launch" file and change the line:
 ```xml
 <param name="frame_id" type="string" value="base_scan"/>
 ```
@@ -178,7 +183,7 @@ to the param value:
 ```xml
 <param name="frame_id" type="string" value="odom"/>
 ```
-Once you have made the bringup, verify in RVIZ that the obstacles detected by laser beams are in the correct orientation!
+With this correction, once you have made the bringup, verify in RVIZ that the obstacles detected by laser beams are in the correct orientation!
 
 In function of lidar module, there are 720 or more laser beams.
 We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
@@ -191,10 +196,10 @@ First verification is the forward kinematics. You need to verify the arduino pro
 
 To test your rubot_mecanum arduino program you need to:
 - open arduino IDE
-- upload the rubot_mecanum.ino file
-- Open 3 new terminals and type (change values for different direction of movement):
+- upload the rUBot_drive.ino file
+- Open 23 new terminals and type:
 ```shell
-roscore
-rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
-rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
+roslaunch rubot_control rubot_nav.launch
 ```
+You will be able to test different movements.

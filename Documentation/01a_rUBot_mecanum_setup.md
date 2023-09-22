@@ -8,7 +8,7 @@ His main characteristics are:
   
 - High-level onboard control with Ubuntu20 and ROS Noetic
   - RPlidar distance sensor
-  - Raspicam 2D camera sensor
+  - usb camera sensor
 
 ![](./Images/00_Setup/1_osoyoo.png)
 

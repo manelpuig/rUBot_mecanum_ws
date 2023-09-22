@@ -7,11 +7,7 @@ The main objectives are to control the rUBot movements:
 - Go to specific pose
 
 ### **Setup your workspace**
-The rock5b onboard is preinstalled with:
-- Ubuntu 20 server 32bits
-  - NoMachine remote desktop
-- ROS Noetic
-- rUBot_mecanum_ws repository is located in /home/ubuntu folder 
+The rock5b onboard contains the "rUBot_mecanum_ws" repository located in /home/rock folder 
 
 We will create a "rubot_control" package to perform the rUBot_mecanum control movements:
 ```shell
@@ -77,13 +73,13 @@ Different navigation programs are created:
 - go to POSE: attend a specific position and orientation
 
 The nodes and topics structure corresponds to the following picture:
-![Getting Started](./Images/01_SW_Model_Control/1_nodes_topics.png)
+![Getting Started](./Images/02_rubot_rock/01b_nodes_topics.png)
 
 ### **a) Navigation control**
 
 We have created a first navigation python files in "src" folder:
 
-- rubot_nav.py: to define the movement with vx, vy and w for a time period
+- **rubot_nav.py**: to define the movement with vx, vy and w for a time period
 
 A "node_nav.launch" file is created to launch the node and python file created above.
 

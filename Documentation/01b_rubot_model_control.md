@@ -9,7 +9,7 @@ The objectives of this chapter are:
 The final model represents the real rUBot we will use in the laboratory
 
 The rUBot mecanum robot we will work is represented in the picture:
-![](./Images/01_SW_Model_Control/1_osoyoo.png)
+![](./Images/00_Setup/1_osoyoo.png)
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
@@ -85,7 +85,7 @@ In the case or upper left wheel:
 ```
 > Be careful with base_link:
 >
-> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the **urdf_inertial_calculator.py** program file you have in "Documentation/files/02_Code_Tutorials/URDF_inertial".
+> The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the **urdf_inertial_calculator.py** program file you have in "Documentation/files/Doc/Robot_Models/URDF_inertial".
 
 The rUBot model includes different sensors and actuators:
 
@@ -400,6 +400,15 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 - Verify in rviz you have to change the fixed frame to "odom" frame
 
 Now we are ready to control our robot in this virtual environment!
+
+**Activity:**
+
+Design a proper **world** corresponding to the real world you will work with:
+- wooden parts with speciffic dimensions we have in the lab
+- Propose a maze for all the next laboratory sessions
+
+Generate the **bringup file** to spawn your previous designed robot model in the proposed maze.
+
 
 ## **3. rUBot mecanum navigation control in virtual environment**
 
