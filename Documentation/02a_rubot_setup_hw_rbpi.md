@@ -2,14 +2,14 @@
 
 The main objectives are:
 
-- Setup the HW in raspberrypi4
-- Clone the rUBot workspace to be ready
+- Setup the raspberrypi4
+- Setup the rUBot workspace in raspberrypi4
 
 
 Let's see how to fulfill these objectives
 
 
-## **1. Setup the rubot with raspberrypi4**
+## **1. Setup the raspberrypi4**
 
 The raspberrypi4 onboard is preinstalled with:
 - Ubuntu 20 server 64bits
@@ -17,7 +17,7 @@ The raspberrypi4 onboard is preinstalled with:
 - ROS Noetic
 - rubot_rbpi4_ws repository is located in /home/pi/Desktop folder 
 
-### **2.1. Install Ubuntu 20**
+### **1.1. Install Ubuntu 20**
 
 We have to install first **Ubuntu 20 server 64bits**:
 
@@ -55,13 +55,18 @@ You will get the ubuntu 20 desktop
 
 - choose a wifi network and change the timezone, language and password
 
-**Create WiFi Hotspot and setup**
+**Create WiFi Hotspot**
 
 Follow instructions in: https://www.debugpoint.com/2020/04/how-to-create-wifi-hotspot-in-ubuntu-20-04-lts/
 
->Carefull!:
->- If "Turn On Wi-Fi Hotspot is disabled select another setting (i.e. Bluetooth) and come back to Wi-Fi setting
->- Choose a SSID corresponding to your robot name: rUBot_XX
+- Choose a SSID corresponding to your robot name: rUBot_XX
+  >If "Turn On Wi-Fi Hotspot is disabled select another setting (i.e. Bluetooth) and come back to Wi-Fi setting
+- Specify the password: rUBot_Mec
+
+If you want to change the Hotspot name (one for each robot). Change the Hotspot settings (name or password):
+```shell
+sudo nm-connection-editor
+```
 
 To select this Hotspot automatically on restart:
 - open a terminal and see all the connection names:
@@ -76,10 +81,11 @@ nmcli con mod Hotspot connection.autoconnect yes
 ```shell
 nmcli con show Hotspot
 ```
-- Identify the IP of the rbpi4 Hotspot:
-  - type ifconfig
+Identify the IP of the rbpi4 Hotspot:
+  - type "ip address show"
   - in wlan0 you identify the inet address: 10.42.0.1
 
+Restart the raspberrypi4 to verify the automatic Hotspot configuration
 
 **Install nomachine remote desktop**
 
@@ -92,16 +98,74 @@ Download nomachine in RaspberryPi and PC:
 - In PC: https://www.nomachine.com/
 
 
-### **2.2. ROS Noetic Desktop installation**
+### **1.2. ROS Noetic Desktop installation**
 
 Follow the instructions on: http://wiki.ros.org/noetic/Installation/Ubuntu
+
+You can connect to raspberrypi4 using NoMachina remote desktop.
+
 > Is recommended to update and upgrade first:
 ```shell
 sudo apt update
 sudo apt upgrade
 ```
+**Install sensor packages**
+- Install **rplidar**:
+You need to install the package: http://wiki.ros.org/rplidar
+```shell
+sudo apt install ros-noetic-rplidar-ros
+```
+- Install **usb-cam**:You need to install the package: https://wiki.ros.org/usb_cam
+```shell
+sudo apt install ros-noetic-usb-cam
+```
+You need to test which video device is connected and change it on the launch file (usb_cam_rock.launch)
 
-**Setup**
+- Install **Arduino**:
+
+You can install Arduino IDE on Ubuntu by 
+- open a terminal in home and execute the following commands:
+```shell
+mkdir arduino
+cd arduino/
+wget https://downloads.arduino.cc/arduino-1.8.15-linux64.tar.xz
+cd arduino-1.8.15/
+sudo ./install.sh
+```
+By default Arduino is installed to /usr/local/bin/arduino.
+
+To avoid any possible problems when using Arduino IDE, add your system user to the dialout group.
+Now we just need to add our system user to the group:
+```shell
+sudo usermod -a -G dialout <username>
+```
+Install ROS Packages for Arduino:
+```shell
+sudo apt install ros-noetic-rosserial-arduino
+sudo apt install ros-noetic-rosserial
+```
+- Configure **Arduino IDE**:
+
+Open the Arduino IDE:
+
+In the Arduino IDE, go to File > Preferences.
+
+In the "Additional Boards Manager URLs" field, add the following URL to install the necessary package for ROS compatibility: http://downloads.arduino.cc/packages/package_rosserial_index.json
+
+
+sudo ./install.sh
+cd ~
+gedit .bashrc
+export PATH=$PATH:$HOME/Desktop/Arduino
+Save and close the file and install rosserial for ROS Noetic using:
+
+sudo apt-get install ros-noetic-rosserial-arduino
+sudo apt-get install ros-noetic-rosserial
+Go to ~/Desktop/Arduino/libraries directory and remove ros_lib folder. From this directory execute:
+
+rosrun rosserial_arduino make_libraries.py .
+
+## **2. Setup the rubot workspace in raspberrypi4**
 
 The raspberrypi4 is configured:
 - to generate a hotspot "rUBot_xx"
@@ -119,14 +183,6 @@ Once you are connected to this network you will be able to connect your computer
     - user: ubuntu
     - password: ubuntu1234
 - You will have the raspberrypi4 desktop on your windows NoMachine screen
-
-![](./Images/2_nomachine.png)
-
-If you want to change the Hotspot name (one for each robot):
-- Change the Hotspot settings (name or password):
-```shell
-sudo nm-connection-editor
-```
 
 ### **2.4. Create your workspace**
 
