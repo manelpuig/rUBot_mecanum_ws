@@ -102,7 +102,7 @@ Download nomachine in RaspberryPi and PC:
 
 Follow the instructions on: http://wiki.ros.org/noetic/Installation/Ubuntu
 
-You can connect to raspberrypi4 using NoMachina remote desktop.
+You can connect to raspberrypi4 using NoMachine remote desktop.
 
 > Is recommended to update and upgrade first:
 ```shell
@@ -115,7 +115,7 @@ You need to install the package: http://wiki.ros.org/rplidar
 ```shell
 sudo apt install ros-noetic-rplidar-ros
 ```
-- Install **usb-cam**:You need to install the package: https://wiki.ros.org/usb_cam
+- Install **usb-cam**: You need to install the package: https://wiki.ros.org/usb_cam
 ```shell
 sudo apt install ros-noetic-usb-cam
 ```
@@ -123,54 +123,67 @@ You need to test which video device is connected and change it on the launch fil
 
 - Install **Arduino**:
 
-You can install Arduino IDE on Ubuntu by 
-- open a terminal in home and execute the following commands:
+You can install Arduino IDE on Ubuntu using command line:
 ```shell
-mkdir arduino
-cd arduino/
-wget https://downloads.arduino.cc/arduino-1.8.15-linux64.tar.xz
-cd arduino-1.8.15/
-sudo ./install.sh
+sudo snap install arduino
+sudo usermod -a -G tty ubuntu
+sudo usermod -a -G dialout ubuntu
 ```
-By default Arduino is installed to /usr/local/bin/arduino.
+Reboot
 
-To avoid any possible problems when using Arduino IDE, add your system user to the dialout group.
-Now we just need to add our system user to the group:
-```shell
-sudo usermod -a -G dialout <username>
-```
+To avoid any possible problems when using Arduino IDE, you have added your system user to the dialout and tty groups.
+
+If there is a problem, contact: https://github.com/snapcrafters/arduino/issues/
+
 Install ROS Packages for Arduino:
 ```shell
-sudo apt install ros-noetic-rosserial-arduino
 sudo apt install ros-noetic-rosserial
+sudo apt install ros-noetic-rosserial-arduino
 ```
 - Configure **Arduino IDE**:
 
-Open the Arduino IDE:
+To install **ESP32 boards**:
 
 In the Arduino IDE, go to File > Preferences.
 
-In the "Additional Boards Manager URLs" field, add the following URL to install the necessary package for ROS compatibility: http://downloads.arduino.cc/packages/package_rosserial_index.json
+In the "Additional Boards Manager URLs" field, add the following URL to install the ESP32 boards: https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
+Now go to Tools  --> Board Manager and search for ESP32. Install Arduino ESP32 and esp32 boards.
 
-sudo ./install.sh
-cd ~
-gedit .bashrc
-export PATH=$PATH:$HOME/Desktop/Arduino
-Save and close the file and install rosserial for ROS Noetic using:
+To install **ROS Libraries**:
 
-sudo apt-get install ros-noetic-rosserial-arduino
-sudo apt-get install ros-noetic-rosserial
-Go to ~/Desktop/Arduino/libraries directory and remove ros_lib folder. From this directory execute:
-
+Go to the Arduino Sketchbook location and install libraries:
+```shell
+cd /home/ubuntu/snap/arduino/current/Arduino/libraries
 rosrun rosserial_arduino make_libraries.py .
+```
+Restart your Arduino IDE and you should see the ros_lib part of your libraries!
+
+**Install Teleop control**
+
+Follow instructions in:
+- https://wiki.ros.org/teleop_twist_keyboard
+- https://wiki.ros.org/joy
+- https://github.com/ros-drivers/joystick_drivers/tree/main/ps3joy
+
+Run in a terminal:
+```shell
+sudo apt install ros-noetic-teleop-twist-keyboard
+sudo apt install ros-noetic-joy
+```
+You need to pair the devices.
+
+You can change the PS3 PAD and buttons assignments.
+
 
 ## **2. Setup the rubot workspace in raspberrypi4**
 
 The raspberrypi4 is configured:
 - to generate a hotspot "rUBot_xx"
 - NoMachine activated 
-- raspicam activated 
+- Sensor packages activated 
+
+**Connect remotelly** to your RaspberryPy4:
 
 When powering the raspberrypi4, generates a hotspot you have to connect to:
 - SSID name: rUBot_01 
@@ -184,259 +197,14 @@ Once you are connected to this network you will be able to connect your computer
     - password: ubuntu1234
 - You will have the raspberrypi4 desktop on your windows NoMachine screen
 
-### **2.4. Create your workspace**
+**Create your workspace**
 
-We will create the workspace where we will install all needed packages for our Hardware project
+We will clone the rUBot_mecanum_ws from our github to complete the project
 ```shell
-mkdir -p ~/Desktop/rubot_rbpi4_ws/src
-cd ~/Desktop/rubot_rbpi4_ws/
+cd /home/ubuntu
+git clone https://github.com/yourGitHubUserName/rUBot_mecanum_ws
+cd rUBot_mecanum_ws/
 catkin_make
-echo "source ~/Desktop/rubot_rbpi4_ws/devel/setup.bash" >> ~/.bashrc
+echo "source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash" >> ~/.bashrc
 ```
-We will install:
-- Raspberrypi camera
-- rpLIDAR
-- Arduino board with rosserial
-### **Install raspberrypi camera**
-Information is located on: https://picamera.readthedocs.io/en/release-1.11/install.html
-
-
-You need to activate the raspicam in Ubuntu:
-- open the file config.txt
-```shell
-sudo nano /boot/firmware/config.txt
-```
-- add the magic line start_x=1 at the end
-![](./Images/2_picam1.png)
-
-- reboot
-- update your system to install the necessary drivers:
-```shell
-sudo apt update
-sudo apt upgrade
-```
-Now we will install the python module for picamera:
-```shell
-sudo apt install python3-pip
-pip install picamera
-```
-And the needed libraries for raspicam package:
-```shell
-sudo apt-get install -y libyaml-cpp-dev
-sudo apt-get install -y libogg-dev libvorbis-dev libtheora-dev
-```
-Finally to work with raspicam in ROS, you need to install the packages:
-```shell
-git clone https://github.com/UbiquityRobotics/raspicam_node.git
-git clone --single-branch --branch=noetic-devel https://github.com/ros-perception/image_transport_plugins.git
-git clone --single-branch --branch=noetic https://github.com/ros-perception/vision_opencv.git
-git clone --single-branch --branch=noetic-devel https://github.com/ros-perception/image_common.git
-```
-> Follow the Build instructions in: https://github.com/UbiquityRobotics/raspicam_node.
-
-> Make sure that your user is in the video group by running groups|grep video 
-```shell
-sudo usermod -a -G video ubuntu
-```
-
-
-Then you are able to compile the workspace:
-```shell
-cd ~/Desktop/rubot_rbpi4_ws/
-catkin_make
-```
-
-### **Install rpLIDAR**
-
-Open a terminal in src folder and type:
-```shell
-cd ~/Desktop/rubot_rbpi4_ws/src
-git clone https://github.com/Slamtec/rplidar_ros
-cd ..
-catkin_make
-```
-To test the sensor, connect the LIDAR sensor to RB Pi and execute:
-```shell
-roslaunch rplidar_ros view_rplidar.launch
-```
-### **Install ARDUINO**
-
-This robot will be controlled by an Arduino Mega board.
-
-The arduino program will start a serial_node with all the topics
-
-The Arduino programm is located in "files/Arduino_node" folder.
-
-Considering your Raspberry computer uses Ubuntu 20, as explained in previous sections, you need to download Arduino IDE version for Linux ARM 64 bits from the following link: https://www.arduino.cc/en/software.
-
-After dowloading the zip file, reclocate it and unzip it in the Tools folder: ~/Tools/Arduino-1.8.18. From this directory, open a terminal and execute the following commands:
-
-```shell
-sudo ./install.sh
-cd ~
-gedit .bashrc
-export PATH=$PATH:$HOME/Desktop/Arduino-1.8.18
-```
-Save and close the file and install rosserial for ROS Noetic using:
-```shell
-sudo apt-get install ros-noetic-rosserial-arduino
-sudo apt-get install ros-noetic-rosserial
-```
-Go to ~/Desktop/Arduino-1.8.18/libraries directory and remove ros_lib folder. From this directory execute:
-```shell
-rosrun rosserial_arduino make_libraries.py .
-```
-
-Test Arduino ROS library with "Hello World" exemple: http://wiki.ros.org/rosserial_arduino/Tutorials/Hello%20World
-
-
-### **Manage USB ports**
-
-The rbpi4 manage arduino board and rpLIDAR with 2 USB ports. 
-
-We have to force the same USB port to the same device:
-- "arduino" port to arduino mega board
-- "rplidar" port to rpLIDAR
-
-This can be done creating UDEV rules for each devide:
-
-**a) Arduino udev rules**
-
-Follow instructions: 
-- https://steve.fi/hardware/arduino-basics/
-- https://medium.com/@darshankt/setting-up-the-udev-rules-for-connecting-multiple-external-devices-through-usb-in-linux-28c110cf9251
-
-  Connect the Arduino Mega in USB port. To see the port name type:
-  ```shell
-  ls -l /dev/ttyAMC*
-  ```
-  Give permissions rwx to this port ttyACM*
-  ```shell
-  sudo chmod 777 /dev/ttyACM*
-  ```
-  To see the needed properties to create udev rules, type:
-  ```shell
-  lsusb
-  ```
-  You will see:
-  ```shell
-  ubuntu@ubuntu:/usr/lib/udev/rules.d$ lsusb
-  Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-  Bus 001 Device 007: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
-  Bus 001 Device 004: ID 0e8f:00fb GreenAsia Inc. 
-  Bus 001 Device 003: ID 04d9:a01c Holtek Semiconductor, Inc. wireless multimedia keyboard with trackball [Trust ADURA 17911]
-  Bus 001 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
-  Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-  ```
-  The create a file /etc/udev/rules.d/99-arduino.rules and give it the following contents:
-  ```xml
-  # Arduino port definition
-  SUBSYSTEM=="tty", GROUP="plugdev", MODE="0660"
-
-  ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0042", SYMLINK+="arduino"
-  ```
-  >The idProduct and idVendor corresponds to the numbers in the Arduino line.
-
-  Now restart the service:
-  ```shell
-  sudo /etc/init.d/udev restart 
-  ```
-  Unplug and plug again the Arduino Board and verify if the symlink is created:
-  ```shell
-  ls -l /dev/arduino /dev/ttyACM0
-  ```
-  If all is OK, you will see:
-  ```shell
-  lrwxrwxrwx 1 root root         7 dic 23 08:58 /dev/arduino -> ttyACM0
-  crw-rw---- 1 root plugdev 166, 0 dic 23 08:58 /dev/ttyACM0
-  ```
-
-**b) rpLIDAR udev rules**
-
-Follow instructions:  
-- https://github.com/Slamtec/rplidar_ros/tree/master/scripts
-
-  Connect the rpLIDAR in USB port. To see the port name type:
-  ```shell
-  ls -l /dev/ttyUSB*
-  ```
-  Give permissions rwx to this port ttyUSB*
-  ```shell
-  sudo chmod 777 /dev/ttyACM*
-  ```
-  To see the needed properties to create udev rules, type:
-  ```shell
-  lsusb
-  ```
-  You will see your rpLIDAR device properties:
-  ```shell
-  Bus 001 Device 010: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
-  ```
-  The create a file /etc/udev/rules.d/rplidar.rules and give it the following contents:
-  ```xml
-  # set the udev rule , make the device_port be fixed by rplidar
-  #
-  KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0777", SYMLINK+="rplidar"
-  ```
-  Now restart the service:
-  ```shell
-  sudo /etc/init.d/udev restart 
-  ```
-  Unplug and plug again the Arduino Board and verify if the symlink is created:
-  ```shell
-  ls -l /dev/arduino /dev/ttyACM0 /dev/rplidar /dev/ttyUSB0
-  ```
-  If all is OK, you will see:
-  ```shell
-  lrwxrwxrwx 1 root root         7 dic 23 09:31 /dev/arduino -> ttyACM0
-  lrwxrwxrwx 1 root root         7 dic 23 09:31 /dev/rplidar -> ttyUSB0
-  crw-rw---- 1 root plugdev 166, 0 dic 23 09:31 /dev/ttyACM0
-  crwxrwxrwx 1 root plugdev 188, 0 dic 23 09:31 /dev/ttyUSB0
-  ```
-
-You have now your rUBot_mecanum ready to work-with!!
-
-
-### **Install joy control**
-
-Almost all robots subscribe /cmd_vel topic whose message type is Twist for controlling robots.
-
-#### **PS2 device**
-Follow the steps:
-- Connect the USB to the rbp4 and push start
-- review the new device associated to the ps2
-```shell
-dmesg -w
-```
-- identify the assigned input. In raspberryPi4 appears dev/input/js0. In rock4 appears dev/hidraw1
-- change mod to "rwxrwxrw-" in dev/input/js0
-```shell
-sudo chmod a+rw dev/input/js0
-```
-- install gstest-gtk
-```shell
-sudo apt install gstest-gtk
-```
-- Install teleop-twist-joy
-```shell
-sudo apt install ros-noetic-teleop-twist-joy
-```
-- create a config folder in src and place inside the "ps3-holonomic.config.yaml" file from teleop-twist-joy package. Configure the button position as desired
-- copy the teleop.launch file from teleop-twist-joy package to launch folder of rubot_control package. Change the config folder location in the specific parameter
-- run
-```shell
-roslaunch teleop_twist_joy teleop.launch
-```
-
-Test the /joy and /cmd_vel topic's contents
-
-### **Copy the final work-space**
-
-The best way is to copy a zip file of the final work-space (including the build and devel folders) in a pen drive and copy it to each raspberrypi robot.
-
-Usually the file properties are lost and in the ws folder you have to make all files executable:
-```shell
-cd ~/Desktop/rUBot_mecanum_ws
-sudo chmod -R +x ./*
-```
-You will have the ws ready to work with!
+We are ready to work with our project.
