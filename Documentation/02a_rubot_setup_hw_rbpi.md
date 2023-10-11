@@ -123,7 +123,9 @@ You need to test which video device is connected and change it on the launch fil
 
 - Install **Arduino**:
 
-You can install Arduino IDE on Ubuntu using command line:
+Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/Driving%20Husky%20with%20ROSSerial.html
+
+You need to install it with snap to be sure you have all dependencies. You can install Arduino IDE on Ubuntu using command line:
 ```shell
 sudo snap install arduino
 sudo usermod -a -G tty ubuntu
