@@ -378,6 +378,7 @@ You can create model parts like walls of 90cm or 60cm or 20cm with a geometry an
   export GAZEBO_MODEL_PATH=/home/user/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 - When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
+- You can allways select "Add folder path" in "insert" gazebo menu tab, and select the models folder you have created in your project ws 
 
 You will have acces in gazebo insert section. Then you can construct your world adding parts.
 
