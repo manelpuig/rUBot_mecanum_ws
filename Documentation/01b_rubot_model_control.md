@@ -366,9 +366,9 @@ Once you finish is better to close the terminal you have work as superuser
 
 #### ***Modify a created world***
 - Open a terminal where you have the world you want to modify
-- type: sudo gazebo ./test.world
+- type: sudo gazebo ./test.world (or simply "gazebo test.world")
 - make modifications
-- save your world in a Desktop directory
+- save your world in a world directory
 - close gazebo and the terminal
 #### **Create world with model parts**
 You can create model parts like walls of 90cm or 60cm or 20cm with a geometry and color, using building editor. These parts can be saved:
