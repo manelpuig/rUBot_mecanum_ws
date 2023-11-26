@@ -1,10 +1,10 @@
 <launch>
  <!-- Navigation Program  -->
     <arg name="distance_laser" default="0.3" />
-    <arg name="speed_factor" default="2" />
-    <arg name="rotation_speed" default="1" />
-    <arg name="forward_speed" default="1" />
-  <node name="wall_follower" pkg="rubot_control" type="rubot_wall_follower_rg.py" output="screen" >
+    <arg name="speed_factor" default="1" />
+    <arg name="rotation_speed" default="0.2" />
+    <arg name="forward_speed" default="0.1" />
+  <node name="wall_follower" pkg="rubot_control" type="rubot_wall_follower_rg_mpuig2.py" output="screen" >
     <param name="distance_laser" value="$(arg distance_laser)"/>
     <param name="speed_factor" value="$(arg speed_factor)"/>
     <param name="rotation_speed" value="$(arg rotation_speed)"/>
