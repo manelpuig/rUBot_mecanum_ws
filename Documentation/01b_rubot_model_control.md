@@ -568,8 +568,10 @@ The algorithm description functionality is:
 Follow the wall accuratelly is an interesting challenge to make a map with precision to apply SLAM techniques for navigation purposes.
 
 There are 2 main tasks:
-- Create a python file "rubot_wall_follower_gm.py" to perform the wall follower in the maze of our mecanum robot
-- Create a launch file to initialyse all the needed nodes in our system for this control task
+- Create a python file "rubot_wall_follower.py" to perform the wall follower in the maze of our mecanum robot
+- Create a launch file "rubot_wall_follower.launch" to initialyse all the needed nodes in our system for this control task
+
+**Geometrical method**
 
 Follow the instructions to perform the rubot_wall_follower_gm.py python program are in the notebook: 
 https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
@@ -589,6 +591,19 @@ You can see a video for the Maze wall follower process in:
 
 ![](./Images/01_SW_Model_Control/21_rubot_wall_follower_gm.png)
 
+**Lidar ranges method**
+
+We have created another rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, right and back-right, and perform a specific actuation in function of the minimum distance readings.
+
+Follow the instructions to create the rubot_wall_follower_rg.py python file: https://www.theconstructsim.com/wall-follower-algorithm/
+
+The algorith is based on laser ranges test and depends on the LIDAR type:
+![](./Images/01_SW_Model_Control/22_lidar_rg.png)
+
+```shell
+roslaunch rubot_control rubot_wall_follower_rg.launch
+```
+
 
 #### **e) Go to POSE**
 Define a specific Position and Orientation as a target point to go:
@@ -604,4 +619,4 @@ For validation type:
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_go2pose.launch
 ```
-![](./Images/01_SW_Model_Control/22_rubot_go2pose.png)
+![](./Images/01_SW_Model_Control/23_rubot_go2pose.png)

@@ -698,7 +698,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 ```shell
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
-![](./Images/1_rubot_wall_follower_rg.png)
+![](./Images/22_lidar_rg.png)
 
 #### **Go to POSE**
 Define a specific Position and Orientation as a target point to go:
