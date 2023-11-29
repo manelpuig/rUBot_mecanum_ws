@@ -15,6 +15,7 @@ His main characteristics are:
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
+- Arduino original program: https://blog.csdn.net/baidu_23831861/article/details/106938752
 
 To **setup** the repository in your ROS environment, you need to:
 - Fork my repository in your github account
