@@ -1,5 +1,4 @@
-#! /usr/bin/env python
-
+#! /usr/bin/env python3
 import rospy
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
@@ -26,11 +25,11 @@ def clbk_laser(msg):
 
     bright_min = int(30 * scanRangesLengthCorrectionFactor)
     bright_max = int(90 * scanRangesLengthCorrectionFactor)
-    right_min = int(91 * scanRangesLengthCorrectionFactor)
+    right_min = int(90 * scanRangesLengthCorrectionFactor)
     right_max = int(120 * scanRangesLengthCorrectionFactor)
-    fright_min = int(121 * scanRangesLengthCorrectionFactor)
+    fright_min = int(120 * scanRangesLengthCorrectionFactor)
     fright_max = int(170 * scanRangesLengthCorrectionFactor)
-    front_min= int(171 * scanRangesLengthCorrectionFactor)
+    front_min= int(170 * scanRangesLengthCorrectionFactor)
     front_max = int(190 * scanRangesLengthCorrectionFactor)
 
     regions = {
@@ -62,27 +61,23 @@ def take_action(regions):
         state_description = 'case 3 - fright'
         linear_x = 0
         angular_z = wz
-        print("R: "+str(regions['right']))
-    elif regions['front'] > d and regions['right'] < (d+0.1):
+    elif regions['front'] > d and regions['right'] < d:
         state_description = 'case 4 - right'
         linear_x = vx
-        angular_z = wz * (d - regions['right'])
-        print("BR: "+str(regions['bright']))
+        angular_z = 0
     elif regions['bright'] < d:
         state_description = 'case 5 - bright'
         linear_x = 0
         angular_z = -2*wz
     else:
         state_description = 'case 6 - Far'
-        linear_x = vx/4
-        angular_z = -2*wz
+        linear_x = vx/2
+        angular_z = -1*wz
 
     rospy.loginfo(state_description)
     msg.linear.x = linear_x
     msg.angular.z = angular_z
-    for i in range(2):
-        pub.publish(msg)
-        time.sleep(0.05)
+    pub.publish(msg)
     rate.sleep()
 
 def shutdown():
@@ -90,10 +85,8 @@ def shutdown():
     msg.linear.x = 0
     msg.linear.y = 0
     msg.angular.z = 0
-    for i in range(5):
-        pub.publish(msg)
-        time.sleep(0.05)
-    rospy.loginfo("Stop")
+    pub.publish(msg)
+    rospy.loginfo("Stop rUBot")
 
 def main():
     global pub
@@ -105,10 +98,10 @@ def main():
     global vf
 
     rospy.init_node('wall_follower')
-    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
     sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
     rospy.on_shutdown(shutdown)
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(25)
 
     d= rospy.get_param("~distance_laser")
     vx= rospy.get_param("~forward_speed")
