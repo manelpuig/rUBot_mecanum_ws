@@ -1,9 +1,7 @@
 obstacle_range: 3.0
 raytrace_range: 3.5
-#robot_gopigo
-footprint: [[-0.17, -0.06], [-0.17, 0.06], [0.09, 0.06], [0.09, -0.06]]
-#robot_nexus
-#footprint: [[-0.22, -0.16], [-0.22, 0.16], [0.22, 0.16], [0.22, -0.16]]
+#robot_mecanum
+footprint: [[-0.14, -0.12], [-0.14, 0.12], [0.14, 0.12], [0.14, -0.12]]
 
 inflation_radius: 1.0
 cost_scaling_factor: 5.0
