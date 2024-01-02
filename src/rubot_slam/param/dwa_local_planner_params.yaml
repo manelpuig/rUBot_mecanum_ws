@@ -5,8 +5,8 @@ DWAPlannerROS:
   max_vel_x: 0.2
   min_vel_x: -0.2
 
-  #max_vel_y: 0.1 #0.0 non holonomic
-  #min_vel_y: -0.1 #0.0 non holonomic
+  max_vel_y: 0.1 #0.0 non holonomic
+  min_vel_y: -0.1 #0.0 non holonomic
 
 # The velocity when robot is moving in a straight line
   max_vel_trans:  0.2
