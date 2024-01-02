@@ -142,57 +142,81 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 
 - Using "omni" drive performances, the robot is able to move also in y direction and the mobility is much better.
 
-- You need to modify the "dwa_local_planner_params_burger.yaml parameters. An exemple of possible parameters set is:
-```xml
-DWAPlannerROS:
+- You need to modify the "dwa_local_planner_params_burger.yaml parameters. 
 
-  holonomic_robot: true           #false
-# Robot Configuration Parameters  Defaults
-  max_vel_x: 1                    #0.22
-  min_vel_x: -1                   #-0.22
+You can see the optimized trajectory. The robot starts to follow this trajectory and if an obstacle appears, the robot avoid this obstacle and find in realtime the new optimal trajectory to the target point. 
 
-  max_vel_y: 0.5                    #0.0
-  min_vel_y: -0.5                   #0.0
 
-# The velocity when robot is moving in a straight line
-  max_vel_trans:  1               #0.22
-  min_vel_trans:  0.2             #0.11
+### **3. Programatic control of Robot Navigation**
 
-  max_vel_theta: 1              #2.75
-  min_vel_theta: -1              #1.37
+When we want to perform a complex task, the robot navigation has to be made programatically. We will be able to perform:
+- Init Pose selection
+- Send a goal to navigation stack
+- Send a sequence of goals to navigation stack
 
-  acc_lim_x: 2.5
-  acc_lim_y: 0.5                  #0.0
-  acc_lim_theta: 3.0              #3.2 
+#### **3.1. Init Pose selection**
 
-# Goal Tolerance Parametes
-  xy_goal_tolerance: 0.1          #0.05
-  yaw_goal_tolerance: 0.1         #0.17
-  latch_xy_goal_tolerance: false
+The init pose is a mesage that has to be published th a /initpose topic.
 
-# Forward Simulation Parameters
-  sim_time: 1.5
-  vx_samples: 20
-  vy_samples: 20                  #0
-  vth_samples: 40
-  controller_frequency: 5.0      #10.0
+The message type is "PoseWithCovarianceStamped"
 
-# Trajectory Scoring Parameters
-  path_distance_bias: 32.0
-  goal_distance_bias: 20.0
-  occdist_scale: 0.02
-  forward_point_distance: 0.325
-  stop_time_buffer: 0.2
-  scaling_speed: 0.25
-  max_scaling_factor: 0.2
+A simple program has been designed for this purpose in "init_pose.py". You have to select the correct pose in python file
 
-# Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.05
-
-# Debugging
-  publish_traj_pc : true
-  publish_cost_grid_pc: true
+```shell
+roslaunch gopigo3_description gopigo_world.launch
+roslaunch gopigo3_slam gopigo_navigation.launch
+rosrun gopigo3_slam init_pose.py
 ```
 
-You can see the optimized trajectory. The gopigo starts to follow this trajectory and if an obstacle appears, the robot avoid this obstacle and find in realtime the new optimal trajectory to the target point. 
+#### **5.2. Send a goal to navigation stack**
 
+The move_base ROS Node, allows to configure, run and interact with the robot navigation. The move_base node implements a SimpleActionServer with a single navigation goal.
+
+The goal pose is of geometry_msgs/PoseStamped message type. 
+
+To communicate with this node, the SimpleActionClient interface is used. The move_base node tries to achieve a desired pose by combining a global and a local motion planners to accomplish a navigation task which includes obstacle avoidance.
+
+![](./Images/02_SW_Nav_Slam/04_nav_goal.png)
+
+We can create a node to:
+- Define a Init Pose
+- Define a first navigation goal
+
+The code is created in "first_goal.py" code
+
+```shell
+roslaunch gopigo3_description gopigo_world.launch
+roslaunch gopigo3_slam gopigo_navigation.launch
+rosrun gopigo3_slam first_goal.py
+```
+
+#### **5.3. Send a sequence of goals to navigation stack**
+
+When different goals have to be defined, We will use a yaml file to define the waypoints and a launch file define the needed parameters.
+
+We have to specify the waypoints as pose in (x,y,w) values and create a new create_pose_stamped(position_x, position_y, rotation_z) function
+
+```shell
+roslaunch gopigo3_description gopigo_world.launch
+roslaunch gopigo3_slam gopigo_navigation.launch
+rosrun gopigo3_slam waypoints_goal.py
+```
+If you want to work with ROS parameters, you can define the waypoints in a "waypoints.yaml" file on config folder:
+```python
+goal1: {"x": -0.5, "y": 0.8, "w": 90}
+goal2: {"x": -0.5, "y": -0.5, "w": 180}
+```
+and load the yaml file in a "waypoints_goal.launch" file:
+```xml
+<launch>
+  <node pkg="gopigo3_slam" type="waypoints_goal_params.py" name="movebase_client_waypoints" output="screen" >
+    <rosparam file="$(find gopigo3_slam)/config/waypoints.yaml" command="load" />
+  </node>
+</launch>
+```
+
+```shell
+roslaunch gopigo3_description gopigo_world.launch
+roslaunch gopigo3_slam gopigo_navigation.launch
+roslaunch gopigo3_slam waypoints_goal.launch
+```
