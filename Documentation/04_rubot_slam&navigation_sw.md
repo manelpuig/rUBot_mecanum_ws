@@ -117,6 +117,12 @@ These parameters will allow you to configure the way that the navigation is perf
 
 Review these parameters in "costmap_common_params.yaml"
 
+**move_base Parameters**
+
+Consider to modify:
+- controller_frequency to 5.0Hz instead of 10.0Hz
+
+
 You can refine some parameters considering the recommendations in: https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#tuning-guide
 
 >Careful!!
@@ -163,12 +169,12 @@ The message type is "PoseWithCovarianceStamped"
 A simple program has been designed for this purpose in "init_pose.py". You have to select the correct pose in python file
 
 ```shell
-roslaunch gopigo3_description gopigo_world.launch
-roslaunch gopigo3_slam gopigo_navigation.launch
-rosrun gopigo3_slam init_pose.py
+roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_slam rubot_navigation.launch
+rosrun rubot_slam init_pose.py
 ```
 
-#### **5.2. Send a goal to navigation stack**
+#### **3.2. Send a goal to navigation stack**
 
 The move_base ROS Node, allows to configure, run and interact with the robot navigation. The move_base node implements a SimpleActionServer with a single navigation goal.
 
@@ -185,21 +191,21 @@ We can create a node to:
 The code is created in "first_goal.py" code
 
 ```shell
-roslaunch gopigo3_description gopigo_world.launch
-roslaunch gopigo3_slam gopigo_navigation.launch
-rosrun gopigo3_slam first_goal.py
+roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_slam rubot_navigation.launch
+rosrun rubot_slam first_goal.py
 ```
 
-#### **5.3. Send a sequence of goals to navigation stack**
+#### **3.3. Send a sequence of goals to navigation stack**
 
 When different goals have to be defined, We will use a yaml file to define the waypoints and a launch file define the needed parameters.
 
 We have to specify the waypoints as pose in (x,y,w) values and create a new create_pose_stamped(position_x, position_y, rotation_z) function
 
 ```shell
-roslaunch gopigo3_description gopigo_world.launch
-roslaunch gopigo3_slam gopigo_navigation.launch
-rosrun gopigo3_slam waypoints_goal.py
+roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_slam rubot_navigation.launch
+rosrun rubot_slam waypoints_goal.py
 ```
 If you want to work with ROS parameters, you can define the waypoints in a "waypoints.yaml" file on config folder:
 ```python
@@ -216,7 +222,7 @@ and load the yaml file in a "waypoints_goal.launch" file:
 ```
 
 ```shell
-roslaunch gopigo3_description gopigo_world.launch
-roslaunch gopigo3_slam gopigo_navigation.launch
-roslaunch gopigo3_slam waypoints_goal.launch
+roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_slam rubot_navigation.launch
+roslaunch rubot_slam waypoints_goal.launch
 ```

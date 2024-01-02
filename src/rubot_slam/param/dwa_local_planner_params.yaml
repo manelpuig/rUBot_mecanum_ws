@@ -5,22 +5,22 @@ DWAPlannerROS:
   max_vel_x: 0.2
   min_vel_x: -0.2
 
-  max_vel_y: 0.1 #0.0 non holonomic
-  min_vel_y: -0.1 #0.0 non holonomic
+  #max_vel_y: 0.1 #0.0 non holonomic
+  #min_vel_y: -0.1 #0.0 non holonomic
 
 # The velocity when robot is moving in a straight line
   max_vel_trans:  0.2
   min_vel_trans:  -0.2
 
-  max_vel_theta: 0.2
-  min_vel_theta: -0.2
+  max_vel_theta: 1
+  min_vel_theta: -1
 
-  acc_lim_x: 0.1
-  acc_lim_y: 0.1 #0.0 non holonomic
-  acc_lim_theta: 0.2 
+  acc_lim_x: 1
+  acc_lim_y: 1 #0.0 non holonomic
+  acc_lim_theta: 1
 
 # Goal Tolerance Parametes
-  xy_goal_tolerance: 0.05
+  xy_goal_tolerance: 0.1
   yaw_goal_tolerance: 0.1
   latch_xy_goal_tolerance: false
 
