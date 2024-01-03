@@ -1,0 +1,15 @@
+<launch>
+    <arg name="world" default="square2.world"/> 
+    <arg name="model" default="rubot_mpuig.urdf" />
+    <arg name="x_pos" default="0.7"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="yaw" default="0.8"/>
+    <!-- spawn world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find rubot_mecanum_description)/worlds/$(arg world)"/>
+    </include>
+    <!-- spawn rubot -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_model"
+      args="-urdf -model rUBot -x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -param robot_description" />
+</launch>

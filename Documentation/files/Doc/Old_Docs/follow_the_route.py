@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 import rospy
 import yaml
 from take_photo import TakePhoto
-from go_to_specific_point_on_map import GoToPose
+from rUBot_mecanum_ws.Documentation.files.Doc.Old_Docs.go_to_specific_point_on_map import GoToPose
 
 if __name__ == '__main__':
 

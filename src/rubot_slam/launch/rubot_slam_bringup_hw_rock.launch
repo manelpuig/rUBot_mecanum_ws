@@ -1,0 +1,15 @@
+<launch>
+    <arg name="model" default="rubot_mpuig.urdf" />
+  <!-- spawn rubot_rp -->
+    <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
+  
+  <!-- launch rUBot mecanum   -->
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+      <param name="port" type="string" value="/dev/ttyACM0"/>
+      <param name="baud" type="int" value="57600"/>
+    </node>
+  <!-- launch rplidar   -->
+    <include file="$(find rubot_mecanum_description)/launch/rplidar_rock_mpuig.launch"/>
+  <!-- launch usb-cam   -->
+    <include file="$(find rubot_mecanum_description)/launch/usb_cam_rock.launch"/>
+</launch>

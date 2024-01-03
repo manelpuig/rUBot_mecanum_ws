@@ -80,59 +80,16 @@ rosrun rubot_projects take_photo.py
 
 ![](./Images/05_rubot_projects/1_photo1.png)
 
-## **2. Go to specific point in the map**
 
-In this project we will learn how to send robot a command: “go to a specific position at map”.
+## **Project 2: Navigate to a sequence of goals in the map and take a photo**
 
-The program is extracted from:
+We will combine the two programs:
 
-- https://github.com/markwsilliman/turtlebot
-- https://learn.turtlebot.com/2015/02/03/11/
+- Send a sequence of goals to navigation stack
+- Take a Photo 
 
-For this purpose we need to use the **move_base node**. This node:
+We will take a "goals_foto.yaml" file to specify the POSE goal and Photo path-name.
 
-- subscribes to move_base_simple/goal (geometry_msgs/PoseStamped)
-- publishes to cmd_vel (geometry_msgs/Twist)
-
-![](./Images/5_move_base.png)
-
-Follow the procedure:
-
-- Launch Gazebo:
-
-  ```shell
-  roslaunch nexus_slam rubot_world.launch
-  ```
-- Launch the navigation:
-
-  ```shell
-  roslaunch nexus_slam rubot_navigation.launch
-  ```
-- Choose a target point in RVIZ using "Publish point" and select the target coordinates (i.e. x=2.0 y=-0.7)
-- open "go_to_specific_point_on_map.py" and specify the target point
-
-  - in line 78 specify the target point, customize the following values so they are appropriate for your location
-    - position = {'x': 2.0, 'y' : -0.7}
-- Launch the "go_to_specific_point_on_map.py" program:
-
-  ```shell
-  rosrun rubot_projects go_to_specific_point_on_map.py
-  ```
-
-![](./Images/5_go2point.png)
-
-## **3. Go to specific point in the map and take a photo**
-
-We will combine our skills from two previous objectives:
-
-- “Going to a Specific Location on Your Map Using Code”
-- and “Taking a Photo Using Code”.
-
-The rUBot will go from the start to each goal from the list and take a photo in every position.
-
-We will work with the files from: https://github.com/markwsilliman/turtlebot
-
-Follow the instructions in: https://learn.turtlebot.com/2015/02/04/5/
 
 We use the code go_to_specific_point_on_map.py and take_photo.py from previous exemples.
 

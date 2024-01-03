@@ -178,6 +178,11 @@ rosrun rubot_slam init_pose.py
 
 The move_base ROS Node, allows to configure, run and interact with the robot navigation. The move_base node implements a SimpleActionServer with a single navigation goal.
 
+References: 
+- https://github.com/markwsilliman/turtlebot
+- https://learn.turtlebot.com/2015/02/04/5/
+
+
 The goal pose is of geometry_msgs/PoseStamped message type. 
 
 To communicate with this node, the SimpleActionClient interface is used. The move_base node tries to achieve a desired pose by combining a global and a local motion planners to accomplish a navigation task which includes obstacle avoidance.

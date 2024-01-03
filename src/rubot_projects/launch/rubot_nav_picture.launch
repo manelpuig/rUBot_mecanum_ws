@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="rubot_projects" type="rubot_nav_picture.py" name="rubot_nav_picture" output="screen" >
+    <rosparam file="$(find rubot_projects)/config/goals_photo.yaml" command="load" />
+  </node>
+</launch>
