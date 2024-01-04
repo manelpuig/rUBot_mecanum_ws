@@ -17,6 +17,13 @@ His main characteristics are:
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
 - Arduino original program: https://blog.csdn.net/baidu_23831861/article/details/106938752
 
+The main objectives of this chapter are:
+
+- Getting started with rUBot_mecanum in simulation environment
+- Getting started with rUBot_mecanum in real robot
+
+## **1. Getting started with rUBot_mecanum in simulation environment**
+
 To **setup** the repository in your ROS environment, you need to:
 - Fork my repository in your github account
 - Open your ROS Noetic environment
@@ -33,3 +40,7 @@ source /opt/ros/noetic/setup.bash
 source /home/user/rUBot_mecanum_ws/devel/setup.bash
 ```
 You are ready to work with your repository!
+
+## **2. Getting started with rUBot_mecanum in real robot**
+
+To **setup** the real robot 
