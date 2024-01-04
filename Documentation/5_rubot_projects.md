@@ -113,8 +113,9 @@ Proceed with the following steps:
 > Careful!:
 > Be sure to execute the rosrun instruction inside the "rubot_mecanum_ws" folder. Review the the absolute path or relative path to the yaml file and the picture path destination.
 
-![](./Images/5_follow_route2.png)
+![](./Images/05_rubot_projects/project2_nav_photo.png)
 
+**Exercise:** Note that the picture is not saved!. Solve this issue.
 
 ## **Project 3: Line follower**
 

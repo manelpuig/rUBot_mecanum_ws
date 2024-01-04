@@ -5,6 +5,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from math import degrees, radians
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import cv2 as cv
 from take_photo import TakePhoto
 
 def create_pose_stamped(position_x, position_y, rotation_z):
@@ -41,11 +42,6 @@ def nav2goals():
         client.send_goal(waypoints[i])
         wait = client.wait_for_result(rospy.Duration(20))
         if not wait:
-            rospy.logerr("Action server not available!")
-            rospy.signal_shutdown("Action server not available!")
-        else:
-            rospy.loginfo("Goal execution done!")
-            if not wait:
             rospy.logerr("Action server not available!")
             rospy.signal_shutdown("Action server not available!")
         else:
