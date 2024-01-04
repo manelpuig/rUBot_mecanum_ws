@@ -1,23 +1,23 @@
-import rclpy
-from rclpy.node import Node
+import rospy
+import cv2
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
-import cv2
 
-class camera_sub(Node):
+class line_follower:
 
     def __init__(self):
-        super().__init__('qr_maze_solving_node')
-        self.camera_sub = self.create_subscription(Image,'/vision_rpi_bot_camera/image_raw',self.camera_cb,10)
-        self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
-        self.vel_msg=Twist()
-        self.bridge=CvBridge()
+        self.bridge = CvBridge()
+        #cv2.namedWindow("window", 1)
+        self.image_sub = rospy.Subscriber('/rubot/camera1/image_raw', 
+                                        Image, self.image_callback)
+        self.cmd_vel_pub = rospy.Publisher('/cmd_vel',
+                                        Twist, queue_size=1)
+        self.twist = Twist()
 
 
-
-    def camera_cb(self, data):
-        frame = self.bridge.imgmsg_to_cv2(data,'bgr8')
+    def image_callback(self, msg):
+        frame = self.bridge.imgmsg_to_cv2(msg,'bgr8')
         frame = frame[290:479,130:400] # First is Y and sencond is X
         edged = cv2.Canny(frame ,60,100 )
 
@@ -54,15 +54,7 @@ class camera_sub(Node):
         cv2.waitKey(1)
 
 
-def main(args=None):
-    rclpy.init(args=args)
-
-    sensor_sub = camera_sub()
-
-    rclpy.spin(sensor_sub)
-    sensor_sub.destroy_node()
-    rclpy.shutdown()
-
-
 if __name__ == '__main__':
-    main()
+    rospy.init_node('line_follower')
+    follower = line_follower()
+    rospy.spin()
