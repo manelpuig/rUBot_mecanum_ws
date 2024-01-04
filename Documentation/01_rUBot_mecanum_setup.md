@@ -10,7 +10,7 @@ His main characteristics are:
   - RPlidar distance sensor
   - usb camera sensor
 
-![](./Images/00_Setup/1_osoyoo.png)
+![](./Images/01_Setup/1_osoyoo.png)
 
 
 **Bibliography:**

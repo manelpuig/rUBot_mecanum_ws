@@ -7,7 +7,7 @@ The objectives of this chapter are:
 - Bringup the real robot.
 
 The rUBot mecanum robot we will work is represented in the picture:
-![](./Images/00_Setup/1_osoyoo.png)
+![](./Images/01_Setup/1_osoyoo.png)
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
@@ -27,15 +27,63 @@ Then open the .bashrc file and verify the environment variables and source to th
 ```shell
 source ~/home/user/rubot_mecanum_ws/devel/setup.bash
 ```
-**Model definition in URDF**
+**Model design**
 
-To create our robot model, we use **URDF** files (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
+The geometrical definition of our rUBot is graphically described by:
+![](./Images/02_Bringup/01_rubot_cad.png)
+
+The different elements (named **links**) are:
+- base_footprint
+- base_link
+- wheels
+- camera
+- base_scan
+- part
+
+These elements are connected each-other by **joints**:
+- base_link_joint
+- wheel_joint
+- joint_camera
+- scan_joint
+- joint_part
+
+Some of these links have a speciffic **functionalities**:
+- wheels: perform a robot movement according to a Mecanum-drive kinematics
+- camera: view front images
+- base_scan: detect obstacle distances in 360º around the robot
+
+To create our robot model, we use **URDF files** (Unified Robot Description Format). URDF file is an XML format file for representing a robot model.(http://wiki.ros.org/urdf/Tutorials)
+
+The general structure of a robot urdf model is based on:
+- Links and joints: for the geometrical structure
+- Gazebo plugins: for the functionalities
+
+The urdf file structure is:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="rubot">
+  <link name="base_link">
+  ...
+  </link>
+  <joint name="base_link_joint" type="fixed">
+  ...
+  </joint>
+  <gazebo>
+    <plugin name="Mecanum_controller" filename="libgazebo_ros_planar_move.so">
+    ...
+    </plugin>
+  </gazebo>
+  <gazebo reference="upper_left_wheel">
+  ...
+  </gazebo>
+</robot>
+```
 
 We have created 2 folders for model description:
 - URDF: folder where different URDF models are located. In our case rubot.urdf
 - meshes: folder where 3D body models in stl format are located. We will have rubot folder.
 
-The main parts of URDF model are:
+As we have explained above, main parts of URDF model are:
 - links: diferent bodies/plastic elements
 - joints: connection between 2 links 
 - sensors & actuators plugins (2D camera, LIDAR and 4-wheels mecanum-drive)
@@ -51,18 +99,9 @@ The **joint definition** contains:
 - origin frame
 - rotation axis
 
-The geometrical definition of our rUBot is:
-![](./Images/01_SW_Model_Control/01_rubot_cad.png)
-
-In the case or upper left wheel:
+In the case or upper left wheel link:
 ```xml
 <!-- upper_left_wheel -->
-  <joint name="upper_left_wheel_joint" type="continuous">
-    <origin rpy="0 0 0" xyz="0.07 0.1 0"/>
-    <parent link="base_link"/>
-    <child link="upper_left_wheel"/>
-    <axis xyz="0 1 0"/>
-  </joint>
   <link name="upper_left_wheel">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -83,6 +122,12 @@ In the case or upper left wheel:
       <inertia ixx="0.000166" ixy="0" ixz="0" iyy="0.000303" iyz="0" izz="0.000166"/>
     </inertial>
   </link>
+  <joint name="upper_left_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0.07 0.1 0"/>
+    <parent link="base_link"/>
+    <child link="upper_left_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
 ```
 > Be careful with base_link:
 >
@@ -170,7 +215,7 @@ This lidar is simulated in URDF model as:
  Review the joint and link definition in URDF model.
 > Note that rpLIDAR is mounted at 180º and you need to turn the link model and the joint to reflect this in the URDF model.
 
-![](./Images/01_SW_Model_Control/02_lidar.png)
+![](./Images/02_Bringup/02_lidar.png)
 
 The gazebo plugin we have used is:
 ```xml
@@ -235,7 +280,21 @@ Each of the 4 wheels have speciffic:
 - joint of continuous type
 - Gazebo plugin as a sort of "driver" to simulate the Kinematics of our rUBot_mecanum.
 
-The **rUBot_mecanum kinematics**...
+The **rUBot_mecanum kinematics** describes the relationship between the robot wheel speeds and the robot velocity. We have to distinguish:
+- **Forward kinematics**: obtains the robot velocity (linear and angular in /cmd_vel) and POSE (odometry) for speciffic robot wheel speeds
+- **Inverse kinematics**: obtains the robot wheels speeds for a desired robot velocity (linear and angular in /cmd_vel)
+
+The different movements the Mecanum robot is able to perform are:
+
+![](./Images/02_Bringup/03_mecanum_movements.png)
+
+The forward kinematics is described by:
+
+![](./Images/02_Bringup/04_mecanum_fkine.png)
+
+The inverse kinematics is described by:
+
+![](./Images/02_Bringup/05_mecanum_ikine.png)
 
 This kinematics is described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
 
@@ -253,9 +312,6 @@ This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: ht
     </plugin>
   </gazebo>
   ```
-In this gazebo plugin, the kinematics of the robot configuration is defined:
-- **Forward kinematics**: obtains the robot velocity (linear and angular in /cmd_vel) and POSE (odometry) for speciffic robot wheel speeds
-- **Inverse kinematics**: obtains the robot wheels speeds for a desired robot velocity (linear and angular in /cmd_vel)
 
 We use a specific "display.launch" launch file where we specify the robot model we want to open in rviz with a configuration specified in "urdf.rviz":
 ```xml
@@ -267,7 +323,16 @@ We use a specific "display.launch" launch file where we specify the robot model 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rubot_mecanum_description)/rviz/urdf_final.rviz" />
 </launch>
 ```
-Launch the ROS visualization tool to check that the model is properly built. 
+
+**ROS visualization Tools**
+
+ROS has two powerfull visualization tools:
+- RVIZ: used to visualize the robot model and the messages published in the different topics
+- Gazebo: is a physical simulator 
+
+**RVIZ**
+
+We will first use RVIZ to check that the model is properly built. 
 
 RViz only represents the robot visual features. You have available all the options to check every aspect of the appearance of the model
 ```shell
