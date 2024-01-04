@@ -45,7 +45,7 @@ The **link definition** contains:
 - collision properties: the origin and geomnetry
 - inertial properties: the origin, mass and inertia matrix
 
-The joint definition contains:
+The **joint definition** contains:
 - joint Type (fixed, continuous)
 - parent and child frames
 - origin frame
@@ -88,14 +88,7 @@ In the case or upper left wheel:
 >
 > The inertia matrix can be analytically calculated with the mas and geometry. Be sure the mass is consistent and the inertia Ixx,Iyy and Izz are high enough to avoid underired drift movements. Consider the Inertia matrix you can generate using the **urdf_inertial_calculator.py** program file you have in "Documentation/files/Doc/Robot_Models/URDF_inertial".
 
-The rUBot model includes different sensors and actuators:
-
-Sensors:
-- a two-dimensional camera: correspondas to USB camera
-- a 360º RPLidar A1M8 (https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html)
-
-Actuator:
-- Mecanum drive actuator: based on 4 DC motors with encoders to obtain the Odometry information
+The rUBot model includes different **sensors and actuators**:
 
 The full model contains also information about the sensor and actuator controllers using specific **Gazebo plugins** (http://gazebosim.org/tutorials?tut=ros_gzplugins#Tutorial:UsingGazebopluginswithROS). 
 
@@ -103,10 +96,19 @@ Gazebo plugins give your URDF models greater functionality and compatible with R
 
 These plugins can be referenced through a URDF file, and to insert them in the URDF file, you have to follow the sintax:
 
-### **Camera sensor plugin**
-This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
+**2D-camera Sensor**:
 
-A driver is needed to view the images.
+The two-dimensional camera sensor correspondas to the USB real camera. 
+
+This camera obtains 2D images in the front and is simulated in URDF model as:
+- link with the visual, collision and inertial properties
+- joint of fixed type
+- Gazebo plugin as a sort of "driver" to simulate the real behaviour
+
+Review the joint and link definition in URDF model.
+
+The used Gazebo plugin is:
+
 ```xml
   <!-- 2D Camera controller -->
   <gazebo reference="camera">
@@ -154,13 +156,23 @@ A driver is needed to view the images.
 >rqt image view
 >```
 
-### **LIDAR sensor plugin**
-This sensor is integrated as a link and fixed joint for visual purposes. Review the joint and link definition in URDF model.
+**RPlidar sensor**
+
+A Lidar sensors is  device that is able to measure the obstacle distances at 360º around the robot. 
+
+He is sending 720 laser beams (2 beams/degree) and measures the distance each laser beam finds an obstacle. He is able to measure from 12cm to 3m. The used Lidar sensor is a 360º RPLidar A1M8 (https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html)
+
+This lidar is simulated in URDF model as:
+- link with the visual, collision and inertial properties
+- joint of fixed type
+- Gazebo plugin as a sort of "driver" to simulate the real behaviour
+
+ Review the joint and link definition in URDF model.
 > Note that rpLIDAR is mounted at 180º and you need to turn the link model and the joint to reflect this in the URDF model.
 
 ![](./Images/01_SW_Model_Control/02_lidar.png)
 
-A driver is needed to see the 720 laser distance points:
+The gazebo plugin we have used is:
 ```xml
   <!-- Laser Distance Sensor YDLIDAR X4 controller-->
   <gazebo reference="base_scan">
@@ -210,8 +222,22 @@ It is important to note that:
 - the number of points of real RPLidar depends on Lidar model (you will need tot test it first)
 - the number of points of simulated Lidar is selected to 720
 
-### **Mecanum drive actuator plugin**
-A driver is needed to describe the kinematics.This kinematics is described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
+**Actuator**:
+
+The rUBot_mecanum contains a "Mecanum drive actuator" based on:
+- 4 wheels driven by a DC servomotor 
+- with speciffic Kinematic control 
+- able to move the robot in x and y directions
+- and able to obtain the Odometry information
+
+Each of the 4 wheels have speciffic:
+- link with the visual, collision and inertial properties
+- joint of continuous type
+- Gazebo plugin as a sort of "driver" to simulate the Kinematics of our rUBot_mecanum.
+
+The **rUBot_mecanum kinematics**...
+
+This kinematics is described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
 
 This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: http://gazebosim.org/tutorials?tut=ros_gzplugins#AddingaModelPlugin
 
