@@ -27,7 +27,7 @@ Then open the .bashrc file and verify the environment variables and source to th
 ```shell
 source ~/home/user/rubot_mecanum_ws/devel/setup.bash
 ```
-**Model design**
+### **1.1. Model design**
 
 The geometrical definition of our rUBot is graphically described by:
 ![](./Images/02_Bringup/01_rubot_cad.png)
@@ -296,7 +296,11 @@ The inverse kinematics is described by:
 
 ![](./Images/02_Bringup/05_mecanum_ikine.png)
 
-This kinematics is described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
+The Odometry calculation is obtained by:
+
+![](./Images/02_Bringup/05_mecanum_odom.png)
+
+This kinematics and odometry calculations are described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
 
 This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: http://gazebosim.org/tutorials?tut=ros_gzplugins#AddingaModelPlugin
 
@@ -313,6 +317,18 @@ This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: ht
   </gazebo>
   ```
 
+### **1.2. ROS visualization Tools**
+
+ROS has two powerfull visualization tools:
+- RVIZ: used to visualize the robot model and the messages published in the different topics
+- Gazebo: is a physical simulator 
+
+**RVIZ**
+
+We will first use RVIZ to check that the model is properly built. 
+
+RViz only represents the robot visual features. You have available all the options to check every aspect of the appearance of the model.
+
 We use a specific "display.launch" launch file where we specify the robot model we want to open in rviz with a configuration specified in "urdf.rviz":
 ```xml
 <launch>
@@ -323,26 +339,14 @@ We use a specific "display.launch" launch file where we specify the robot model 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rubot_mecanum_description)/rviz/urdf_final.rviz" />
 </launch>
 ```
-
-**ROS visualization Tools**
-
-ROS has two powerfull visualization tools:
-- RVIZ: used to visualize the robot model and the messages published in the different topics
-- Gazebo: is a physical simulator 
-
-**RVIZ**
-
-We will first use RVIZ to check that the model is properly built. 
-
-RViz only represents the robot visual features. You have available all the options to check every aspect of the appearance of the model
 ```shell
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/03_rviz_rubot.png)
+![](./Images/02_Bringup/06_rviz_rubot.png)
 
 > Colors in rviz: 
 >- are defined at the beginning
->- Ensure the "visual" link properties have no "name"
+>- Ensure the "visual" link properties have color "name"
 ```xml
 <robot name="rubot">
   <material name="yellow">
@@ -360,9 +364,9 @@ roslaunch rubot_mecanum_description display.launch
       <material name="yellow"/>
     </visual>
 ```
-In robotics research, always before working with a real robot, we simulate the robot behaviour in a virtual environment close to the real one.
+**Gazebo**
 
-**Gazebo** is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
+In robotics research, always before working with a real robot, we simulate the robot behaviour in a virtual environment close to the real one. **Gazebo** is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
 
 We will create a new spawn.launch file to spawn the robot in an empty world:
 ```xml
@@ -383,7 +387,7 @@ Open a new terminal and launch this file:
 roslaunch rubot_mecanum_description rubot_gazebo.launch
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/04_rubot_gazebo.png)
+![](./Images/02_Bringup/07_rubot_gazebo.png)
 
 You will see in Rviz the camera is receiving now images!
 > Colors in gazebo: 
@@ -401,10 +405,10 @@ You can create a very **simple world** "rubot.world" using gazebo:
 
 Now in RVIZ you will see the objects with the USB camera and Lidar
 
-![](./Images/01_SW_Model_Control/05_rubot_test_world.png)
+![](./Images/02_Bringup/08_rubot_test_world.png)
 
 You can see the nodes and topics generated using rqt_graph
-![](./Images/01_SW_Model_Control/06_rubot_test_rqt.png)
+![](./Images/02_Bringup/09_rubot_test_rqt.png)
 
 > To see the frames you have to add TF in rviz
 
@@ -424,14 +428,14 @@ You can see the nodes and topics generated using rqt_graph
 
 Design a proper model corresponding to the real rUBot_mecanum you will work with:
 - Customized model colors (rviz and gazebo)
-- Add a number part on top with a fixed joint
+- Add a 3D-part on top with a fixed joint
 
 To verify the final frame orientations (modify the launch files accordingly):
 ```shell
 roslaunch rubot_mecanum_description rubot_gazebo.launch
 roslaunch rubot_mecanum_description display.launch
 ```
-![](./Images/01_SW_Model_Control/07_rubot_number.png)
+![](./Images/02_Bringup/10_rubot_number.png)
 
 
 ## **2. Design the project world**
@@ -446,13 +450,12 @@ sudo gazebo
 ```
 
 You can build your world using "Building Editor" in Edit menu
-![](./Images/01_SW_Model_Control/08_BuildingWorld.png)
 
-You can save:
-- the generated model in a model folder (without extension)
+![](./Images/02_Bringup/11_BuildingWorld.png)
 
-Close the Builder Editor, modify the model position and add other elements if needed. Save:
-- the generated world (with extension .world) in the world folder.
+- Save the generated model in a model folder (without extension)
+- Close the Builder Editor, modify the model position and add other elements if needed.
+- Save the generated world (with extension .world) in the world folder.
 
 Once you finish is better to close the terminal you have work as superuser
 
@@ -465,7 +468,7 @@ Once you finish is better to close the terminal you have work as superuser
 #### **Create world with model parts**
 You can create model parts like walls of 90cm or 60cm or 20cm with a geometry and color, using building editor. These parts can be saved:
 - in ~/.gazebo/models/
-- in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models), if you add this line in .bashrc file:
+- in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models). To add the path in Gazebo, add this line in .bashrc file:
   ```xml
   export GAZEBO_MODEL_PATH=/home/user/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
@@ -475,10 +478,10 @@ You can create model parts like walls of 90cm or 60cm or 20cm with a geometry an
 You will have acces in gazebo insert section. Then you can construct your world adding parts.
 
 This is an exemple:
-![](./Images/01_SW_Model_Control/09_BuildingEditor.png)
+![](./Images/02_Bringup/12_BuildingEditor.png)
 
 
-### **Bringup the rUBot in project world**
+## **3. Bringup the rUBot in Virtual environment**
 
 The first step in robotics is to bringup the rUBot mecanum robot in our generated world. This means:
 - spawn our robot in the designed environment 
@@ -486,7 +489,7 @@ The first step in robotics is to bringup the rUBot mecanum robot in our generate
 ``` shell
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
-![](./Images/01_SW_Model_Control/10_mecanum_bringup.png)
+![](./Images/02_Bringup/13_mecanum_bringup.png)
 
 >Careful:
 - we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
@@ -503,212 +506,162 @@ Design a proper **world** corresponding to the real world you will work with:
 Generate the **bringup file** to spawn your previous designed robot model in the proposed maze.
 
 
-## **3. rUBot mecanum navigation control in virtual environment**
+## **4. Bringup the real robot**
 
-Once the world has been generated we will create a ROS Package "rubot_control" to perform the navigation control nodes
+The rUBot Mecanum real hardware is based on:
+- Arduino Mega with custom Shield to control the 4 Mecanum Wheels (and other sensors onboard in function of the application)
+- 2D-Camera to generate front images
+- Lidar for Navigation with obstacle avoidance
+
+To Bingup our real robot we have to:
+ 
+- Launch the "Mecanum-drive control" module for servomotor actuators for the 4 mecanum wheels
+- Launch the RPlidar distance sensor
+- Launch the usb camera sensor
+
+![](./Images/01_Setup/1_osoyoo.png)
+
+### **4.1. Launch the "Mecanum-drive control" module**
+
+We have created a custom Arduino program for rubot_mecanum robot. This program is able to:
+- Communicate with ROS environment to subscribe the desired rUBot movement
+- Apply the kinematics of the Mecanum robot to control the 4 mecanum wheels 
+- Read the encoders to calculate the odometry
+- Communicate with ROS environment to publish the odometry in real-time
+- Interface with all the other sensors/actuators connected to arduino-mega board
+
+The "**rUBot_drive.ino**" arduino program is located on /Documentation/files/arduino/ folder
+
+Let's see some important characteristics:
+- You need to install Encoder.h lib: https://www.arduino.cc/reference/en/libraries/encoder/
+- Motor connections
+
+![](./Images/02_Bringup/14_motor.png)
+
+- Shield schematics
+
+![](./Images/02_Bringup/15_shield.png)
+
+- Pin number of encoders, PWM and DIR in config.h and encoder.h files
+
+![](./Images/02_Bringup/16_pinout.png)
+
+- We need to increase the buffer size of /odom publisher because the Arduino MEGA Buffer size for messages is 512bits (not enough for Odometry messages). To perform this modification, in **ROS.h** file from the Arduino library you have to add (at the end in else case section):
+  ```python
+  #else
+
+    //typedef NodeHandle_<ArduinoHardware, 25, 25, 512, 512, FlashReadOutBuffer_> NodeHandle;
+    typedef NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> NodeHandle;
+
+  #endif  
+  ```
+
+- We need to increase the communication baudrate. The default baudrate to communicate with Arduino board is 57600. I suggest to maintain the Baudrate to 57600!
+  >
+  >In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
+  ```python
+  class ArduinoHardware {
+    public:
+      //ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
+      ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
+        iostream = io;
+        baud_ = baud;
+      }
+      ArduinoHardware()
+      {
+  #if defined(USBCON) and !(defined(USE_USBCON))
+        /* Leonardo support */
+        iostream = &Serial1;
+  #elif defined(USE_TEENSY_HW_SERIAL) or defined(USE_STM32_HW_SERIAL)
+        iostream = &Serial1;
+  #else
+        iostream = &Serial;
+  #endif
+        //baud_ = 57600;
+        baud_ = 115200;
+      }
+  ```
+  > Important!: This changes have to be made in the library files where Arduino is installed (/home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
+
+When we power the arduino board, this program starts and a to integrate this new node in the ROS environment, we have to run:
+```xml
+<node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+  <param name="port" type="string" value="/dev/ttyACM0"/>
+  <param name="baud" type="int" value="57600"/>
+</node>
+```
+
+### **4.2. Launch LIDAR node**
+
+To launch the rpLIDAR sensor, connect the LIDAR sensor to rock5b and execute:
 ```shell
-cd ~/rubot_mecanum_ws/src
-catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msgs
-cd ..
-catkin_make
+roslaunch rubot_mecanum_description rplidar_rock.launch
 ```
+Verify:
+- the port to: /dev/ttyUSB0
+- the frame_id to: base_scan
 
-### **3.1 Kinematics model of mecanum robot**
-The first concept we are going to see is kinematic models. 
-
-Wheeled mobile robots may be classified in two major categories, holonomic (omnidirectional) and nonholonomic. 
-- **Nonholonomic mobile robots**, such as conventional cars, employ conventional wheels, which prevents cars from moving directly sideways.
-- **Holonomic mobile robots**, such as mecanum cars, employ omni or mecanum wheels, which allow lateral and diagonal movements
-
-We will define the Kinematic model for Holonomic Mecanum wheeled robot:
-
-Omnidirectional wheeled mobile robots typically employ either omni wheels or mecanum wheels, which are typical wheels augmented with rollers on their outer circumference. These rollers spin freely and they allow sideways sliding while the wheel drives forward or backward without slip in that direction.
-
-The **different movements** our car can perform are:
-![](./Images/01_SW_Model_Control/11_mecanum_kine1.png)
-
-The **forces** involved define the robot linear and angular movement:
-![](./Images/01_SW_Model_Control/12_mecanum_kine2.png)
-
-The **Forward Kinematics** equations are defined below:
-![](./Images/01_SW_Model_Control/13_mecanum_kine3.png)
-
-where
-
-- Vi: Linear speed of the wheels.
-- ωdi: Angular speed of the wheels.
-- Vir: Tangential speed of the rollers.
-- ul: Linear velocity of the system on the X axis.
-- uf: Linear velocity of the system on the Y axis.
-- ω: Speed of rotation of the system on the Z axis.
-- a: Distance from the center of the robot to the axis of rotation of the wheel.
-- b: Distance from the center of the robot to the center of the width of the wheel.
-
->(see [Lynch & Park, 2017] for a complete derivation of this model).
-
-In the **Inverse Kinematics** we want to apply a robot movement defined by:
-- a linear and angular velocity using a Twist message type published in a /cmd_vel topic. 
-- we need to calculate the 4 wheel speeds needed to obtain this robot velocity
-
-This is defined by the following expressions:
-![](./Images/01_SW_Model_Control/14_mecanum_kine4.png)
-To obtain the **Odometry** we use the information of (uf,ul,w) and Gazebo plugin calculates the POSE of our robot.
-
-The analytical expressions are explained graphically in the picture:
-![](./Images/01_SW_Model_Control/15_odom_mecanum.png)
-
-In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
-
-### **3.2. Mecanum control in a world environment**
-We can control the movement of our robot using:
-- the keyboard or a joypad
-- pragramatically in python creating a "/rubot_nav" node
-
-We are now ready to launch control actions
-
-#### **3.2.1. Keyboard control**
-You can control the rUBot with the keyboard installing the following packages:
+## **3. Launch usb_cam node**
+We have created a speciffic launch file to open properly the camera
+To launch the raspicam sensor, execute:
 ```shell
-sudo apt-get install ros-noetic-teleop-tools
-sudo apt-get install ros-noetic-teleop-twist-keyboard
+roslaunch rubot_mecanum_description usb_cam_rock.launch
 ```
+Verify:
+- the video_device param to: "/dev/video1"
+- the camera_frame_id param to: "usb_cam"
+- the topic to subscribe to the image data:
+  ```shell
+  <remap from="image" to="/usb_cam/image_raw"/>
+  ```
+  > This is in case you want to open "Image View". By default is not activated (commented)
 
-Then you will be able to control the robot with the Keyboard typing:
-``` shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-```
+## **Final bringup launch file**
+
+We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
+
+To launch the bringup file type:
 ```shell
-rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
-or
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
 ```
-![](./Images/01_SW_Model_Control/16_rubot_bringup.png)
+Graphically we have this structure:
 
-#### **3.2.2. Python programming control**
-Diferent navigation programs are created:
+![](./Images/02_Bringup/17_nodes_topics.png)
 
-- **Navigation control**: to define a desired robot velocity
-- **Lidar test**: to verify the LIDAR readings and angles
-- **Autonomous navigation**: to perform a simple algorithm for navigation with obstacle avoidance using the LIDAR
-- **Wall follower**: at a fixed distance to perform a good map
-- **Go to POSE**: attend a specific position and orientation
+### **Activity**
 
-The nodes and topics structure corresponds to the following picture:
-![](./Images/01_SW_Model_Control/17_nodes_topics.png)
+The firsts tests we can do are:
+- Image view in rviz
+- lidar ranges
+- Kinematics: wheels movement for desired direction
+- odometry values
+- DC motor linear velocity and position
 
-#### **a) Navigation Control**
+## **1. Image view**
 
-We will create now a first navigation python files in "src" folder:
-- rubot_nav.py: to define a rubot movement with linear and angular speed during a time td
-
-Specific launch file have been created to launch the node and python file created above:
+To view the image is better to use:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-roslaunch rubot_control rubot_nav.launch
+rqt_image_view
 ```
+> This is usually done in the bringup file
 
-#### **b) LIDAR test**
+## **2. Lidar reference frame and ranges**
+The LIDAR reference-frame is by default "**base_scan**". When using rplidar mounted back-side, the urdf model is made with the "base_scan" frame looking to the back-side. As a consequence, in rviz we will see the obstacles 180º shifted.
 
-In order to navigate autonomously and avoid obstacles, we will use a specific rpLIDAR sensor.
-To verify the LIDAR readings and angles we have generated the "rubot_lidar_test.py" python file:
-```python
-#! /usr/bin/env python3
-import rospy
-from sensor_msgs.msg import LaserScan
-def callback(msg):
-    print ("Number of scan points: "+ str(len(msg.ranges)))
-    # values at 0 degrees
-    print ("Distance at 0deg: " + str(msg.ranges[0]))
-    # values at 90 degrees
-    print ("Distance at 90deg: " + str(msg.ranges[180]))
-    # values at 180 degrees
-    print ("Distance at 180deg: " + str(msg.ranges[360]))
-    # values at 270 degrees
-    print ("Distance at 270deg: " + str(msg.ranges[540]))
-    # values at 360 degrees
-    print ("Distance at 360deg: " + str(msg.ranges[719]))
-rospy.init_node('scan_values')
-sub = rospy.Subscriber('/scan', LaserScan, callback)
-rospy.spin()
+The node programs we have made in package "rubot_control" takes into account that the zero-angle is in the back. This means we have noting to change if we want to use these nodes.
+
+In the next section when we will work with SLAN techniques for navigation, we will have to make a correction to see the obstacles in the correct orientation. You will have to change the Lidar reference-frame to "**odom**" frame. You will have to open the "rplidar_rock.launch" file and change the line:
+```xml
+<param name="frame_id" type="string" value="base_scan"/>
 ```
-To test the LIDAR we have generated a launch file
+to the param value:
+```xml
+<param name="frame_id" type="string" value="odom"/>
+```
+With this correction, once you have made the bringup, verify in RVIZ that the obstacles detected by laser beams are in the correct orientation!
+
+In function of lidar module, there are 720 or more laser beams.
+We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_lidar_test.launch
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/01_SW_Model_Control/18_rubot_lidar_test.png)
-> We can see that the zero angle corresponds to the back side of the robot!
-
-#### **c) Autonomous navigation with obstacle avoidance**
-We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
-
-We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-roslaunch rubot_control rubot_self_nav.launch
-```
-
-![](./Images/01_SW_Model_Control/19_rubot_self.png)
-
-The algorithm description functionality is:
-- "rubot_self_nav.py": The Python script makes the robot go forward. 
-    - LIDAR is allways searching the closest distance and the angle
-    - when this distance is lower than a threshold, the robot goes backward with angular speed in the oposite direction of the minimum distance angle.
-
-#### **d) Wall Follower**
-Follow the wall accuratelly is an interesting challenge to make a map with precision to apply SLAM techniques for navigation purposes.
-
-There are 2 main tasks:
-- Create a python file "rubot_wall_follower.py" to perform the wall follower in the maze of our mecanum robot
-- Create a launch file "rubot_wall_follower.launch" to initialyse all the needed nodes in our system for this control task
-
-**Geometrical method**
-
-Follow the instructions to perform the rubot_wall_follower_gm.py python program are in the notebook: 
-https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
-
-The algorithm is based on:
-
-![](./Images/01_SW_Model_Control/20_wall_follower_gm.png)
-
-You will have to tune the proper parameter set for a good wall following process
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-roslaunch rubot_control rubot_wall_follower_gm.launch
-```
-
-You can see a video for the Maze wall follower process in: 
-[![IMAGE_ALT](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
-
-![](./Images/01_SW_Model_Control/21_rubot_wall_follower_gm.png)
-
-**Lidar ranges method**
-
-We have created another rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, right and back-right, and perform a specific actuation in function of the minimum distance readings.
-
-Follow the instructions to create the rubot_wall_follower_rg.py python file: https://www.theconstructsim.com/wall-follower-algorithm/
-
-The algorith is based on laser ranges test and depends on the LIDAR type:
-![](./Images/01_SW_Model_Control/22_lidar_rg.png)
-
-```shell
-roslaunch rubot_control rubot_wall_follower_rg.launch
-```
-
-
-#### **e) Go to POSE**
-Define a specific Position and Orientation as a target point to go:
-
-- x target point
-- y target point
-- f yaw orientation angle in deg
-
-Modify the python script developed in turlesim control package according to the odom message type
-
-For validation type:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-roslaunch rubot_control rubot_go2pose.launch
-```
-![](./Images/01_SW_Model_Control/23_rubot_go2pose.png)
