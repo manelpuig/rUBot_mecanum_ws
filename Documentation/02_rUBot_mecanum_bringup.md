@@ -509,9 +509,11 @@ Generate the **bringup file** to spawn your previous designed robot model in the
 ## **4. Bringup the real robot**
 
 The rUBot Mecanum real hardware is based on:
-- Arduino Mega with custom Shield to control the 4 Mecanum Wheels (and other sensors onboard in function of the application)
+- Robot base structure with 4 Mecanum wheels driven by DC-servomotors
 - 2D-Camera to generate front images
 - Lidar for Navigation with obstacle avoidance
+- Arduino Mega with custom Shield: to control the 4 Mecanum Wheels (and other sensors onboard in function of the application)
+- Rock5b Computer on-board: for high level control in ROS environment. He will also control directly the usb-camera and the Lidar.
 
 To Bingup our real robot we have to:
  
@@ -523,26 +525,43 @@ To Bingup our real robot we have to:
 
 ### **4.1. Launch the "Mecanum-drive control" module**
 
+The 4 mecanum wheels will be controlled by the Arduino board. 
+
+The Arduino is great tool for quickly and easily programming hardware. You can integrate ROS in Arduino hardware with:
+- the **rosserial_arduino package**: to use ROS directly with the Arduino IDE.
+- the **rosserial package**: to provide a ROS communication protocol that works over your Arduino's UART. It allows your Arduino to create a ROS node which can directly publish and subscribe to ROS messages, publish TF transforms, and get the ROS system time.
+
+You can install rosserial for Arduino by running:
+```shell
+sudo apt-get install ros-noetic-rosserial-arduino
+sudo apt-get install ros-noetic-rosserial
+```
+Once you have installed Arduino IDE, you can install the ROS libraries with:
+```shell
+cd <sketchbook>/libraries
+rm -rf ros_lib
+rosrun rosserial_arduino make_libraries.py .
+```
 We have created a custom Arduino program for rubot_mecanum robot. This program is able to:
-- Communicate with ROS environment to subscribe the desired rUBot movement
+- Communicate with ROS environment to subscribe to the topic **/cmd_vel** the desired rUBot movement
 - Apply the kinematics of the Mecanum robot to control the 4 mecanum wheels 
 - Read the encoders to calculate the odometry
-- Communicate with ROS environment to publish the odometry in real-time
+- Communicate with ROS environment to publish to the topic **/odom** the odometry in real-time
 - Interface with all the other sensors/actuators connected to arduino-mega board
 
 The "**rUBot_drive.ino**" arduino program is located on /Documentation/files/arduino/ folder
 
 Let's see some important characteristics:
 - You need to install Encoder.h lib: https://www.arduino.cc/reference/en/libraries/encoder/
-- Motor connections
+- Verify the Motor connections order
 
 ![](./Images/02_Bringup/14_motor.png)
 
-- Shield schematics
+- Verify the Shield schematics for the A,B,C,D bus-connectors
 
 ![](./Images/02_Bringup/15_shield.png)
 
-- Pin number of encoders, PWM and DIR in config.h and encoder.h files
+- Verify the Pin number of encoders, PWM and DIR in config.h and encoder.h files
 
 ![](./Images/02_Bringup/16_pinout.png)
 
@@ -556,7 +575,7 @@ Let's see some important characteristics:
   #endif  
   ```
 
-- We need to increase the communication baudrate. The default baudrate to communicate with Arduino board is 57600. I suggest to maintain the Baudrate to 57600!
+- The default baudrate to communicate with Arduino board is 57600. I suggest to maintain the Baudrate to 57600!
   >
   >In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
   ```python
@@ -581,18 +600,21 @@ Let's see some important characteristics:
         baud_ = 115200;
       }
   ```
-  > Important!: This changes have to be made in the library files where Arduino is installed (/home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
+  > Important!: This changes have to be made in the library files where Arduino is installed (usually in /home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
 
-When we power the arduino board, this program starts and a to integrate this new node in the ROS environment, we have to run:
+When we power the arduino board, this program starts and a new node appears in the ROS environment. To test its behaviour we have to run:
 ```xml
-<node name="serial_node" pkg="rosserial_python" type="serial_node.py">
-  <param name="port" type="string" value="/dev/ttyACM0"/>
-  <param name="baud" type="int" value="57600"/>
-</node>
+roscore
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
+> the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
+
+> The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]'
 
 ### **4.2. Launch LIDAR node**
 
+The rpLidar sensor is directly connected to the USB port of Rock5b board.
 To launch the rpLIDAR sensor, connect the LIDAR sensor to rock5b and execute:
 ```shell
 roslaunch rubot_mecanum_description rplidar_rock.launch
@@ -602,7 +624,7 @@ Verify:
 - the frame_id to: base_scan
 
 ## **3. Launch usb_cam node**
-We have created a speciffic launch file to open properly the camera
+The usb-camera sensor is directly connected to the USB port of Rock5b board. We have created a speciffic launch file to open properly the camera
 To launch the raspicam sensor, execute:
 ```shell
 roslaunch rubot_mecanum_description usb_cam_rock.launch
