@@ -8,16 +8,15 @@ The objectives of this chapter are:
 The final model represents the real rUBot we will use in the laboratory
 
 The rUBot mecanum robot we will work is represented in the picture:
-![](./Images/00_Setup/1_osoyoo.png)
+![](./Images/01_Setup/1_osoyoo.png)
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
 
 
-
 ## **1. rUBot mecanum navigation control in virtual environment**
 
-Once the world has been generated we will create a ROS Package "rubot_control" to perform the navigation control nodes
+For navigation control of our robot, I have created a ROS Package "rubot_control". If you want to create it from scratch you would have to type:
 ```shell
 cd ~/rubot_mecanum_ws/src
 catkin_create_pkg rubot_control rospy std_msgs sensor_msgs geometry_msgs nav_msgs
@@ -26,24 +25,24 @@ catkin_make
 ```
 
 ### **3.1 Kinematics model of mecanum robot**
-The first concept we are going to see is kinematic models. 
+The rUBot mecanum is based on a 4-wheels and has a Mecanum-drive kinematics model. We have first to analyse its kinematics model to properly control it.
 
 Wheeled mobile robots may be classified in two major categories, holonomic (omnidirectional) and nonholonomic. 
 - **Nonholonomic mobile robots**, such as conventional cars, employ conventional wheels, which prevents cars from moving directly sideways.
 - **Holonomic mobile robots**, such as mecanum cars, employ omni or mecanum wheels, which allow lateral and diagonal movements
 
-We will define the Kinematic model for Holonomic Mecanum wheeled robot:
+The rUBot mecanum corresponds to a Kinematic model for Holonomic Mecanum wheeled robot:
 
 Omnidirectional wheeled mobile robots typically employ either omni wheels or mecanum wheels, which are typical wheels augmented with rollers on their outer circumference. These rollers spin freely and they allow sideways sliding while the wheel drives forward or backward without slip in that direction.
 
 The **different movements** our car can perform are:
-![](./Images/01_SW_Model_Control/11_mecanum_kine1.png)
+![](./Images/03_Control/01_mecanum_movements.png)
 
 The **forces** involved define the robot linear and angular movement:
-![](./Images/01_SW_Model_Control/12_mecanum_kine2.png)
+![](./Images/03_Control/02_mecanum_forces.png)
 
 The **Forward Kinematics** equations are defined below:
-![](./Images/01_SW_Model_Control/13_mecanum_kine3.png)
+![](./Images/03_Control/03_mecanum_fkine.png)
 
 where
 
@@ -63,11 +62,11 @@ In the **Inverse Kinematics** we want to apply a robot movement defined by:
 - we need to calculate the 4 wheel speeds needed to obtain this robot velocity
 
 This is defined by the following expressions:
-![](./Images/01_SW_Model_Control/14_mecanum_kine4.png)
+![](./Images/03_Control/04_mecanum_ikine.png)
 To obtain the **Odometry** we use the information of (uf,ul,w) and Gazebo plugin calculates the POSE of our robot.
 
 The analytical expressions are explained graphically in the picture:
-![](./Images/01_SW_Model_Control/15_odom_mecanum.png)
+![](./Images/03_Control/05_mecanum_odom.png)
 
 In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
 
@@ -89,26 +88,26 @@ Then you will be able to control the robot with the Keyboard typing:
 ``` shell
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
+![](./Images/03_Control/06_bringup_sw.png)
 ```shell
 rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
 or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
-![](./Images/01_SW_Model_Control/16_rubot_bringup.png)
+![](./Images/03_Control/07_rubot_teleop.png)
 
 #### **3.2.2. Python programming control**
 Diferent navigation programs are created:
 
 - **Navigation control**: to define a desired robot velocity
-- **Lidar test**: to verify the LIDAR readings and angles
 - **Autonomous navigation**: to perform a simple algorithm for navigation with obstacle avoidance using the LIDAR
 - **Wall follower**: at a fixed distance to perform a good map
 - **Go to POSE**: attend a specific position and orientation
 
-The nodes and topics structure corresponds to the following picture:
-![](./Images/01_SW_Model_Control/17_nodes_topics.png)
-
 #### **a) Navigation Control**
+**In Virtual environment**
+
+A first simple navigation program is created to move the robot according to a speciffic Twist message.
 
 We will create now a first navigation python files in "src" folder:
 - rubot_nav.py: to define a rubot movement with linear and angular speed during a time td
@@ -118,39 +117,17 @@ Specific launch file have been created to launch the node and python file create
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_nav.launch
 ```
+Verify first that the code is working in the simulated environment.
 
-#### **b) LIDAR test**
+**Navigation control in REAL environment**
 
-In order to navigate autonomously and avoid obstacles, we will use a specific rpLIDAR sensor.
-To verify the LIDAR readings and angles we have generated the "rubot_lidar_test.py" python file:
-```python
-#! /usr/bin/env python3
-import rospy
-from sensor_msgs.msg import LaserScan
-def callback(msg):
-    print ("Number of scan points: "+ str(len(msg.ranges)))
-    # values at 0 degrees
-    print ("Distance at 0deg: " + str(msg.ranges[0]))
-    # values at 90 degrees
-    print ("Distance at 90deg: " + str(msg.ranges[180]))
-    # values at 180 degrees
-    print ("Distance at 180deg: " + str(msg.ranges[360]))
-    # values at 270 degrees
-    print ("Distance at 270deg: " + str(msg.ranges[540]))
-    # values at 360 degrees
-    print ("Distance at 360deg: " + str(msg.ranges[719]))
-rospy.init_node('scan_values')
-sub = rospy.Subscriber('/scan', LaserScan, callback)
-rospy.spin()
+In real environment, the bringup process depends on the real robot.
+
+To bringup the rUBot_mecanum, execute in a first terminal:
+``` shell
+roslaunch rubot_mecanum_description rubot_bringup_hw.launch
 ```
-To test the LIDAR we have generated a launch file
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
-roslaunch rubot_control rubot_lidar_test.launch
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-```
-![](./Images/01_SW_Model_Control/18_rubot_lidar_test.png)
-> We can see that the zero angle corresponds to the back side of the robot!
+![](./Images/03_Control/08_bringup.png)
 
 #### **c) Autonomous navigation with obstacle avoidance**
 We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
