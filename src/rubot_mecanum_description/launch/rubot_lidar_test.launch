@@ -1,0 +1,5 @@
+<launch>
+ <!-- LIDAR Test -->
+  <node name="scan_values" pkg="rubot_mecanum_description" type="rubot_lidar_test.py" output="screen" >
+  </node> 
+</launch>

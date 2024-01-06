@@ -623,7 +623,7 @@ Verify:
 - the port to: /dev/ttyUSB0
 - the frame_id to: base_scan
 
-## **3. Launch usb_cam node**
+### **4.3. Launch usb_cam node**
 The usb-camera sensor is directly connected to the USB port of Rock5b board. We have created a speciffic launch file to open properly the camera
 To launch the raspicam sensor, execute:
 ```shell
@@ -638,7 +638,7 @@ Verify:
   ```
   > This is in case you want to open "Image View". By default is not activated (commented)
 
-## **Final bringup launch file**
+### **Final bringup launch file**
 
 We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
@@ -652,38 +652,22 @@ Graphically we have this structure:
 
 ### **Activity**
 
-The firsts tests we can do are:
-- Image view in rviz
-- lidar ranges
-- Kinematics: wheels movement for desired direction
-- odometry values
-- DC motor linear velocity and position
+The objectives of this activity are:
+- Lidar test:
+  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_2.launch**, including a laser_factor variable as beams/deg.
+  - Where is located the zero-index of rpLIDAR? Modify the rubot.urdf base_scan frame to take into account the rpLIDAR orientation. Create a final **rubot_2.urdf** file you will use in the future projects.
+  - Open RVIZ and verify the position of the obstacles around the robot. Are them in the correct orientation? 
+  - create another **rplidar_rock_2.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
+- Final bringup file:
+  - Create a new **rubot_bringup_hw_rock_2.launch** file containing:
+    - robot_mpuig.urdf final model
+    - rplidar_rock_mpuig.launch final file
+  - Put your robot inside a real world and launch the rubot_bringup_hw_rock_2.launch file
 
-## **1. Image view**
+Upload a zip file including:
+- the final picture and 
+- the rubot_lidar_test_2.launch, 
+- rubot_2.urdf, 
+- rplidar_rock_2.launch, 
+- rubot_bringup_hw_rock_2.launch 
 
-To view the image is better to use:
-```shell
-rqt_image_view
-```
-> This is usually done in the bringup file
-
-## **2. Lidar reference frame and ranges**
-The LIDAR reference-frame is by default "**base_scan**". When using rplidar mounted back-side, the urdf model is made with the "base_scan" frame looking to the back-side. As a consequence, in rviz we will see the obstacles 180º shifted.
-
-The node programs we have made in package "rubot_control" takes into account that the zero-angle is in the back. This means we have noting to change if we want to use these nodes.
-
-In the next section when we will work with SLAN techniques for navigation, we will have to make a correction to see the obstacles in the correct orientation. You will have to change the Lidar reference-frame to "**odom**" frame. You will have to open the "rplidar_rock.launch" file and change the line:
-```xml
-<param name="frame_id" type="string" value="base_scan"/>
-```
-to the param value:
-```xml
-<param name="frame_id" type="string" value="odom"/>
-```
-With this correction, once you have made the bringup, verify in RVIZ that the obstacles detected by laser beams are in the correct orientation!
-
-In function of lidar module, there are 720 or more laser beams.
-We have created a "rubot_lidar_test.launch" file to test the number of laser beams and its position.
-```shell
-roslaunch rubot_control rubot_lidar_test.launch
-```
