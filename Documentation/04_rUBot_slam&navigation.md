@@ -32,7 +32,7 @@ source /home/user/rUBot_mecanum_ws_/devel/setup.bash
 ```
 change the path corresponding to your ws
 
-To perform SLAM & Navigation, we need to create a specific "rubot_slam" package.
+To perform SLAM & Navigation, we need to create a specific **"rubot_slam" package**.
 
 This package is already created in the simulation ws. Take the same "rubot_slam" package and make few modifications to use it to:
 - generate the map of your maze
@@ -44,7 +44,7 @@ https://github.com/ROBOTIS-GIT/turtlebot3
 
 Now you can follow the next steps:
 
-### **1. Generate the map**
+## **1. Generate the map**
 
 To generate the map we need first to:
 - Bringup rUBot_mecanum
@@ -73,6 +73,8 @@ roslaunch rubot_control rubot_wall_follower_rg.launch
 ```shell
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
+![](./Images/04_Slam/1_rubot_map1.png)
+
 - Once you have finish the map, you need to launch the map_saver program from map_server package:
 ```shell
 cd src/rubot_slam/maps
@@ -88,7 +90,7 @@ Provided with the map, we are ready to perform robot navigation with the rUBot_m
 
 You can close now the "rubot_slam.launch" file.
 
-### **2. Navigate to speciffic target points within the map**
+## **2. Navigate to speciffic target points within the map**
 
 When the robot moves around a map, it needs to know which is its POSE within the map.
 
@@ -122,7 +124,6 @@ Review these parameters in "costmap_common_params.yaml"
 Consider to modify:
 - controller_frequency to 5.0Hz instead of 10.0Hz
 
-
 You can refine some parameters considering the recommendations in: https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#tuning-guide
 
 >Careful!!
@@ -144,23 +145,30 @@ roslaunch rubot_slam rubot_navigation.launch
 ```shell
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
+![](./Images/04_Slam/2_rubot_nav1.png)
+
 - Select the target goal to navigate with the tool "2D-Nav-Goal"
+- With a "Differential Drive" kinematics robot structure, the mobility is not optimum and some target poits are not accessible and the program is aborted
+
+![](./Images/04_Slam/3_rubot_abort.png)
 
 - Using "omni" drive performances, the robot is able to move also in y direction and the mobility is much better.
 
 - You need to modify the "dwa_local_planner_params_burger.yaml parameters. 
 
+![](./Images/04_Slam/4_rubot_lateral.png)
+
 You can see the optimized trajectory. The robot starts to follow this trajectory and if an obstacle appears, the robot avoid this obstacle and find in realtime the new optimal trajectory to the target point. 
 
 
-### **3. Programatic control of Robot Navigation**
+## **3. Programatic control of Robot Navigation**
 
 When we want to perform a complex task, the robot navigation has to be made programatically. We will be able to perform:
 - Init Pose selection
 - Send a goal to navigation stack
 - Send a sequence of goals to navigation stack
 
-#### **3.1. Init Pose selection**
+### **3.1. Init Pose selection**
 
 The init pose is a mesage that has to be published th a /initpose topic.
 
@@ -174,7 +182,7 @@ roslaunch rubot_slam rubot_navigation.launch
 rosrun rubot_slam init_pose.py
 ```
 
-#### **3.2. Send a goal to navigation stack**
+### **3.2. Send a goal to navigation stack**
 
 The move_base ROS Node, allows to configure, run and interact with the robot navigation. The move_base node implements a SimpleActionServer with a single navigation goal.
 
@@ -201,7 +209,7 @@ roslaunch rubot_slam rubot_navigation.launch
 rosrun rubot_slam first_goal.py
 ```
 
-#### **3.3. Send a sequence of goals to navigation stack**
+### **3.3. Send a sequence of goals to navigation stack**
 
 When different goals have to be defined, We will use a yaml file to define the waypoints and a launch file define the needed parameters.
 
