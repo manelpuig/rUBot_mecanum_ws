@@ -3,7 +3,7 @@
     <arg name="model" default="rubot_mpuig.urdf" />
     <arg name="x_pos" default="0.7"/>
     <arg name="y_pos" default="0.0"/>
-    <arg name="z_pos" default="0.0"/>
+    <arg name="z_pos" default="0.7"/>
     <arg name="yaw" default="0.8"/>
     <!-- spawn world -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">

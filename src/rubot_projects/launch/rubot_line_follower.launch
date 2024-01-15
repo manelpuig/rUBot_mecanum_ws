@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-        <node name="line_following_traffic"
+        <node name="line_follower"
             pkg="rubot_projects"
-            type="line_following_traffic1.py"
+            type="rubot_line_follower_sw.py"
             respawn="false" output="screen" >
         </node>
 </launch>

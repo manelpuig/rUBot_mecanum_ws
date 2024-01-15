@@ -155,7 +155,7 @@ We will construct first these models in a specific folder:
 
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
 
-- in ~/.bashrc file adding this line:
+- in ~/.bashrc file adding this line (needed for simulation to find the models):
 
 ```xml
 export GAZEBO_MODEL_PATH=$HOME/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
@@ -238,6 +238,14 @@ by this text:
 
 - you have now the turn traffic sign ready!
 
+#### **b) road**
+
+Let's create a road model based on:
+- box rectangular (10x10x0.1)
+- texture made with power point defining a white line over a black surface. We take the picture in png format.
+
+
+
 To add models in our world add each model in the last part of your world file (here starts with empy.world):
 
 ```xml
@@ -285,7 +293,7 @@ Open line_follower.py and:
   Start the node line_follower
 
 ```shell
-roslaunch rubot_projects line_follower_start.launch
+roslaunch rubot_projects rubot_line_follower_sw.launch
 ```
 
 ![](./Images/5_line_follower1.png)
