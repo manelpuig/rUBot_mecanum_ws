@@ -146,24 +146,25 @@ The nexts steps will be:
 We have created different models to include in gazebo world:
 
 - Trafic signs
-- lights
+
 - road
 
 We will construct first these models in a specific folder:
 
-- /media/sf_github_manelpuig/rubot_mecanum_ws/src/robot_projects/rubot_projects/models
+- rubot_mecanum_ws/src/rubot_mecanum_description/models
 
 We have to add this folder to GAZEBO_MODEL_PATH tenvironment variable. This is done either:
 
 - in ~/.bashrc file adding this line:
 
 ```xml
-export GAZEBO_MODEL_PATH=$HOME/Escritorio/rUBot_mecanum_ws/src/rubot_projects/models:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=$HOME/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
 ```
 
 > If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
 
 - or copy the models folder in ~/.gazebo/models/
+- you can always add a folder in "insert" tag of Gazebo
 
 #### **a) Traffic sign**
 
@@ -184,15 +185,15 @@ Let's create a "sign board 30" model:
 
 This model will be used to create all the other traffic signs, for exemple the turn traffic sign:
 
-- Make a copy of this folder with the name "sign_left_turn"
-- in model.config file change the name to "sign_left_turn"
-- add materials and meshes folders inside "sign_left_turn"
+- Make a copy of this folder with the name "turn_left"
+- in model.config file change the name to "turn_left"
+- add materials and meshes folders inside "turn_left"
 - In materials folder add scripts and textures folder
-- In textures folder add the png file with the sign picture (turn.png)
-- in scripts add a sign_left_turn.material file with this contents (specify the turn.png file):
+- In textures folder add the png file with the sign picture (turn_left.png)
+- in scripts add a turn_left.material file with this contents (specify the turn_left.png file):
 
 ```xml
-material sign_left_turn/Diffuse
+material turn_left/Diffuse
 {
   technique
   {
@@ -200,7 +201,7 @@ material sign_left_turn/Diffuse
     {
       texture_unit
       {
-        texture turn.png
+        texture turn_left.png
         filtering anistropic
         max_anisotropy 16
       }
@@ -209,7 +210,7 @@ material sign_left_turn/Diffuse
 }
 ```
 
-- Open the model.sdf and change the material properties of link02 where we want to place the turn left texture. Replace the text:
+- Open the model.sdf and change the material properties of link01 where we want to place the turn left texture. Replace the text:
 
 ```xml
         <material>
@@ -228,9 +229,9 @@ by this text:
 ```xml
         <material>
           <script>
-            <uri>model://sign_left_turn/materials/scripts</uri>
-            <uri>model://sign_left_turn/materials/textures</uri>
-            <name>sign_left_turn/Diffuse</name>
+            <uri>model://turn_left/materials/scripts</uri>
+            <uri>model://turn_left/materials/textures</uri>
+            <name>turn_left/Diffuse</name>
           </script>
         </material>
 ```
@@ -257,15 +258,9 @@ To add models in our world add each model in the last part of your world file (h
     </include>
     <!-- Line Test 1 -->
     <include>
-        <uri>model://line2</uri>
-        <name>line_1</name>
-        <pose>0 0 0 0 0 0</pose>
-      </include> 
-    <!-- Line Test 2 -->
-    <include>
-        <uri>model://line2</uri>
-        <name>line_2</name>
-        <pose>1 1.025 0 0 0 1.57</pose>
+      <uri>model://road_base</uri>
+      <name>road_base</name>
+      <pose>0 0 0 0 0 0</pose>
     </include> 
   </world>
 </sdf>
@@ -274,7 +269,7 @@ To add models in our world add each model in the last part of your world file (h
 We spawn our robot into gazebo world:
 
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 
 To see the camera image, type:
