@@ -9,6 +9,7 @@ The different projects will be:
 
 - 1. rUBot takes photo
 - 2. Go to specific point in the map and take a photo
+- 3. Follow a point based trajectory with traffic signs
 - 4. Line follower
 
 References OpenCV:
@@ -117,7 +118,7 @@ Proceed with the following steps:
 
 **Exercise:** Note that the picture is not saved!. Solve this issue.
 
-## **Project 3: Line follower**
+## **Project 3: Follow a point based trajectory with traffic signs**
 
 Important information can be obtained here:
 
@@ -136,12 +137,14 @@ And with the code:
 
 The nexts steps will be:
 
-- Define a proper simulated world in Gazebo
-- spawn the robot model in Gazebo world
-- setup the robot with camera
-- start the line follower node
+- world setup
+- bringup the robot
+- create the map
+- create the "point based trajectory"
+- Signal identification
+- SLAM and Navigation within the tajectory
 
-### **World setup**
+### **1. World setup**
 
 We have created different models to include in gazebo world:
 
@@ -245,8 +248,10 @@ Let's create a road model based on:
 - texture made with power point defining a white line over a black surface. We take the picture in png format.
 
 
-
-To add models in our world add each model in the last part of your world file (here starts with empy.world):
+#### **c) Create a world**
+To create a world, you can:
+- add models in our empty world 
+- add each model in the last part of your world file (here starts with empy.world):
 
 ```xml
 <sdf version="1.5">
@@ -273,6 +278,80 @@ To add models in our world add each model in the last part of your world file (h
   </world>
 </sdf>
 ```
+
+### **2. Bringup the robot**
+
+We spawn our robot into gazebo world:
+
+```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+```
+
+### **3. Create the map**
+
+To create the MAP, we start the slam_gmapping node
+```shell
+roslaunch rubot_slam rubot_slam.launch
+```
+- use the navigation program you have designed to follow the walls for exemple to properly generate the map.
+```shell
+roslaunch rubot_control rubot_wall_follower_rg.launch
+```
+- or let's do this as usual with the teleoperation package:
+```shell
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+```
+
+### **4. Create the "point based trajectory"**
+
+You have to define the waypoints in a "trajectorys.yaml" file on config folder:
+```python
+goal1: {"x": -0.5, "y": 0.8, "w": 90}
+goal2: {"x": -0.5, "y": -0.5, "w": 180}
+goal3: {"x": -0.5, "y": -0.5, "w": 180}
+```
+
+### **5. Signal identification**
+
+To identify the signal placed in each waypont, you can use:
+- Image processing techniques
+- Image identification techniques
+
+The code created will have to be able to identify the signal you have found because the next waypoint will depend on the signal identified
+
+### **6. SLAM and Navigation within the tajectory**
+
+You have to create the trajectory.py file to:
+- go to the first waypoint
+- take picture of the signal
+- identify the signal
+- choose the next waypoint
+- take picture of the signal
+- identify the signal
+- execute the action
+
+You will have then to execute:
+```shell
+roslaunch rubot_slam rubot_navigation.launch
+roslaunch rubot_slam trajectory.launch
+```
+
+## **Project 4: Line follower**
+
+Important information can be obtained here:
+
+- https://www.theconstructsim.com/morpheus-chair-create-a-linefollower-with-rgb-camera-and-ros-episode-5/
+- https://www.youtube.com/watch?v=9C7Q8bRERgM
+- https://github.com/noshluk2/ROS2-Self-Driving-Car-AI-using-OpenCV
+
+Related to the links:
+
+- http://www.rosject.io/l/8292943/
+- https://en.wikipedia.org/wiki/Differential_wheeled_robot
+
+And with the code:
+
+- https://bitbucket.org/theconstructcore/morpheus_chair/src/master/
 
 We spawn our robot into gazebo world:
 

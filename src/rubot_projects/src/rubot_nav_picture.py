@@ -48,6 +48,8 @@ def nav2goals():
             rospy.loginfo("Goal execution done!")
             if camera.take_picture(photos[i]):
                 rospy.loginfo("Saved image " + photos[i])
+                print("Rebut?" + str(camera.image_received))
+                print("Rebut?" + str(camera.image))
             else:
                 rospy.loginfo("No images received")   
 
