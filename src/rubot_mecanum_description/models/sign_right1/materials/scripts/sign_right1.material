@@ -1,0 +1,15 @@
+material sign_right1/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture right.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
