@@ -103,9 +103,9 @@
           <izz>0.166667</izz>
         </inertia>
       </inertial>
-      <pose>0.022706 0.007463 2 0 1.55484 3.14</pose>
+      
       <visual name='visual'>
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>0 0 0.95 -1.57 0 3.14</pose>
         <geometry>
           <mesh>
             <uri>model://sign_right1/meshes/sign_board.obj</uri>
