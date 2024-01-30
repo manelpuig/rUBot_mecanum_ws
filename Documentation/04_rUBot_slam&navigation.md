@@ -24,6 +24,7 @@ sudo apt install ros-noetic-slam-gmapping
 ```
 Also for some transformations you will need to install transforms3d:
 ```shell
+sudo apt install python3-pip
 sudo pip3 install transforms3d
 ```
 Open the .bashrc file and verify to source to the proper workspace:
