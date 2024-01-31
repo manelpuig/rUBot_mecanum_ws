@@ -64,7 +64,7 @@ Follow the procedure:
 - Identify the topic name where raspicam publishes the photo as a mesage of type sensor_msgs:
 
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch 
+roslaunch rubot_projects rubot_projects_bringup_sw.launch 
 rostopic list
 ```
 
