@@ -18,6 +18,12 @@ References OpenCV:
 - https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html
 - https://github.com/Akshay594/OpenCV/tree/master/tutorials
 
+References InterRealSense:
+
+- https://dev.intelrealsense.com/docs/ros-wrapper
+- https://www.youtube.com/watch?v=GhHvuAoFC6I
+- https://intel.github.io/robot_devkit_doc/pages/rs_slam.html
+
 References for webcam:
 
 - https://automaticaddison.com/working-with-ros-and-opencv-in-ros-noetic/
@@ -71,9 +77,9 @@ rostopic list
 rosrun rubot_projects take_photo.py
 ```
 
-- Open the "photos" folder and you will see the photo1_sw.jpg created
+- Open the "photos" folder and you will see the photo1.jpg created
 
-![](./Images/05_rubot_projects/01_photo1.jpg)
+![](./Images/05_rubot_projects/1_photo1.png)
 
 
 ## **Project 2: Navigate to a sequence of goals in the map and take a photo**
@@ -142,9 +148,8 @@ The nexts steps will be:
 
 We have created different models to include in gazebo world:
 
-- Walls
-- square
 - Trafic signs
+
 - road
 
 We will construct first these models in a specific folder:
@@ -162,9 +167,89 @@ export GAZEBO_MODEL_PATH=$HOME/rUBot_mecanum_ws/src/rubot_mecanum_description/mo
 > If you want to delete any model path from gazebo, load the "gui.ini" file from .gazebo folder. There is a list of model paths and you can delete the one you do not want
 
 - or copy the models folder in ~/.gazebo/models/
+- you can always add a folder in "insert" tag of Gazebo
 
-#### **Create a world file**
-The best way to create a world, you can:
+#### **a) Traffic sign**
+
+Let's create a "sign board 30" model:
+
+- Open Gazebo as superuser (sudo gazebo)
+- select edit --> Model Editor
+- add the meshes (obj files or standard objects) needed to create the sign model
+- adjust the size and place the objects in the correct positions to be assembled
+- select joint in gazebo (fixed), define the parent and child links, adjust the relative pose, change the joint name if you want and create the model
+- save the model as "sign_stand"
+- You will see the folder created for this model with 2 files (model.config and model.sdf)
+- in model.sdf you can:
+  - reduce the mass of the upper links for inertial stability.
+  - change the defauld color (Gazebo/Grey)
+  - change the dimensions and pose of different links if necessary
+- open gazebo and add the generated model to verify the size and mecanical stability.
+
+This model will be used to create all the other traffic signs, for exemple the turn traffic sign:
+
+- Make a copy of this folder with the name "turn_left"
+- in model.config file change the name to "turn_left"
+- add materials and meshes folders inside "turn_left"
+- In materials folder add scripts and textures folder
+- In textures folder add the png file with the sign picture (turn_left.png)
+- in scripts add a turn_left.material file with this contents (specify the turn_left.png file):
+
+```xml
+material turn_left/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture turn_left.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+```
+
+- Open the model.sdf and change the material properties of link01 where we want to place the turn left texture. Replace the text:
+
+```xml
+        <material>
+          <lighting>1</lighting>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+```
+
+by this text:
+
+```xml
+        <material>
+          <script>
+            <uri>model://turn_left/materials/scripts</uri>
+            <uri>model://turn_left/materials/textures</uri>
+            <name>turn_left/Diffuse</name>
+          </script>
+        </material>
+```
+
+- you have now the turn traffic sign ready!
+
+#### **b) road**
+
+Let's create a road model based on:
+- box rectangular (10x10x0.1)
+- texture made with power point defining a white line over a black surface. We take the picture in png format.
+
+
+#### **c) Create a world**
+To create a world, you can:
 - add models in our empty world 
 - add each model in the last part of your world file (here starts with empy.world):
 
@@ -179,21 +264,17 @@ The best way to create a world, you can:
     <include>
       <uri>model://ground_plane</uri>
     </include>
-    <!-- A Square -->
-    <include>
-      <uri>model://square2m</uri>
-      <pose>0 0.5 0.01 0 0 0</pose>
-    </include>
-    <!-- A wall30cm -->
-    <include>
-      <uri>model://wall30cm</uri>
-      <pose>-0.8 0 0.01 0 0 1.57</pose>
-    </include>
     <!-- A traffic sign -->
     <include>
-      <uri>model://sign_left</uri>
-      <pose>0 -0.2 0.01 0 0 0</pose>
+      <uri>model://sign_left_turn</uri>
+      <pose>0 0 0.5 0 0 0</pose>
     </include>
+    <!-- Line Test 1 -->
+    <include>
+      <uri>model://road_base</uri>
+      <name>road_base</name>
+      <pose>0 0 0 0 0 0</pose>
+    </include> 
   </world>
 </sdf>
 ```
@@ -203,11 +284,8 @@ The best way to create a world, you can:
 We spawn our robot into gazebo world:
 
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
-
-![](./Images/05_rubot_projects/project3_bringup.png)
-
 
 ### **3. Create the map**
 
@@ -228,10 +306,9 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 
 You have to define the waypoints in a "trajectorys.yaml" file on config folder:
 ```python
-goal_s: {"x": 0, "y": -0.6, "w": 90}
-goal_r: {"x": 0.5, "y": 0.5, "w": 90}
-goal_l: {"x": -0.5, "y": 0.5, "w": 90}
-goal_t: {"x": -0.6, "y": 0.7, "w": 180}
+goal1: {"x": -0.5, "y": 0.8, "w": 90}
+goal2: {"x": -0.5, "y": -0.5, "w": 180}
+goal3: {"x": -0.5, "y": -0.5, "w": 180}
 ```
 
 ### **5. Signal identification**
@@ -256,5 +333,48 @@ You have to create the trajectory.py file to:
 You will have then to execute:
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
-roslaunch rubot_projects sign_trajectory.launch
+roslaunch rubot_slam trajectory.launch
 ```
+
+## **Project 4: Line follower**
+
+Important information can be obtained here:
+
+- https://www.theconstructsim.com/morpheus-chair-create-a-linefollower-with-rgb-camera-and-ros-episode-5/
+- https://www.youtube.com/watch?v=9C7Q8bRERgM
+- https://github.com/noshluk2/ROS2-Self-Driving-Car-AI-using-OpenCV
+
+Related to the links:
+
+- http://www.rosject.io/l/8292943/
+- https://en.wikipedia.org/wiki/Differential_wheeled_robot
+
+And with the code:
+
+- https://bitbucket.org/theconstructcore/morpheus_chair/src/master/
+
+We spawn our robot into gazebo world:
+
+```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+```
+
+To see the camera image, type:
+
+```shell
+rosrun rqt_image_view rqt_image_view
+```
+
+Open line_follower.py and:
+
+- change the camera_topic="/rubot/camera1/image_raw", cmd_vel_topic="/cmd_vel"
+- be sure to have the "rgb_hsv.py" file in src folder
+  Start the node line_follower
+
+```shell
+roslaunch rubot_projects rubot_line_follower_sw.launch
+```
+
+![](./Images/5_line_follower1.png)
+
+see: https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html

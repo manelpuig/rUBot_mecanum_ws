@@ -11,13 +11,17 @@
     <!-- A Square -->
     <include>
       <uri>model://square2m</uri>
-      <pose>0 0 0.01 0 0 0</pose>
+      <pose>0 0.5 0.01 0 0 0</pose>
+    </include>
+    <!-- A wall30cm -->
+    <include>
+      <uri>model://wall30cm</uri>
+      <pose>-0.8 0 0.01 0 0 1.57</pose>
     </include>
     <!-- A traffic sign -->
     <include>
       <uri>model://sign_left</uri>
-      <pose>0 0 0.01 0 0 0</pose>
+      <pose>0 -0.2 0.01 0 0 0</pose>
     </include>
- 
   </world>
 </sdf>
