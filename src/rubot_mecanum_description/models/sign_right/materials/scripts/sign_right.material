@@ -1,4 +1,4 @@
-material sign_right1/Diffuse
+material sign_right/Diffuse
 {
   technique
   {
