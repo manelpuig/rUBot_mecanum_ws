@@ -6,7 +6,7 @@ from math import degrees, radians
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import cv2 as cv
-from take_photo import TakePhoto
+from rubot_project1_picture import TakePhoto
 
 def create_pose_stamped(position_x, position_y, rotation_z):
     goal = MoveBaseGoal()# Has to be created here
@@ -29,6 +29,7 @@ def nav2goals():
     
     goal1 = rospy.get_param("~goal1")
     goal2 = rospy.get_param("~goal2")
+    img_topic = rospy.get_param("~img_topic")
 
     goal_pose1 = create_pose_stamped(goal1['x'], goal1['y'], radians(goal1['w']))
     name_photo1 = goal1['photo']
@@ -46,7 +47,7 @@ def nav2goals():
             rospy.signal_shutdown("Action server not available!")
         else:
             rospy.loginfo("Goal execution done!")
-            if camera.take_picture(photos[i]):
+            if TakePhoto(img_topic,photos[i]):
                 rospy.loginfo("Saved image " + photos[i])
                 print("Rebut?" + str(camera.image_received))
                 print("Rebut?" + str(camera.image))
@@ -56,7 +57,7 @@ def nav2goals():
 if __name__ == '__main__':
     try:
         rospy.init_node('rubot_nav_picture')
-        camera = TakePhoto()
+        #camera = TakePhoto()
         nav2goals()
 
     except rospy.ROSInterruptException:

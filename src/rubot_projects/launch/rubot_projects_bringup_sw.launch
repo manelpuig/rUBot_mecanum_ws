@@ -1,5 +1,5 @@
 <launch>
-    <arg name="world" default="square4m_sign_right.world"/> 
+    <arg name="world" default="square2.world"/> 
     <arg name="model" default="rubot_mpuig.urdf" />
     <arg name="x_pos" default="0.5"/>
     <arg name="y_pos" default="-1.5"/>

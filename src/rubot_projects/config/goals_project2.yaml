@@ -1,4 +1,3 @@
-goal_s: {"x": 0, "y": -0.6, "w": 90}
-goal_r: {"x": 0.5, "y": 0.5, "w": 90}
-goal_l: {"x": -0.5, "y": 0.5, "w": 90}
-goal_t: {"x": -0.6, "y": 0.7, "w": 180}
+goal1: {"x": 0, "y": -0.6, "w": 90, "photo": "$(find rubot_projects)/photos/goal1.png"}
+goal2: {"x": 0.5, "y": 0.5, "w": 90, "photo": "$(find rubot_projects)/photos/goal2.png"}
+img_topic: '/rubot/camera1/image_raw'

@@ -68,9 +68,14 @@ rostopic list
 - run the "take_photo.py" python file to take a photo
 
 ```shell
-rosrun rubot_projects take_photo.py
+rosrun rubot_projects rubot_project1_picture.py
 ```
-
+If you use a launch file, you have to specify the absolute path: 
+- "/home/puigmanel/Desktop/rUBot_mecanum_ws/src/photos/photo3_sw.jpg"
+- or use "$(find rubot_projects)/photos/photo3_sw.jpg"
+```shell
+roslaunch rubot_projects rubot_project1_picture.launch
+```
 - Open the "photos" folder and you will see the photo1_sw.jpg created
 
 ![](./Images/05_Projects/01_photo1.jpg)

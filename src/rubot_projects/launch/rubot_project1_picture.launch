@@ -1,5 +1,6 @@
 <launch>
-  <node pkg="rubot_projects" type="rubot_project1_picture.py" name="rubot_nav_picture" output="screen" >
-    <rosparam file="$(find rubot_projects)/config/goals_photo.yaml" command="load" />
+  <node pkg="rubot_projects" type="rubot_project1_picture.py" name="take_photo" output="screen">
+    <param name="image_topic" value="/rubot/camera1/image_raw"/>
+    <param name="image_title" value="$(find rubot_projects)/photos/photo3_sw.jpg"/>
   </node>
 </launch>

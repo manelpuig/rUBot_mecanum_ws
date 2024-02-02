@@ -1,20 +1,4 @@
 #!/usr/bin/env python3
-
-'''
-Copyright (c) 2016, Nadya Ampilogova
-All rights reserved.
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'''
-
-# Script for simulation
-# Launch gazebo world prior to run this script
-
-from __future__ import print_function
-import sys
 import rospy
 import cv2 as cv
 from std_msgs.msg import String
@@ -22,25 +6,26 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 class TakePhoto:
-    def __init__(self):
-
+    def __init__(self, img_topic, image_title):
         self.bridge = CvBridge()
         self.image_received = False
 
         # Connect image topic
-        #img_topic = "/raspicam_node/image"
-        img_topic = "/rubot/camera1/image_raw"
         self.image_sub = rospy.Subscriber(img_topic, Image, self.callback)
 
-        # Allow up to one second to connection
+        # Allow up to one second for connection
         rospy.sleep(1)
 
-    def callback(self, data):
+        # Take a photo
+        if self.take_picture(image_title):
+            rospy.loginfo("Saved image " + image_title)
+        else:
+            rospy.loginfo("No images received")
 
-        # Convert image to OpenCV format
+    def callback(self, data):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            cv.putText(cv_image, "Image 1", (100,290), cv.FONT_HERSHEY_TRIPLEX, 1, (0, 255, 255), 1)
+            cv.putText(cv_image, "Image 1", (100, 290), cv.FONT_HERSHEY_TRIPLEX, 1, (0, 255, 255), 1)
         except CvBridgeError as e:
             print(e)
 
@@ -49,28 +34,21 @@ class TakePhoto:
 
     def take_picture(self, img_title):
         if self.image_received:
-            # Save an image
             cv.imwrite(img_title, self.image)
             return True
         else:
             return False
 
 if __name__ == '__main__':
-
     # Initialize
     rospy.init_node('take_photo', anonymous=False)
-    camera = TakePhoto()
 
-    # Take a photo
-
-    # Use '_image_title' parameter from command line
-    # Default value is 'photo.jpg'
+    # Get parameters from launch file
+    img_topic = rospy.get_param('~image_topic', '/rubot/camera1/image_raw')
     img_title = rospy.get_param('~image_title', './src/rubot_projects/photos/photo3_sw.jpg')
 
-    if camera.take_picture(img_title):
-        rospy.loginfo("Saved image " + img_title)
-    else:
-        rospy.loginfo("No images received")
+    # Create TakePhoto instance
+    camera = TakePhoto(img_topic, img_title)
 
-    # Sleep to give the last log messages time to be sent
-    rospy.sleep(1)
+   # Keep the node running
+    rospy.spin()
