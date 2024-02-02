@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.7'>
   <model name='wall60cm'>
-    <pose>-0.3725 -1.9975 0 0 -0 0</pose>
+    <pose>-0 0 0 0 0 0</pose>
     <link name='Wall_4'>
       <collision name='Wall_4_Collision'>
         <geometry>
@@ -29,7 +29,7 @@
           <layer>0</layer>
         </meta>
       </visual>
-      <pose>-0.0725 -1.9725 0 0 -0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
     </link>
     <static>1</static>
   </model>

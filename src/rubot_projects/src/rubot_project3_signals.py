@@ -48,17 +48,21 @@ def movebase_client():
  
     client.wait_for_server()
     
-    goal1 = rospy.get_param("~goal1")
-    goal2 = rospy.get_param("~goal2")
+    goal_s = rospy.get_param("~goal_s")
+    goal_r = rospy.get_param("~goal_r")
+    goal_l = rospy.get_param("~goal_l")
+    goal_t = rospy.get_param("~goal_t")
 
-    goal_pose1 = create_pose_stamped(goal1['x'], goal1['y'], radians(goal1['w']))
-    goal_pose2 = create_pose_stamped(goal2['x'], goal2['y'], radians(goal2['w']))
+    goal_pose_s = create_pose_stamped(goal_s['x'], goal_s['y'], radians(goal_s['w']))
+    goal_pose_r = create_pose_stamped(goal_r['x'], goal_r['y'], radians(goal_r['w']))
+    goal_pose_l = create_pose_stamped(goal_l['x'], goal_l['y'], radians(goal_l['w']))
+    goal_pose_t = create_pose_stamped(goal_t['x'], goal_t['y'], radians(goal_t['w']))
 
     # --- Follow Waypoints ---
-    waypoints = [goal_pose1, goal_pose2]
-    for i in range(2):
+    waypoints = [goal_pose_s, goal_pose_r, goal_pose_t]
+    for i in range(3):
         client.send_goal(waypoints[i])
-        wait = client.wait_for_result(rospy.Duration(20))
+        wait = client.wait_for_result(rospy.Duration(30))
         if not wait:
             rospy.logerr("Action server not available!")
             rospy.signal_shutdown("Action server not available!")

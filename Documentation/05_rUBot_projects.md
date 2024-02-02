@@ -73,12 +73,12 @@ rosrun rubot_projects take_photo.py
 
 - Open the "photos" folder and you will see the photo1_sw.jpg created
 
-![](./Images/05_rubot_projects/01_photo1.jpg)
+![](./Images/05_Projects/01_photo1.jpg)
 
 
 ## **Project 2: Navigate to a sequence of goals in the map and take a photo**
 
-The objective is to follow the route and take pictures.
+The objective is to navigate to 2 different targets and take pictures.
 
 We will combine the two programs:
 
@@ -89,7 +89,7 @@ We will take a "goals_foto.yaml" file to specify the POSE goal and Photo path-na
 
 Proceed with the following steps:
 
-- Launch bringup in Gazebo virtual environment:
+- Launch bringup in Gazebo virtual environment: square2.world
 
   ```shell
   roslaunch rubot_projects rubot_projects_bringup_sw.launch
@@ -108,7 +108,7 @@ Proceed with the following steps:
 > Careful!:
 > Be sure to execute the rosrun instruction inside the "rubot_mecanum_ws" folder. Review the the absolute path or relative path to the yaml file and the picture path destination.
 
-![](./Images/05_rubot_projects/project2_nav_photo.png)
+![](./Images/05_Projects/project2_nav_photo.png)
 
 **Exercise:** Note that the picture is not saved!. Solve this issue.
 
@@ -179,20 +179,27 @@ The best way to create a world, you can:
     <include>
       <uri>model://ground_plane</uri>
     </include>
-    <!-- A Square -->
+    <!-- A Square 4m -->
     <include>
-      <uri>model://square2m</uri>
-      <pose>0 0.5 0.01 0 0 0</pose>
+      <uri>model://square4m</uri>
+      <pose>0 0 0 0 0 0</pose>
     </include>
-    <!-- A wall30cm -->
+    <!-- A wall90cm -->
     <include>
-      <uri>model://wall30cm</uri>
-      <pose>-0.8 0 0.01 0 0 1.57</pose>
+      <uri>model://wall90cm</uri>
+      <name>wall90_1</name>      
+      <pose>0.5 0 0 0 0 1.57</pose>
+    </include>
+    <!-- A wall90cm -->
+    <include>
+      <uri>model://wall90cm</uri>
+      <name>wall90_2</name>
+      <pose>0.05 0.45 0 0 0 0</pose>
     </include>
     <!-- A traffic sign -->
     <include>
-      <uri>model://sign_left</uri>
-      <pose>0 -0.2 0.01 0 0 0</pose>
+      <uri>model://sign_right</uri>
+      <pose>0.5 -0.5 0.01 0 0 0</pose>
     </include>
   </world>
 </sdf>
@@ -200,13 +207,13 @@ The best way to create a world, you can:
 
 ### **2. Bringup the robot**
 
-We spawn our robot into gazebo world:
+We spawn our robot into gazebo world: "square4m_sign_right.world"
 
 ```shell
 roslaunch rubot_projects rubot_projects_bringup_sw.launch
 ```
 
-![](./Images/05_rubot_projects/project3_bringup.png)
+![](./Images/05_Projects/project3_bringup.png)
 
 
 ### **3. Create the map**
@@ -224,7 +231,7 @@ roslaunch rubot_control rubot_wall_follower_rg.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
-![](./Images/05_rubot_projects/project3_map.png)
+![](./Images/05_Projects/project3_map.png)
 
 ```shell
 cd src/rubot_slam/maps
@@ -235,10 +242,10 @@ rosrun map_server map_saver -f project3_map
 
 You have to define the waypoints in a "trajectorys.yaml" file on rubot_projects/config folder:
 ```python
-goal_s: {"x": 0, "y": -0.6, "w": 90}
-goal_r: {"x": 0.5, "y": 0.5, "w": 90}
-goal_l: {"x": -0.5, "y": 0.5, "w": 90}
-goal_t: {"x": -0.6, "y": 0.7, "w": 180}
+goal_s: {"x": 0.5, "y": -1, "w": 90}
+goal_r: {"x": 1, "y": 0.5, "w": 90}
+goal_l: {"x": 0, "y": 0, "w": 90}
+goal_t: {"x": -1, "y": 1, "w": 180}
 ```
 
 ### **5. Signal identification**
@@ -260,8 +267,14 @@ You have to create the trajectory.py file to:
 - identify the signal
 - execute the action
 
-You will have then to execute:
+You will have then to execute the Navigation on the project Map:
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
-roslaunch rubot_project3 rubot_project3_navigation.launch
+roslaunch rubot_project rubot_project3_signals.launch
 ```
+
+![](./Images/05_Projects/project3_navigation.png)
+
+
+![](./Images/05_Projects/project3_target.png)
+

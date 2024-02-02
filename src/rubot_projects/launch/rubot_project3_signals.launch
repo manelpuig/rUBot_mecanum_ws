@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="rubot_projects" type="rubot_project3_navigation.py" name="movebase_client_waypoints" output="screen" >
+  <node pkg="rubot_projects" type="rubot_project3_signals.py" name="movebase_client_waypoints" output="screen" >
     <rosparam file="$(find rubot_projects)/config/goals_project3.yaml" command="load" />
   </node>
 </launch>

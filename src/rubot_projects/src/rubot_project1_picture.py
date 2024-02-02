@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # Use '_image_title' parameter from command line
     # Default value is 'photo.jpg'
-    img_title = rospy.get_param('~image_title', './src/rubot_projects/photos/photo1_sw.jpg')
+    img_title = rospy.get_param('~image_title', './src/rubot_projects/photos/photo3_sw.jpg')
 
     if camera.take_picture(img_title):
         rospy.loginfo("Saved image " + img_title)
