@@ -1,5 +1,0 @@
-<launch>
-  <node pkg="rubot_slam" type="waypoints_goal_params.py" name="movebase_client_waypoints" output="screen" >
-    <rosparam file="$(find rubot_slam)/config/waypoints.yaml" command="load" />
-  </node>
-</launch>

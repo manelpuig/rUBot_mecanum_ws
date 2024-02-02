@@ -224,9 +224,16 @@ roslaunch rubot_control rubot_wall_follower_rg.launch
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 
+![](./Images/05_rubot_projects/project3_map.png)
+
+```shell
+cd src/rubot_slam/maps
+rosrun map_server map_saver -f project3_map
+```
+
 ### **4. Create the "point based trajectory"**
 
-You have to define the waypoints in a "trajectorys.yaml" file on config folder:
+You have to define the waypoints in a "trajectorys.yaml" file on rubot_projects/config folder:
 ```python
 goal_s: {"x": 0, "y": -0.6, "w": 90}
 goal_r: {"x": 0.5, "y": 0.5, "w": 90}
@@ -256,5 +263,5 @@ You have to create the trajectory.py file to:
 You will have then to execute:
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
-roslaunch rubot_projects sign_trajectory.launch
+roslaunch rubot_project3 rubot_project3_navigation.launch
 ```
