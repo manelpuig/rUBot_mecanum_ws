@@ -3,7 +3,7 @@
   <arg name="model" default="rubot_mpuig.urdf" />
   <!-- More arguments -->
   <arg name="multi_robot_name" default=""/>
-  <arg name="map_file" default="$(find rubot_slam)/maps/square2_map.yaml"/>
+  <arg name="map_file" default="$(find rubot_slam)/maps/project3_map.yaml"/>
   <arg name="open_rviz" default="true"/>
   <arg name="move_forward_only" default="false"/>
 

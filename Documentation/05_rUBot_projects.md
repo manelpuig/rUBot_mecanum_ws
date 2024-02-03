@@ -107,11 +107,11 @@ Proceed with the following steps:
 - Launch the "rubot_nav_picture.launch" program:
 
   ```shell
-  roslaunch rubot_projects rubot_nav_picture.launch
+  roslaunch rubot_projects rubot_project2_navigation_picture.launch
   ```
 
 > Careful!:
-> Be sure to execute the rosrun instruction inside the "rubot_mecanum_ws" folder. Review the the absolute path or relative path to the yaml file and the picture path destination.
+> Use "rospack" to obtain the absolute path to the photo. Alternative is to specify the absolute path that will be different for each student
 
 ![](./Images/05_Projects/project2_nav_photo.png)
 
@@ -247,10 +247,31 @@ rosrun map_server map_saver -f project3_map
 
 You have to define the waypoints in a "trajectorys.yaml" file on rubot_projects/config folder:
 ```python
-goal_s: {"x": 0.5, "y": -1, "w": 90}
-goal_r: {"x": 1, "y": 0.5, "w": 90}
-goal_l: {"x": 0, "y": 0, "w": 90}
-goal_t: {"x": -1, "y": 1, "w": 180}
+goal_s:
+  x: 0.5
+  y: -1
+  w: 90
+  photo_name: 'goal_s.png'
+
+goal_r:
+  x: 1
+  y: 0.5
+  w: 90
+  photo_name: 'goal_r.png'
+
+goal_l:
+  x: 0
+  y: 0
+  w: 90
+  photo_name: 'goal_l.png'
+
+goal_t:
+  x: -1
+  y: 1
+  w: 180
+  photo_name: 'goal_t.png'
+
+img_topic: '/rubot/camera1/image_raw'
 ```
 
 ### **5. Signal identification**
@@ -272,7 +293,7 @@ You have to create the trajectory.py file to:
 - identify the signal
 - execute the action
 
-You will have then to execute the Navigation on the project Map:
+You will have then to execute the Navigation on the project Map: "project3_map.yaml"
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
 roslaunch rubot_project rubot_project3_signals.launch

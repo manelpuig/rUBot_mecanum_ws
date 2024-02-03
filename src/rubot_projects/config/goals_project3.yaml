@@ -1,4 +1,25 @@
-goal_s: {"x": 0.5, "y": -1, "w": 90}
-goal_r: {"x": 1, "y": 0.5, "w": 90}
-goal_l: {"x": 0, "y": 0, "w": 90}
-goal_t: {"x": -1, "y": 1, "w": 180}
+goal_s:
+  x: 0.5
+  y: -1
+  w: 90
+  photo_name: 'goal_s.png'
+
+goal_r:
+  x: 1
+  y: 0.5
+  w: 90
+  photo_name: 'goal_r.png'
+
+goal_l:
+  x: 0
+  y: 0
+  w: 90
+  photo_name: 'goal_l.png'
+
+goal_t:
+  x: -1
+  y: 1
+  w: 180
+  photo_name: 'goal_t.png'
+
+img_topic: '/rubot/camera1/image_raw'

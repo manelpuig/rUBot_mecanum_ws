@@ -1,3 +1,13 @@
-goal1: {"x": 0, "y": -0.6, "w": 90, "photo": "$(find rubot_projects)/photos/goal1.png"}
-goal2: {"x": 0.5, "y": 0.5, "w": 90, "photo": "$(find rubot_projects)/photos/goal2.png"}
+goal1:
+  x: -0.8
+  y: -0.8
+  w: 180
+  photo_name: 'goal1.png'
+
+goal2:
+  x: -0.8
+  y: 0.5
+  w: 90
+  photo_name: 'goal2.png'
+
 img_topic: '/rubot/camera1/image_raw'

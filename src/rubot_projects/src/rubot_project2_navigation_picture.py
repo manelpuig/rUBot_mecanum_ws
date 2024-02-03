@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import rospy
+import rospkg
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from math import degrees, radians
@@ -32,16 +33,18 @@ def nav2goals():
     img_topic = rospy.get_param("~img_topic")
 
     goal_pose1 = create_pose_stamped(goal1['x'], goal1['y'], radians(goal1['w']))
-    name_photo1 = goal1['photo']
     goal_pose2 = create_pose_stamped(goal2['x'], goal2['y'], radians(goal2['w']))
-    name_photo2 = goal2['photo']
+    
+    name_photo1= photos_path + goal1['photo_name']
+    name_photo2= photos_path + goal2['photo_name']
+
 
     # --- Follow Waypoints ---
     waypoints = [goal_pose1, goal_pose2]
     photos = [name_photo1, name_photo2]
     for i in range(2):
         client.send_goal(waypoints[i])
-        wait = client.wait_for_result(rospy.Duration(20))
+        wait = client.wait_for_result(rospy.Duration(40))
         if not wait:
             rospy.logerr("Action server not available!")
             rospy.signal_shutdown("Action server not available!")
@@ -49,15 +52,18 @@ def nav2goals():
             rospy.loginfo("Goal execution done!")
             if TakePhoto(img_topic,photos[i]):
                 rospy.loginfo("Saved image " + photos[i])
-                print("Rebut?" + str(camera.image_received))
-                print("Rebut?" + str(camera.image))
             else:
                 rospy.loginfo("No images received")   
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('rubot_nav_picture')
-        #camera = TakePhoto()
+        rospy.init_node('movebase_client_waypoints')
+        # Initialize the ROS package manager
+        rospack = rospkg.RosPack()
+        # Get the path of the 'rubot_projects' package
+        rubot_projects_path = rospack.get_path('rubot_projects')
+        # Construct the full path to the photos directory
+        photos_path = rubot_projects_path + '/photos/'
         nav2goals()
 
     except rospy.ROSInterruptException:
