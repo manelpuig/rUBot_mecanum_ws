@@ -296,7 +296,7 @@ You have to create the trajectory.py file to:
 You will have then to execute the Navigation on the project Map: "project3_map.yaml"
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
-roslaunch rubot_project rubot_project3_signals.launch
+roslaunch rubot_projects rubot_project3_signals.launch
 ```
 
 ![](./Images/05_Projects/project3_navigation.png)

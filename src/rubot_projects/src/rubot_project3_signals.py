@@ -9,6 +9,7 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import cv2 as cv
 from rubot_project1_picture import TakePhoto
+from TrafficSignalsDetection import signal_detected
 
 def create_pose_stamped(position_x, position_y, rotation_z):
     goal = MoveBaseGoal()# Has to be created here
@@ -55,7 +56,7 @@ def nav2goals():
         else:
             rospy.loginfo("No images received")  
     # Process photo signal
-    traffic_signal = "right"
+    traffic_signal = signal_detected(name_photo_s)
     if traffic_signal == "right":
         rospy.loginfo("Signal detected: RIGHT!")
         waypoints = [goal_pose_r, goal_pose_t]
