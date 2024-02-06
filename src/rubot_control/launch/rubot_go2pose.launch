@@ -1,8 +1,8 @@
 <launch>
   <!-- run navigation program  -->
-    <arg name="x" default="0.8"/>
-    <arg name="y" default="-0.6"/>
-    <arg name="f" default="90"/>
+    <arg name="x" default="0.6"/>
+    <arg name="y" default="0.3"/>
+    <arg name="f" default="-90"/>
     <node pkg="rubot_control" type="rubot_go2pose.py" name="rubot_control" output="screen" >
       <param name="x" value="$(arg x)"/>
       <param name="y" value="$(arg y)"/>
