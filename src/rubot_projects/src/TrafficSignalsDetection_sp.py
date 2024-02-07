@@ -90,7 +90,7 @@ def signal_detected(photo):
         signal = "right"
     else:
         signal = "left"
-    #rospy.loginfo("Centroids " + dif)
+    rospy.loginfo("Centroids " + dif)
     return signal
 
 if __name__ == '__main__':
