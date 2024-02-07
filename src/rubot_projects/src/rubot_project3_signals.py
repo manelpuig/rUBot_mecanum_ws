@@ -9,7 +9,7 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import cv2 as cv
 from rubot_project1_picture import TakePhoto
-from TrafficSignalsDetection import signal_detected
+from TrafficSignalsDetection_sp import signal_detected
 
 def create_pose_stamped(position_x, position_y, rotation_z):
     goal = MoveBaseGoal()# Has to be created here
