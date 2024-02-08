@@ -18,34 +18,29 @@ First of all, we have created the "rubot_mecanum_description" package where we h
 
 In case you want to create it from scratch, type:
 ```shell
-cd ~/home/user/rubot_mecanum_ws/src
+cd /home/user/rubot_mecanum_ws/src
 catkin_create_pkg rubot_mecanum_description rospy
 cd ..
 catkin_make
 ```
-Then open the .bashrc file and verify the environment variables and source to the proper workspace:
-```shell
-source ~/home/user/rubot_mecanum_ws/devel/setup.bash
-```
+
 ### **1.1. Model design**
 
 The geometrical definition of our rUBot is graphically described by:
 ![](./Images/02_Bringup/01_rubot_cad.png)
 
 The different elements (named **links**) are:
-- base_footprint
 - base_link
 - wheels
 - camera
 - base_scan
-- part
 
 These elements are connected each-other by **joints**:
 - base_link_joint
 - wheel_joint
 - joint_camera
 - scan_joint
-- joint_part
+
 
 Some of these links have a speciffic **functionalities**:
 - wheels: perform a robot movement according to a Mecanum-drive kinematics
@@ -219,7 +214,7 @@ This lidar is simulated in URDF model as:
 
 The gazebo plugin we have used is:
 ```xml
-  <!-- Laser Distance Sensor YDLIDAR X4 controller-->
+  <!-- Laser Distance Sensor RPLIDAR controller-->
   <gazebo reference="base_scan">
     <sensor name="lds_lfcd_sensor" type="ray">
       <pose>0 0 0 0 0 0</pose>
@@ -368,7 +363,7 @@ roslaunch rubot_mecanum_description display.launch
 
 In robotics research, always before working with a real robot, we simulate the robot behaviour in a virtual environment close to the real one. **Gazebo** is an open source 3D robotics simulator and includes an ODE physics engine and OpenGL rendering, and supports code integration for closed-loop control in robot drives. This is sensor simulation and actuator control.
 
-We will create a new spawn.launch file to spawn the robot in an empty world:
+We will create a new rubot_gazebo.launch file to spawn the robot in an empty world:
 ```xml
 <launch>
   <!-- Define the needed parameters -->
@@ -424,11 +419,12 @@ You can see the nodes and topics generated using rqt_graph
   pkill gzserver && pkill gzclient
   ```
 
-**Activity:**
+**Activity 3: rUBot Bringup**
 
-Design a proper model corresponding to the real rUBot_mecanum you will work with:
+Design a custom rUBot model corresponding to the real rUBot_mecanum you will work with:
 - Customized model colors (rviz and gazebo)
 - Add a 3D-part on top with a fixed joint
+- Modify the "base_scan" link to take into account the lidar orientation in our robot
 
 To verify the final frame orientations (modify the launch files accordingly):
 ```shell
@@ -437,6 +433,9 @@ roslaunch rubot_mecanum_description display.launch
 ```
 ![](./Images/02_Bringup/10_rubot_number.png)
 
+Upload a zip file with:
+- Picture with gazebo and rviz
+- file: "rubot_custom.urdf"
 
 ## **2. Design the project world**
 
@@ -650,24 +649,24 @@ Graphically we have this structure:
 
 ![](./Images/02_Bringup/17_nodes_topics.png)
 
-### **Activity**
+### **Lab Activity 1: Bringup and Lidar test**
 
 The objectives of this activity are:
 - Lidar test:
   - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_2.launch**, including a laser_factor variable as beams/deg.
-  - Where is located the zero-index of rpLIDAR? Modify the rubot.urdf base_scan frame to take into account the rpLIDAR orientation. Create a final **rubot_2.urdf** file you will use in the future projects.
+  - Where is located the zero-index of rpLIDAR? Modify the rubot.urdf base_scan frame to take into account the rpLIDAR orientation. Create a final **rubot_custom.urdf** file you will use in the future projects.
   - Open RVIZ and verify the position of the obstacles around the robot. Are them in the correct orientation? 
-  - create another **rplidar_rock_2.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
+  - create another **rplidar_rock_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
 - Final bringup file:
-  - Create a new **rubot_bringup_hw_rock_2.launch** file containing:
-    - robot_mpuig.urdf final model
-    - rplidar_rock_mpuig.launch final file
-  - Put your robot inside a real world and launch the rubot_bringup_hw_rock_2.launch file
+  - Create a new **rubot_bringup_hw_rock_custom.launch** file containing:
+    - robot_custom.urdf final model
+    - rplidar_rock_custom.launch final file
+  - Put your robot inside a real world and launch the rubot_bringup_hw_rock_custom.launch file
 
 Upload a zip file including:
-- the final picture and 
-- the rubot_lidar_test_2.launch, 
-- rubot_2.urdf, 
-- rplidar_rock_2.launch, 
-- rubot_bringup_hw_rock_2.launch 
+- picture of rviz screen 
+- the rubot_lidar_test_custom.launch, 
+- rubot_custom.urdf, 
+- rplidar_rock_custom.launch, 
+- rubot_bringup_hw_rock_custom.launch 
 

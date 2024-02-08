@@ -21,7 +21,6 @@ The main objectives of this chapter are:
 
 - Getting started with rUBot_mecanum in simulation environment
 - Getting started with rUBot_mecanum in real robot
-  - Review the installation proces using Rock5b or raspberryPi4
 
 ## **1. Getting started with rUBot_mecanum in simulation environment**
 
@@ -51,7 +50,7 @@ The main objectives are:
 - Clone the rUBot workspace to be ready
 
 
-### **Setup the rubot with rock5b**
+### **2.1. Setup the rubot with rock5b**
 
 The rock5b onboard is preinstalled with:
 - Ubuntu20.04 server 64bits
@@ -91,18 +90,19 @@ For a proper Display resolution in Nomachine, select: Display --> Change the siz
 
 You will have the rUBot desktop on your windows nomachine screen
 
-### **Clone a repository**
+### **2.2. Clone a repository**
 
 The first time you have to clone the "rUBot_mecanum_ws" repository to the home folder.
 ```shell
 cd /home/rock
-git clone https://github.com/your_username/rUBot_gopigo_ws
+git clone https://github.com/your_username/rUBot_mecanum_ws
 cd rUBot_mecanum_ws
 catkin_make
 ```
 > If you have not internet connection you can:
-- obtain the zip file of repository from github
-- drag the zip file from coputer directory to the rock5b Desktop directory
+- obtain the zip file of repository from github or the ROS Noetic simulation environment
+- drag the zip file from coputer directory to the rock5b home directory
+- Unzip the file and compile
 
 Review the ~/.bashrc: Verify the last lines:
 ```shell
