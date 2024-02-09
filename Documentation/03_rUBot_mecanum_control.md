@@ -86,7 +86,7 @@ We are now ready to launch control actions.
 
 We first bringup our robot:
 ``` shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
 ```
 ![](./Images/03_Control/06_bringup_sw.png)
 
@@ -118,7 +118,7 @@ roslaunch rubot_control rubot_nav.launch
 ```
 Verify first that the code is working in the simulated environment.
 
-**Trajectory**
+**Activity 4: rUBot navigation in a predefined Trajectory**
 
 If the robot moves in the correct direction, you can follow with the next objective: Create a new node for **path trajectory** definition:
 
@@ -139,7 +139,7 @@ In real environment, the bringup process depends on the real robot.
 
 To bringup the rUBot_mecanum, execute in a first terminal:
 ``` shell
-roslaunch rubot_mecanum_description rubot_bringup_hw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
 ```
 ![](./Images/03_Control/08_bringup.png)
 
@@ -147,7 +147,7 @@ Verify the previous node created to publish a Twist message to the /cmd_vel topi
 ``` shell
 roslaunch rubot_control rubot_nav.launch
 ```
-**Trajectory**
+**Lab Activity 3: rUBot navigation in a predefined Trajectory**
 
 If the robot moves in the correct direction, you can follow with the next objective: Create a new node for **path trajectory** definition:
 
@@ -161,8 +161,7 @@ If the robot moves in the correct direction, you can follow with the next object
 ``` shell
 roslaunch rubot_control rubot_path_nav.launch
 ```
-**Lab session Delivery:**
-
+Verify different trajectories inside your world
 Upload the:
 
 - rubot_path_nav.launch and rubot_path_nav.py files
@@ -182,7 +181,7 @@ Let's verify first this behaviour in virtual environment
 
 We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
 roslaunch rubot_control rubot_self_nav.launch
 ```
 
@@ -191,21 +190,35 @@ roslaunch rubot_control rubot_self_nav.launch
 >- Verify in rviz if you have to change the fixed frame to "odom" frame
 >- You can test the behaviour when tunning the parameters defined
 
+**Activity 5: rUBot self-navigation**
+
+The objective of this activity is to modify the code to move the robot in Holonomic way, for exemple:
+-  When the minimum distance is in the right side move the robot over the left side
+
+Design the code using the Holonomic robot performances, and upload:
+- the file "rubot_self_nav_holonomic.py"
+- a video of the current behaviour in your desoigned world
+
 ### **2.2. Self-navigation control in REAL environment**
 
-To bringup the gopigo3 robot, execute in a first terminal:
+To bringup the rUBot mecanum robot, execute:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
 ```
 Then verify the obstacle avoidance behaviour for different parameter values.
 ```shell
 roslaunch rubot_control rubot_self_nav.launch
 ```
-**Lab session Delivery:**
+The robot is not working as expected because the number of laser beams is nor 720 as in simulation!
+
+**Lab Activity 4: rUBot self-navigation**
+
+The objective of this lab session is:
+- take into account the number of laser beams of your Lidar in the python code
+- verify the designed holonomic self-navigation node you have created for virtual environment in the previous activity.
 
 Upload the:
-
-- rubot_self_nav.launch and rubot_self_nav.py files
+- rubot_self_nav_holonomic.launch and rubot_self_nav_holonomic.py files
 - Video of the execution in REAL environment
 
 ## **3. Wall Follower**
@@ -258,6 +271,21 @@ Open a terminal and type:
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
+The wall-follower algorithm is not finished and surelly your robot is not able to follow the wall!
+
+**Activity 6: rUBot wall-follower**
+
+The objective of this activity is:
+- Understand the wall-follower algorithm
+- complete the code to follow the walls of your designed world
+- verify the performances with a concave corners
+- create a new algorithm using the holonomic performances of rUBot mecanum
+
+Upload:
+- the rubot_wall_follower.py code completed
+- video of simulated behaviour in concave corners
+- the proposed code "rubot_wall_follower_holonomic.py"
+
 ### **3.2. Wall follower in REAL environment**
 
 To bringup the Mecanum robot, execute in a first terminal:
@@ -274,13 +302,15 @@ roslaunch rubot_control rubot_wall_follower_gm.launch
 ```shell
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
-**Lab session Delivery:**
+**Lab Activity 5: rUBot wall-follower HW**
 
-Upload the:
+The objective of this activity is:
+- verify the performances of the designed code in the previous activity with your real rUBot
+- Improve your new algorithm using the holonomic performances of rUBot mecanum
 
-- rubot_wall_follower_rg.launch and rubot_wall_follower_rg.py files
-- rubot_wall_follower_gm.launch and rubot_wall_follower_gm.py files
-- Video of the execution in REAL environment
+Upload:
+- video of simulated behaviour in concave corners
+- the proposed code "rubot_wall_follower_holonomic.py"
 
 ## **4. Go to POSE**
 Define a specific Position and Orientation as a target point to go:
@@ -294,7 +324,7 @@ A node is created in "rubot_go2pose.py" file to reach the POSE destination with 
 
 For validation type:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
 roslaunch rubot_control rubot_go2pose.launch
 ```
 ![](./Images/03_Control/13_rubot_go2pose.png)
@@ -305,16 +335,11 @@ Test different POSE targets before to test it with REAL robot.
 
 To bringup the Mecanum robot, execute in a first terminal:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
 ```
 Then verify the same node with the real Mecanum robot:
 ```shell
 roslaunch rubot_mecanum_description rubot_go2pose.launch
 ```
-**Lab session Delivery:**
 
-Upload the:
-
-- rubot_go2pose.launch and rubot_go2pose.py files
-- Video of the execution in REAL environment
 
