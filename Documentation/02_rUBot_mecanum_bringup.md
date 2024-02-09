@@ -419,24 +419,6 @@ You can see the nodes and topics generated using rqt_graph
   pkill gzserver && pkill gzclient
   ```
 
-**Activity 3: rUBot Bringup**
-
-Design a custom rUBot model corresponding to the real rUBot_mecanum you will work with:
-- Customized model colors (rviz and gazebo)
-- Add a 3D-part on top with a fixed joint
-- Modify the "base_scan" link to take into account the lidar orientation in our robot
-
-To verify the final frame orientations (modify the launch files accordingly):
-```shell
-roslaunch rubot_mecanum_description rubot_gazebo.launch
-roslaunch rubot_mecanum_description display.launch
-```
-![](./Images/02_Bringup/10_rubot_number.png)
-
-Upload a zip file with:
-- Picture with gazebo and rviz
-- file: "rubot_custom.urdf"
-
 ## **2. Design the project world**
 
 Here we have first to design the project world, for exemple a maze from where our rUBot mecanum has to navigate autonomously.
@@ -496,13 +478,26 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 
 Now we are ready to control our robot in this virtual environment!
 
-**Activity:**
+**Activity 3: rUBot Bringup SW**
 
-Design a proper **world** corresponding to the real world you will work with:
-- wooden parts with speciffic dimensions we have in the lab
-- Propose a maze for all the next laboratory sessions
+The objective of this activity is to spawn our custom rUBot in a virtual world.
 
-Generate the **bringup file** to spawn your previous designed robot model in the proposed maze.
+You will have to:
+- Design a custom rUBot model corresponding to the real rUBot_mecanum (rubot_custom.urdf), with:
+  - Customized model colors (rviz and gazebo)
+  - Add a 3D-part on top with a fixed joint
+  - Modify the "base_scan" link to take into account the lidar orientation in our robot
+
+To verify the final bringup, create a new "rubot_bringup_sw_custom.launch" file and type:
+```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+```
+![](./Images/02_Bringup/10_rubot_number.png)
+
+Upload a zip file with:
+- Picture with gazebo and rviz
+- file: "rubot_custom.urdf"
+- file: "rubot_bringup_sw_custom.launch"
 
 
 ## **4. Bringup the real robot**
@@ -649,11 +644,22 @@ Graphically we have this structure:
 
 ![](./Images/02_Bringup/17_nodes_topics.png)
 
-### **Lab Activity 1: Bringup and Lidar test**
+
+### **Lab Activity 1: rUBot bringup HW**
+
+The objective of this session is to understand the diferent nodes we have to launch to bringup our robot and verify the working performances.
+- Verify the nodes and topics 
+- verify the Camera images
+- Verify the Lidar performances
+- Verify the arduino node
+
+Have you something that is not working as you expected?
+
+### **Lab Activity 2: Lidar test and final bringup HW**
 
 The objectives of this activity are:
 - Lidar test:
-  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_2.launch**, including a laser_factor variable as beams/deg.
+  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch**, including a laser_factor variable as beams/deg.
   - Where is located the zero-index of rpLIDAR? Modify the rubot.urdf base_scan frame to take into account the rpLIDAR orientation. Create a final **rubot_custom.urdf** file you will use in the future projects.
   - Open RVIZ and verify the position of the obstacles around the robot. Are them in the correct orientation? 
   - create another **rplidar_rock_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
