@@ -338,6 +338,12 @@ roslaunch rubot_projects rubot_project3_signals.launch
 
 ![](./Images/05_Projects/project3_target.png)
 
+You can see a video of the final process:
+[Drive with Right Traffic Signal](https://www.youtube.com/watch?v=lLoMEeCuRck "Título alternativo")
+
+Video link: https://youtu.be/lLoMEeCuRck
+
+
 **Lab Activity 9: rUBot drive with traffic signals**
 
 The objective of this activity is:
