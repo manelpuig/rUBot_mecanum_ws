@@ -338,3 +338,23 @@ roslaunch rubot_projects rubot_project3_signals.launch
 
 ![](./Images/05_Projects/project3_target.png)
 
+**Lab Activity 9: rUBot drive with traffic signals**
+
+The objective of this activity is:
+- To drive the rUBot in a predesigned world considering:
+  - a list of target points defined in "goals_project3.yaml" file
+  - a traffic signal located in the first target point which defines the following target point
+
+To accomplish the objective you will have to:
+- Modify the "rubot_project2_navigation_picture.py" file to accomplish the project objectives
+- import the "TrafficSignalsDetection.py" in previous python file for the identification process
+
+
+To bringup the real robot for the Project process use the speciffic launch file:
+```shell
+roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+```
+
+Upload:
+- video of real process project
+- the final "rubot_project3_signals.py" code
