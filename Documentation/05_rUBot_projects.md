@@ -288,7 +288,14 @@ To identify the signal placed in each waypont, you can use:
 - Image processing techniques
 - Image identification techniques
 
-The code created will have to be able to identify the signal you have found because the next waypoint will depend on the signal identified
+With the code created, you will be able to identify the signal you have found. The next waypoint will depend on the signal identified.
+
+If you use Image processing techniques to identify the contours:
+- you can select the external circle contorur (parent) and the internal arrow contour (child) of signal
+- obtain the gravity center (momentum)
+- obtain the difference of gravity centers to identify right (positive) or left (negative) Traffic Signal
+
+![](./Images/05_Projects/project3_signal_id1.png)
 
 **Lab Activity 8: rUBot signal identification**
 
