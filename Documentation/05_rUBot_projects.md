@@ -10,7 +10,6 @@ The different projects will be:
 - 1. rUBot takes photo
 - 2. Go to specific point in the map and take a photo
 - 3. Follow a point based trajectory with traffic signs
-- 4. Line follower
 
 References OpenCV:
 
@@ -55,15 +54,24 @@ Important information is taken from: https://learn.turtlebot.com/2015/02/04/3/
 
 Follow the procedure:
 
-- Identify the topic name where raspicam publishes the photo as a mesage of type sensor_msgs:
+- Bringup the rUBot and identify the topic name where raspicam publishes the photo as a mesage of type sensor_msgs:
+
+**For virtual environment use:**
 
 ```shell
 roslaunch rubot_projects rubot_projects_bringup_sw.launch 
 rostopic list
 ```
+**For real rUBot use:**
 
+```shell
+roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch 
+rostopic list
+```
 - Then modify the "take_photo.py" python file with:
-  - the proper topic name /rubot/camera1/image_raw
+  - the proper topic name:
+    - for simulation: /rubot/camera1/image_raw
+    - for real rUBot: /usb_cam/image_raw
   - the proper photo filename in folder path: ./src/rubot_projects/photos/photo_sim.jpg
 - run the "take_photo.py" python file to take a photo
 
@@ -282,17 +290,43 @@ To identify the signal placed in each waypont, you can use:
 
 The code created will have to be able to identify the signal you have found because the next waypoint will depend on the signal identified
 
+**Lab Activity 8: rUBot signal identification**
+
+The objective of this activity is:
+- Identify the "right" and "left" traffic signals using:
+  - Image processing techniques
+  - Image Identification techniques
+
+To bringup the real robot for the Project process use the speciffic launch file:
+```shell
+roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+```
+
+Upload:
+- video of real process for signal identiffication
+- the description of the techniques you have used
+- the final "TrafficSignalsDetection.py" code
+
 ### **6. SLAM and Navigation within the tajectory**
 
 You have to create the trajectory.py file to:
 - go to the first waypoint
 - take picture of the signal
 - identify the signal
-- choose the next waypoint
-- take picture of the signal
-- identify the signal
-- execute the action
+- choose and go to the next waypoint
+- go to the final target point
 
+First of all you have to bringup your rUBot:
+
+when simulating in virtual environment:
+```shell
+roslaunch rubot_projects rubot_projects_bringup_sw.launch
+```
+
+when using the real robot:
+```shell
+roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+```
 You will have then to execute the Navigation on the project Map: "project3_map.yaml"
 ```shell
 roslaunch rubot_slam rubot_navigation.launch

@@ -91,6 +91,22 @@ Provided with the map, we are ready to perform robot navigation with the rUBot_m
 
 You can close now the "rubot_slam.launch" file.
 
+**Lab Activity 6: rUBot SLAM HW**
+
+The objective of this activity is:
+- Construct the project world in the laboratory and generate the MAP with your real rUBot
+- Consider to create a big map because of the size of our robot. Change the parameters you consider for the final map
+
+To bringup the real robot for the SLAM process use the speciffic launch file:
+```shell
+roslaunch rubot_slam rubot_slam_bringup_hw_rock.launch
+```
+
+Upload:
+- video of real process for map generation
+- the list of parameters you have changed and a short explanation about the reasons for this change
+
+
 ## **2. Navigate to speciffic target points within the map**
 
 When the robot moves around a map, it needs to know which is its POSE within the map.
@@ -240,3 +256,19 @@ roslaunch rubot_slam rubot_slam_bringup_sw.launch
 roslaunch rubot_slam rubot_navigation.launch
 roslaunch rubot_slam waypoints_goal.launch
 ```
+
+**Lab Activity 7: rUBot SLAM-Navigation HW**
+
+The objective of this activity is:
+- Considering the generated MAP, create a new waypoints.yaml file with the desired navigation target points
+- Use the previous generated yaml file and Navigate to different points with your real rUBot
+- Consider to change some parameters to take into account the driving performances of your rUBot mecanum.
+
+To bringup the real robot for the SLAM process use the speciffic launch file:
+```shell
+roslaunch rubot_slam rubot_slam_bringup_hw_rock.launch
+```
+
+Upload:
+- video of real process for Navigation
+- the list of parameters you have changed and a short explanation about the reasons for this change
