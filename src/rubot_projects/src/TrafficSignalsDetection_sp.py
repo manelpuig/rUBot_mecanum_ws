@@ -76,7 +76,7 @@ def signal_detected(photo):
         cv2.circle(img_parent, (px, py), 2, (0, 0, 255), -1)
         #print(f"Parent Contour: ({px} , {py})")
         cv2.imshow('Parent', img_parent)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
 
     # Print the detection
     dif=cx-px
@@ -90,7 +90,7 @@ def signal_detected(photo):
         signal = "right"
     else:
         signal = "left"
-    rospy.loginfo("Centroids " + dif)
+    rospy.loginfo("Centroids " + str(dif))
     return signal
 
 if __name__ == '__main__':
