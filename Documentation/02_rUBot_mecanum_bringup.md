@@ -132,13 +132,13 @@ The rUBot model includes different **sensors and actuators**:
 
 The full model contains also information about the sensor and actuator controllers using specific **Gazebo plugins** (http://gazebosim.org/tutorials?tut=ros_gzplugins#Tutorial:UsingGazebopluginswithROS). 
 
-Gazebo plugins give your URDF models greater functionality and compatible with ROS messages and service calls for sensor output and motor input. 
+Gazebo plugins give your URDF models greater functionality and compatiblility with ROS messages and service calls for sensor output and motor input. 
 
 These plugins can be referenced through a URDF file, and to insert them in the URDF file, you have to follow the sintax:
 
 **2D-camera Sensor**:
 
-The two-dimensional camera sensor correspondas to the USB real camera. 
+The two-dimensional camera sensor corresponds to the USB real camera. 
 
 This camera obtains 2D images in the front and is simulated in URDF model as:
 - link with the visual, collision and inertial properties
@@ -200,7 +200,7 @@ The used Gazebo plugin is:
 
 A Lidar sensors is  device that is able to measure the obstacle distances at 360º around the robot. 
 
-He is sending 720 laser beams (2 beams/degree) and measures the distance each laser beam finds an obstacle. He is able to measure from 12cm to 3m. The used Lidar sensor is a 360º RPLidar A1M8 (https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html)
+He is sending 720 laser beams (2 beams/degree) and measures the distance each laser beam finds an obstacle. He is able to measure from 12cm to 10m. The used Lidar sensor is a 360º RPLidar A1M8 (https://www.robotshop.com/es/es/rplidar-a1m8-kit-desarrollo-escaner-laser-360-grados.html)
 
 This lidar is simulated in URDF model as:
 - link with the visual, collision and inertial properties
@@ -435,7 +435,7 @@ You can build your world using "Building Editor" in Edit menu
 ![](./Images/02_Bringup/11_BuildingWorld.png)
 
 - Save the generated model in a model folder (without extension)
-- Close the Builder Editor, modify the model position and add other elements if needed.
+- Close the Builder Editor, modify the model position and add other models to configure your virtual desired world.
 - Save the generated world (with extension .world) in the world folder.
 
 Once you finish is better to close the terminal you have work as superuser
@@ -443,15 +443,15 @@ Once you finish is better to close the terminal you have work as superuser
 #### ***Modify a created world***
 - Open a terminal where you have the world you want to modify
 - type: sudo gazebo ./test.world (or simply "gazebo test.world")
-- make modifications
+- make modifications: add some other models, delete previously added models, etc.
 - save your world in a world directory
 - close gazebo and the terminal
 #### **Create world with model parts**
-You can create model parts like walls of 90cm or 60cm or 20cm with a geometry and color, using building editor. These parts can be saved:
-- in ~/.gazebo/models/
-- in speciffic folder in your package (i.e. rubot_mecanum_ws/src/rubot_mecanum_description/models). To add the path in Gazebo, add this line in .bashrc file:
+You can create model parts like walls of 60cm or 90cm or 120cm with a geometry and color, using building editor. These parts can be saved:
+- in ~/.gazebo/models/ (this is the default folder)
+- in speciffic folder in your package (i.e. rUBot_mecanum_ws/src/rubot_mecanum_description/models). In this case, to add the path in Gazebo, add this line in .bashrc file:
   ```xml
-  export GAZEBO_MODEL_PATH=/home/user/rubot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
+  export GAZEBO_MODEL_PATH=/home/user/rUBot_mecanum_ws/src/rubot_mecanum_description/models:$GAZEBO_MODEL_PATH
   ```
 - When a model is created with "Building Editor", this path is saved in gazebo environment and you can use it in the future.
 - You can allways select "Add folder path" in "insert" gazebo menu tab, and select the models folder you have created in your project ws 
@@ -464,16 +464,19 @@ This is an exemple:
 
 ## **3. Bringup the rUBot in Virtual environment**
 
-The first step in robotics is to bringup the rUBot mecanum robot in our generated world. This means:
-- spawn our robot in the designed environment 
+The first step in robotics is to bringup the rUBot mecanum robot in our generated virtual world. This means:
+- Open Gazebo with the designed virtual world
+- spawn our robot in the designed virtual world 
 - and opened Rviz to see the topic messages.
+
+This is defined in "rubot_bringup_sw.launch" file. 
 ``` shell
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 ![](./Images/02_Bringup/13_mecanum_bringup.png)
 
 >Careful:
-- we have included in launch file: gazebo spawn, rviz visualization and rubot_nav node execution 
+- we have included in launch file: gazebo rubot spawn and rviz visualization 
 - Verify in rviz you have to change the fixed frame to "odom" frame
 
 Now we are ready to control our robot in this virtual environment!
@@ -486,7 +489,8 @@ You will have to:
 - Design a custom rUBot model corresponding to the real rUBot_mecanum (rubot_custom.urdf), with:
   - Customized model colors (rviz and gazebo)
   - Add a 3D-part on top with a fixed joint
-  - Modify the "base_scan" link to take into account the lidar orientation in our robot
+  - Modify the "base_scan" link and joint to take into account the lidar orientation in our robot
+- Design a custom virtual world using the wooden model parts
 
 To verify the final bringup, create a new "rubot_bringup_sw_custom.launch" file and type:
 ```shell
@@ -569,14 +573,14 @@ Let's see some important characteristics:
   #endif  
   ```
 
-- The default baudrate to communicate with Arduino board is 57600. I suggest to maintain the Baudrate to 57600!
+- The default baudrate to communicate with Arduino board is 47600. I suggest to maintain the Baudrate to 47600!
   >
   >In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
   ```python
   class ArduinoHardware {
     public:
-      //ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
-      ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
+      ArduinoHardware(SERIAL_CLASS* io , long baud= 47600){
+      //ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
         iostream = io;
         baud_ = baud;
       }
@@ -590,8 +594,8 @@ Let's see some important characteristics:
   #else
         iostream = &Serial;
   #endif
-        //baud_ = 57600;
-        baud_ = 115200;
+        baud_ = 47600;
+        //baud_ = 115200;
       }
   ```
   > Important!: This changes have to be made in the library files where Arduino is installed (usually in /home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
@@ -599,7 +603,7 @@ Let's see some important characteristics:
 When we power the arduino board, this program starts and a new node appears in the ROS environment. To test its behaviour we have to run:
 ```xml
 roscore
-rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=47600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
 > the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
@@ -635,6 +639,8 @@ Verify:
 ### **Final bringup launch file**
 
 We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
+
+>Important!: Change the **"rubot_custom.urdf"** as the model name according to the robot model you have designed in the previous activity.
 
 To launch the bringup file type:
 ```shell
