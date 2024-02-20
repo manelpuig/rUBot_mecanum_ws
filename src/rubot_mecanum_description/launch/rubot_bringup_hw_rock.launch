@@ -13,7 +13,7 @@
   <!-- launch rUBot mecanum  -->
     <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
       <param name="port" type="string" value="/dev/ttyACM0"/>
-      <param name="baud" type="int" value="47600"/>
+      <param name="baud" type="int" value="57600"/>
     </node>
   <!-- launch rplidar  -->
     <include file="$(find rubot_mecanum_description)/launch/rplidar_rock.launch"/> 

@@ -573,13 +573,13 @@ Let's see some important characteristics:
   #endif  
   ```
 
-- The default baudrate to communicate with Arduino board is 47600. I suggest to maintain the Baudrate to 47600!
+- The default baudrate to communicate with Arduino board is 47600. I suggest to maintain the Baudrate to 57600!
   >
   >In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
   ```python
   class ArduinoHardware {
     public:
-      ArduinoHardware(SERIAL_CLASS* io , long baud= 47600){
+      ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
       //ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
         iostream = io;
         baud_ = baud;
@@ -594,7 +594,7 @@ Let's see some important characteristics:
   #else
         iostream = &Serial;
   #endif
-        baud_ = 47600;
+        baud_ = 57600;
         //baud_ = 115200;
       }
   ```
@@ -603,7 +603,7 @@ Let's see some important characteristics:
 When we power the arduino board, this program starts and a new node appears in the ROS environment. To test its behaviour we have to run:
 ```xml
 roscore
-rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=47600
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
 rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 ```
 > the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
