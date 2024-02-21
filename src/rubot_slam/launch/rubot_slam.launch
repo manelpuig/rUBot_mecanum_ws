@@ -4,7 +4,7 @@
   <arg name="multi_robot_name" default=""/>
   <arg name="open_rviz" default="true"/>
 
-  <!-- GoPiGo3 URDF model & robot_state_publisher -->
+  <!-- rUBot URDF model & robot_state_publisher -->
   <param name="robot_description" textfile="$(find rubot_mecanum_description)/urdf/$(arg model)" />
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
