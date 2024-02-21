@@ -58,6 +58,8 @@ The rock5b onboard is preinstalled with:
 - ROS Noetic
 - Arduino
 
+You can find the image in OneDrive: Documents/Software/ROS/Rock/rock5b_32_original.img
+
 When connected to power, it is configured to:
 - generate a hotspot "rubot_XX"
 - virtual monitor installed
@@ -97,6 +99,8 @@ The raspberrypi4 onboard is preinstalled with:
 - NoMachine remote desktop
 - ROS Noetic
 - Arduino
+
+You can find the image in OneDrive: Documents/Software/ROS/RBPi/Noetic_rbpi4.img.gz (ready for Pi Imager)
 
 When connected to power, it is configured to:
 - generate a hotspot "rubot_XX"
