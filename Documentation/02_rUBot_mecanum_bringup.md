@@ -467,7 +467,7 @@ This is an exemple:
 The first step in robotics is to bringup the rUBot mecanum robot in our generated virtual world. This means:
 - Open Gazebo with the designed virtual world
 - spawn our robot in the designed virtual world 
-- and opened Rviz to see the topic messages.
+- and open Rviz to see the topic messages.
 
 This is defined in "rubot_bringup_sw.launch" file. 
 ``` shell
@@ -477,7 +477,7 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 
 >Careful:
 - we have included in launch file: gazebo rubot spawn and rviz visualization 
-- Verify in rviz you have to change the fixed frame to "odom" frame
+- Verify in rviz you have in fixed frame the "odom" frame
 
 Now we are ready to control our robot in this virtual environment!
 
