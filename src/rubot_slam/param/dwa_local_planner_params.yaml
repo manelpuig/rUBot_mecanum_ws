@@ -10,8 +10,8 @@ DWAPlannerROS:
   max_vel_trans:  0.15 # very important to be maintained
   min_vel_trans:  -0.15 # very important to be maintained
 
-  max_vel_theta: 0.6
-  min_vel_theta: 0.5
+  max_vel_theta: 0.5
+  min_vel_theta: 0.3
 
   acc_lim_x: 0.4
   acc_lim_y: 0.4 #0.0 non holonomic
