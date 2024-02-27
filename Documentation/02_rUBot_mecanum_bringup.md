@@ -600,6 +600,13 @@ Let's see some important characteristics:
   ```
   > Important!: This changes have to be made in the library files where Arduino is installed (usually in /home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
 
+Let's **upload the Arduino program: rUBot_drive_mpuig.ino** (there is a number version):
+- with filesystem manager go to Documentation/files/Arduino folder
+- Select the last program version and uncompress the file in the same folder
+- Open the main program rUBot_drive_mpuig.ino
+- verify the board is Arduino Mega and port tty/ACM0
+- upload the program to arduino board (any ROS bringup previous execution has to be closed!)
+
 When we power the arduino board, this program starts and a new node appears in the ROS environment. To test its behaviour we have to run:
 ```xml
 roscore
@@ -609,6 +616,12 @@ rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
 > the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
 
 > The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]'
+
+Graphically we have designed a **Closed loop PID CD-motor speed control**:
+
+![](./Images/02_Bringup/19_pid.png)
+
+Each wheel is turning at a precise speed defined by the inverse kinematics. The speed dynamics and steady state value is ensured by the designed PID closed loop.
 
 ### **4.2. Launch LIDAR node**
 
