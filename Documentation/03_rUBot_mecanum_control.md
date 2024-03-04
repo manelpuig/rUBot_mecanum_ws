@@ -70,6 +70,7 @@ In the **Inverse Kinematics** we want to apply a robot movement defined by:
 
 This is defined by the following expressions:
 ![](./Images/03_Control/04_mecanum_ikine.png)
+
 To obtain the **Odometry** we use the information of (uf,ul,w) and Gazebo plugin calculates the POSE of our robot.
 
 The analytical expressions are explained graphically in the picture:
@@ -169,11 +170,11 @@ sudo apt-get install ros-noetic-joy-teleop ros-noetic-teleop-twist-joy ros-noeti
 ```shell
 rosrun joy joy_node dev:=/dev/input/js0
 ```
-- to translate the messages from the /joy topic to TWIST messages. Another ROS package already performs this translation, we just need to start the teleop_twist_joynode.
+- to translate the messages from the /joy topic to TWIST messages, another ROS package already performs this translation. We just need to start the teleop_twist_joynode:
 ```shell
 rosrun teleop_twist_joy teleop_node 
 ```
-- Subscribe to the topic /cmd_vel. Then, on your gamepad, identify the deadman switch button, a safe guard to prevent sending commands that you did not intent (usually is X on my PlayStation 3 controller). Hold down the X button, move the joystick, and you should see these messages.
+- Subscribe to the topic /cmd_vel. Then, on your gamepad, identify the deadman switch button, a safe guard to prevent sending commands that you did not intent (usually is X on my PlayStation 3 controller). Hold down the X button, move the joystick, and you should see messages published on /cmd_vel topic.
 - Cool! Now you just need feed these messages to your robot, and you can start moving around, controlled with a gamepad.
 
 We have already created a new **rubot_joy.launch** file to execute the 2 nodes after the bringup:
