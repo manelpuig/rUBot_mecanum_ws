@@ -129,6 +129,18 @@ You will have the rUBot desktop on your windows nomachine screen
 ```shell
 sudo apt install openssh-server
 ```
+### **Using windows Xrdp remote desktop**
+To connect your computer to the robot using Xrdp, follow the instructions in: https://somebooks.es/escritorio-remoto-en-ubuntu-20-04-con-xrdp/
+
+- Install xrdp en raspberrypi4 with ssh connexion:
+```shell
+sudo apt install xrdp -y
+``` 
+- In windows PC open "Remote Desktop Connexion"
+- Use the Account data:
+  - IP: 10.42.0.1
+  - user: ubuntu
+  - password: ubuntu1234
 
 ### **Extra Wifi connection**
 
