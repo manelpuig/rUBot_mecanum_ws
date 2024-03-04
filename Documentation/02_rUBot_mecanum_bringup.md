@@ -688,7 +688,7 @@ The objectives of this activity are:
  - Create a new **rubot_bringup_hw_rock_custom.launch** file containing:
     - rubot_custom.urdf final model
     - rplidar_rock_custom.launch final file
-- Final bringup file:
+- Lidar test:
   - Put your robot inside a real world and launch the **rubot_bringup_hw_rock_custom.launch** file
   - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
 

@@ -1,0 +1,10 @@
+<launch>
+  <!-- Inicia el nodo joy_node -->
+  <node pkg="joy" type="joy_node" name="joy_node" output="screen">
+    <param name="dev" type="string" value="/dev/input/js0" />
+  </node>
+
+  <!-- Inicia el nodo teleop_twist_joy -->
+  <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
+  </node>
+</launch>
