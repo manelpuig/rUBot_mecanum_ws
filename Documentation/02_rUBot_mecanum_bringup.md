@@ -492,14 +492,14 @@ You will have to:
   - Modify the "base_scan" link and joint to take into account the lidar orientation in our robot
 - Design a custom virtual world using the wooden model parts
 
-To verify the final bringup, create a new "rubot_bringup_sw_custom.launch" file and type:
+To verify the final bringup, create a new "rubot_bringup_sw_custom.launch" file with your rubot_custom.urdf and the world you have created:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
 ```
 ![](./Images/02_Bringup/10_rubot_number.png)
 
 Upload a zip file with:
-- Picture with gazebo and rviz
+- Picture with gazebo and rviz obtained with your custom rubot model and designed world
 - file: "rubot_custom.urdf"
 - file: "rubot_bringup_sw_custom.launch"
 
@@ -674,23 +674,27 @@ The objective of this session is to understand the diferent nodes we have to lau
 
 Have you something that is not working as you expected?
 
+Upload the following:
+- Picture of the RVIZ screen obtained
+- Picture with the nodes and topics obtained with the instruction rqt_graph
+
 ### **Lab Activity 2: Lidar test and final bringup HW**
 
 The objectives of this activity are:
-- Lidar test:
-  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch**, including a laser_factor variable as beams/deg.
-  - Where is located the zero-index of rpLIDAR? Modify the rubot.urdf base_scan frame to take into account the rpLIDAR orientation. Create a final **rubot_custom.urdf** file you will use in the future projects.
-  - Open RVIZ and verify the position of the obstacles around the robot. Are them in the correct orientation? 
-  - create another **rplidar_rock_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
 - Final bringup file:
-  - Create a new **rubot_bringup_hw_rock_custom.launch** file containing:
-    - robot_custom.urdf final model
+  - Launch the **rubot_bringup_hw_rock.launch** with the previously created **rubot_custom.urdf** file.
+  - In RVIZ, verify the position of the obstacles around the robot. Are them in the correct orientation? 
+  - create another **rplidar_rock_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
+ - Create a new **rubot_bringup_hw_rock_custom.launch** file containing:
+    - rubot_custom.urdf final model
     - rplidar_rock_custom.launch final file
-  - Put your robot inside a real world and launch the rubot_bringup_hw_rock_custom.launch file
+- Final bringup file:
+  - Put your robot inside a real world and launch the **rubot_bringup_hw_rock_custom.launch** file
+  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
 
 Upload a zip file including:
-- picture of rviz screen 
-- the rubot_lidar_test_custom.launch, 
+- picture of rviz screen where you can see the lidar distances
+- the rubot_lidar_test_custom.py, 
 - rubot_custom.urdf, 
 - rplidar_rock_custom.launch, 
 - rubot_bringup_hw_rock_custom.launch 

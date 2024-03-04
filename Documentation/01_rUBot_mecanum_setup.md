@@ -125,6 +125,27 @@ For a proper Display resolution in Nomachine, select: Display --> Change the siz
 
 You will have the rUBot desktop on your windows nomachine screen
 
+- Install SSH service
+```shell
+sudo apt install openssh-server
+```
+
+### **Extra Wifi connection**
+
+To have internet access, you can connect and install USB wireless adapter:
+https://www.amazon.es/Archer-T2U-Nano-inal%C3%A1mbrico-Escritorio/dp/B07LGSDBTF
+or 
+https://www.amazon.es/TP-Link-Archer-T2U-Nano-Adaptador/dp/B07PB1X4CN
+
+- Install the device:
+```shell
+sudo apt install dkms
+git clone https://github.com/aircrack-ng/rtl8812au.git
+cd rtl8812a1
+sudo make dkms_install
+```
+You will need to shutdown the raspberrypi4 to finish the installation 
+
 ### **2.3. Clone a repository**
 
 The first time you have to clone the "rUBot_mecanum_ws" repository to the home folder.
