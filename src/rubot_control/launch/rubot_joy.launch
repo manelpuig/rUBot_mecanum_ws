@@ -2,9 +2,23 @@
   <!-- Inicia el nodo joy_node -->
   <node pkg="joy" type="joy_node" name="joy_node" output="screen">
     <param name="dev" type="string" value="/dev/input/js0" />
+    <!-- enable all gamepad axis -->
+    <param name="axes" value="[0,1,2,3,4,5]" />
   </node>
 
   <!-- Inicia el nodo teleop_twist_joy -->
   <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
+    <!-- Asocia el eje 1 a la componente linear.x -->
+    <param name="axis_linear/x" value="1" />
+    <!-- Asocia el eje 0 a la componente linear.y -->
+    <param name="axis_linear/y" value="0" />
+    <!-- Asocia el eje 2 a la componente angular.z -->
+    <param name="axis_angular/yaw" value="2" />
+    <!-- Limita la velocidad lineal x a 0.2 m/s -->
+    <param name="scale_linear/x" value="0.2" />
+    <!-- Limita la velocidad lineal y a 0.2 m/s -->
+    <param name="scale_linear/y" value="0.2" />
+    <!-- Limita la velocidad angular a 0.3 rad/s -->
+    <param name="scale_angular/yaw" value="0.3" />
   </node>
 </launch>

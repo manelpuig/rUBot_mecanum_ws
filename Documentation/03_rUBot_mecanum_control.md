@@ -174,14 +174,19 @@ rosrun joy joy_node dev:=/dev/input/js0
 ```shell
 rosrun teleop_twist_joy teleop_node 
 ```
-- Subscribe to the topic /cmd_vel. Then, on your gamepad, identify the deadman switch button, a safe guard to prevent sending commands that you did not intent (usually is X on my PlayStation 3 controller). Hold down the X button, move the joystick, and you should see messages published on /cmd_vel topic.
-- Cool! Now you just need feed these messages to your robot, and you can start moving around, controlled with a gamepad.
+- connect the gamepad and select the Mode2 (green and red leds)
+- Subscribe to the topic /cmd_vel. Then, on your gamepad, identify the deadman switch button (in our gamepad is the triangle button) and you should see messages published on /cmd_vel topic.
+- You can see that this enable a non-holonomic movement
+- To enable the **holonomic movement**, you have to configure the proper parameters. 
+- An exemple is created to start the 2 nodes with the proper configuration parameters. This is the **rubot_joy.launch** file.
 
-We have already created a new **rubot_joy.launch** file to execute the 2 nodes after the bringup:
 ```shell
 roslaunch rubot_control rubot_joy.launch
 ```
 > For button mapping documentation refer to: http://wiki.ros.org/joy or http://wiki.ros.org/ps3joy
+
+Cool! If you have made the bringup of your robot, you will automatically feed these messages to your robot, and you can start moving around, controlled with a gamepad.
+
 
 #### **c) Python programming control**
 In the previous session we have created a python node to publish a Twist message in /cmd_vel topic. Verify the previous rubot_nav.launch file created for this purpose:
