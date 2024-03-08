@@ -71,6 +71,11 @@ To connect your PC to the Robot, we have to:
     - SSID name: rubot_XX 
     - password "rock1234"
 
+To change the hotspot SSID, use:
+```shell
+sudo nm-connection-editor
+```
+
 ### **Using nomachine remote desktop**
 To connect your computer to the robot using Nomachine:
 - Install in your computer Nomachine remote desktop: https://www.nomachine.com/es
@@ -91,6 +96,11 @@ Connect
 For a proper Display resolution in Nomachine, select: Display --> Change the size of remote screen
 
 You will have the rUBot desktop on your windows nomachine screen
+
+To change the hotspot SSID, use:
+```shell
+sudo nm-connection-editor
+```
 
 ### **2.2. Setup the rubot with raspberrypi4**
 
@@ -113,6 +123,7 @@ To connect your PC to the Robot, we have to:
     - SSID name: rubot_XX 
     - password "rUBot_Mec"
 
+
 ### **Using nomachine remote desktop**
 To connect your computer to the robot using Nomachine, follow the same procedure and take into account:
 
@@ -125,9 +136,9 @@ For a proper Display resolution in Nomachine, select: Display --> Change the siz
 
 You will have the rUBot desktop on your windows nomachine screen
 
-- Install SSH service
+To change the hotspot SSID, use:
 ```shell
-sudo apt install openssh-server
+sudo nm-connection-editor
 ```
 ### **Using windows Xrdp remote desktop**
 To connect your computer to the robot using Xrdp, follow the instructions in: https://somebooks.es/escritorio-remoto-en-ubuntu-20-04-con-xrdp/
