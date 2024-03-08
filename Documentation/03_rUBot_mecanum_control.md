@@ -164,7 +164,7 @@ https://dev.to/admantium/radu-control-the-robot-using-a-joystick-976
 
 - In order to work with any gamepad, we need to install additional ROS packages:
 ```shell
-sudo apt-get install ros-noetic-joy-teleop ros-noetic-teleop-twist-joy ros-noetic-joy
+sudo apt-get install ros-noetic-teleop-twist-joy ros-noetic-joy
 ```
 - These packages provide several ways to interact with a connected joypad. To get started, we will run a ROS node called joy_node with the parameter of the detected device file.
 ```shell
@@ -184,6 +184,7 @@ rosrun teleop_twist_joy teleop_node
 roslaunch rubot_control rubot_joy.launch
 ```
 > For button mapping documentation refer to: http://wiki.ros.org/joy or http://wiki.ros.org/ps3joy
+> for detailed configuration of launch file refer to: https://github.com/ros-teleop/teleop_twist_joy/blob/indigo-devel/launch/teleop.launch
 
 Cool! If you have made the bringup of your robot, you will automatically feed these messages to your robot, and you can start moving around, controlled with a gamepad.
 

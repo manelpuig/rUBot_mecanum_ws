@@ -153,7 +153,7 @@ https://www.amazon.es/TP-Link-Archer-T2U-Nano-Adaptador/dp/B07PB1X4CN
 ```shell
 sudo apt install dkms
 git clone https://github.com/aircrack-ng/rtl8812au.git
-cd rtl8812a1
+cd rtl8812au
 sudo make dkms_install
 ```
 You will need to shutdown the raspberrypi4 to finish the installation 

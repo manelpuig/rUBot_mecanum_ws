@@ -2,6 +2,8 @@
   <!-- Inicia el nodo joy_node -->
   <node pkg="joy" type="joy_node" name="joy_node" output="screen">
     <param name="dev" type="string" value="/dev/input/js0" />
+    <!-- enable continuous movement -->
+    <param name="autorepeat_rate" value="20" />
     <!-- enable all gamepad axis -->
     <param name="axes" value="[0,1,2,3,4,5]" />
   </node>
