@@ -277,7 +277,36 @@ There are 2 main tasks:
 
 ### **3.1. Wall follower in VIRTUAL environment**
 
-We have created a rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, right and back-right, and perform a specific actuation in function of the minimum distance readings.
+We have developed 2 different methods for wall follower:
+- Geometrical method
+- Lidar ranges method
+
+**Geometrical method**
+
+Follow the instructions to perform the rubot_wall_follower_gm.py python program are in the notebook: 
+https://github.com/Albert-Alvarez/ros-gopigo3/blob/lab-sessions/develop/ROS%20con%20GoPiGo3%20-%20S4.md
+
+The algorithm is based on:
+
+![](./Images/03_Control/10_wall_follower_gm.png)
+
+A rubot_wall_follower_gm.launch is generated to test the node within a specified world
+
+```shell
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
+roslaunch rubot_control rubot_wall_follower_gm.launch
+```
+![](./Images/03_Control/11_rubot_wall_follower_gm.png)
+
+You will have to tune the proper parameter set for a good wall following process
+
+You can see a video for the Maze wall follower process in: 
+[![IMAGE_ALT](https://img.youtube.com/vi/z5sAyiFs-RU/maxresdefault.jpg)](https://youtu.be/z5sAyiFs-RU)
+
+
+**Lidar ranges method**
+
+We have created another rubot_wall_follower_rg.py file based on the reading distances from LIDAR in the ranges: front, front-right, right and back-right, and perform a specific actuation in function of the minimum distance readings.
 
 Follow the instructions to create the rubot_wall_follower_rg.py python file: https://www.theconstructsim.com/wall-follower-algorithm/
 
@@ -286,7 +315,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 
 Open a terminal and type:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 The wall-follower algorithm is not finished and surelly your robot is not able to follow the wall!
@@ -303,18 +332,22 @@ Upload:
 - the rubot_wall_follower.py code completed
 - video of simulated behaviour in concave corners
 - the proposed code "rubot_wall_follower_holonomic.py"
-- video of simulated behaviour with holonomic performances
 
 ### **3.2. Wall follower in REAL environment**
 
 To bringup the Mecanum robot, execute in a first terminal:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
-Then verify the obstacle avoidance behaviour for different created programs.
+Then verify the obstacle avoidance behaviour for different parameter values.
 
+**Geometric method**
 ```shell
-roslaunch rubot_control rubot_wall_follower_rg_custom.launch
+roslaunch rubot_control rubot_wall_follower_gm.launch
+```
+**Ranges method**
+```shell
+roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 **Lab Activity 5: rUBot wall-follower HW**
 
@@ -347,22 +380,11 @@ Test different POSE targets before to test it with REAL robot.
 
 ### **4.2. Go to POSE in REAL environment**
 
-In a real environment, there is very important the POSE precision. The Odometry computing is made with wheels readings. The floor characteristics and slings can produce inacuracies in odometry calculations.
-
-It is important the include other sensors to obtain a better accuracy. In our case we have included an IMU sensor to obtain a better measurement of the orientation.
-
-We will test the obtained POSE accuracy with:
-- Computing the Odometry with the wheel readigns
-- Computing the Odometry with the wheel readigns but measuring the robot orientation using the IMU sensor.
-
-We will have to:
-- upload a new arduino program to read and calibrate the IMU sensor to measure the robot orientation
-- Calibrate the IMU sensor only a first time with speciffic arduino program
-- Bringup the Mecanum robot, using a new arduino program to measure the robot orientation with the IMU sensor:
+To bringup the Mecanum robot, execute in a first terminal:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
 ```
-- Then verify the same node with the real Mecanum robot:
+Then verify the same node with the real Mecanum robot:
 ```shell
 roslaunch rubot_mecanum_description rubot_go2pose.launch
 ```
