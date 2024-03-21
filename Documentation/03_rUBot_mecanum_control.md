@@ -188,8 +188,15 @@ roslaunch rubot_control rubot_joy.launch
 
 Cool! If you have made the bringup of your robot, you will automatically feed these messages to your robot, and you can start moving around, controlled with a gamepad.
 
+#### **c) Smart-Phone control**
+ROS-Mobile is an Android application designed for dynamic control and visualization of mobile robotic system operated by the Robot Operating System (ROS). The application uses ROS nodes initializing publisher and subscriber with standard ROS messages. (https://github.com/ROS-Mobile/ROS-Mobile-Android)
 
-#### **c) Python programming control**
+- Download from Google Playstore:
+Simply go to the Google Playstore Website of the ROS-Mobile app and download it. It will be installed automatically. This video shows the installation and operation process: https://www.youtube.com/watch?v=T0HrEcO-0x0
+- Connect via ssh to the Master located in the RaspberryPi4 onboard computer
+- Create a proper Dashboard with the joypad desried configuration
+
+#### **d) Python programming control**
 In the previous session we have created a python node to publish a Twist message in /cmd_vel topic. Verify the previous rubot_nav.launch file created for this purpose:
 ``` shell
 roslaunch rubot_control rubot_nav.launch
