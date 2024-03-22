@@ -196,6 +196,9 @@ Simply go to the Google Playstore Website of the ROS-Mobile app and download it.
 - Connect via ssh to the Master located in the RaspberryPi4 onboard computer
 - Create a proper Dashboard with the joypad desried configuration
 
+![](./Images/03_Control/07_ros_mobile.png)
+
+
 #### **d) Python programming control**
 In the previous session we have created a python node to publish a Twist message in /cmd_vel topic. Verify the previous rubot_nav.launch file created for this purpose:
 ``` shell
