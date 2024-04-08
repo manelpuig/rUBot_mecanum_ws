@@ -1,121 +1,120 @@
 #!/usr/bin/env python3
 import rospy
-#!/usr/bin/env python3
-import rospy
-import tf
-from std_msgs.msg import String, Header
-from std_msgs.msg import Float32
+from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
-from geometry_msgs.msg import Vector3
-from sensor_msgs.msg import LaserScan #import laserscan msg
-from math import sqrt, cos, sin, pi, atan2
-import numpy
-import sys
-from dynamic_reconfigure.server import Server
-from wall_following_assignment.cfg import FollowerConfig
 
-class PID:
-    def __init__(self, Kp, Td, Ti, dt):
-        self.Kp = Kp
-        self.Td = Td
-        self.Ti = Ti
-        self.curr_error = 0
-        self.prev_error = 0
-        self.sum_error = 0
-        self.prev_error_deriv = 0
-        self.curr_error_deriv = 0
-        self.control = 0
-        self.dt = dt
-
-    def srv_callback(self, config, level):
-	self.Kp = config.Kp
-	self.Td = config.Td
-	self.Ti = config.Ti
-	self.dt = config.dt
-    	return config
-
-    def update_control(self, current_error, reset_prev=False):
-	if(self.Td != 3.0):
-		print("TD is changed", self.Td)
-        self.curr_error_deriv = (self.curr_error - self.prev_error) / self.dt
-
-        #steering angle = P gain + D gain + I gain
-        p_gain = self.Kp * self.curr_error
-
-        i_gain = self.sum_error  + self.Ti * self.curr_error * self.dt
-        self.sum_error = i_gain
-        d_gain = self.Td * self.curr_error_deriv
-
-        #PID control
-        w = p_gain + d_gain + i_gain # = control?
-        self.control = w
-
-        # update error
-        self.prev_error = self.curr_error
-        self.curr_error = current_error
-        self.prev_error_deriv = self.curr_error_deriv
-        #print("control", self.control)
-	return self.control 
-
-class WallFollowerHusky:
+class rUBot:
     def __init__(self):
-        rospy.init_node('wall_follower_husky', anonymous=True)
+        rospy.init_node("rubot_nav", anonymous=False)
 
-        self.forward_speed = rospy.get_param("~forward_speed")
-        self.desired_distance_from_wall = rospy.get_param("~desired_distance_from_wall")
-        self.hz = 5
+        # Parameters
+        self._distance_laser = rospy.get_param("~distance_laser")
+        self._speed_factor = rospy.get_param("~speed_factor")
+        self._forward_speed = rospy.get_param("~forward_speed")
+        self._rotation_speed = rospy.get_param("~rotation_speed")
 
+        # Twist message
+        self._msg = Twist()
+        self._cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
-        # todo: set up the command publisher to publish at topic '/husky_1/cmd_vel'
-        # using geometry_msgs.Twist messages
-        self.cmd_pub = rospy.Publisher('/husky_1/cmd_vel', Twist, queue_size=10)
+        # Subscribers
+        rospy.Subscriber("/scan", LaserScan, self.callback_laser)
 
+        # Rate
+        self._rate = rospy.Rate(25)
 
-        # todo: set up the laser scan subscriber
-        # this will set up a callback function that gets executed
-        # upon each spinOnce() call, as long as a laser scan
-        # message has been published in the meantime by another node
-        self.laser_sub = rospy.Subscriber("/husky_1/scan", LaserScan, self.laser_scan_callback)
+        # PID parameters for angle control
+        self._kp_angle = 0.02
+        self._ki_angle = 0.01
+        self._kd_angle = 0.00001
+        self._integral_angle = 0.0
+        self._prev_error_angle = 0.0
 
+        # PID parameters for distance control
+        self._kp_distance = 0.5
+        self._ki_distance = 0.8
+        self._kd_distance = 0.00001
+        self._integral_distance = 0.0
+        self._prev_error_distance = 0.0
 
-        # PID init
-        self.pid = PID(1.3, 3.0, 0.01, 0.2)
-	    srv = Server(FollowerConfig, self.pid.srv_callback)
-
-    def laser_scan_callback(self, msg):
-        # todo: implement this
-        # Populate this command based on the distance to the closest
-        # object in laser scan. I.e. compute the cross-track error
-        # as mentioned in the PID slides.
-
-
-        # TASK: compute the cross-track error
-        cte_pub = rospy.Publisher('/husky_1/cte', Float32, queue_size=1000)
-
-
-        # You can populate the command based on either of the following two methods:
-        # (1) using only the distance to the closest wall
-        # (2) using the distance to the closest wall and the orientation of the wall
-        #
-        # If you select option 2, you might want to use cascading PID control.
-
-        # cmd.angular.z = ???
-        #calculation
-        cte = min(msg.ranges) - self.desired_distance_from_wall
-        cte_pub.publish(cte)
-        angle = self.pid.update_control(cte)
-        linear = Vector3(self.forward_speed, 0, 0)
-        angular = Vector3(0, 0, angle)
-        twist = Twist(linear, angular)
-        self.cmd_pub.publish(twist)
-        print("cte : ", cte)
-
-    def run(self):
-        rate = rospy.Rate(self.hz)
-        rospy.spin()
+    def start(self):
         while not rospy.is_shutdown():
-            rate.sleep()
+            self._cmd_vel.publish(self._msg)
+            self._rate.sleep()
 
-if __name__ == '__main__':
-    wfh = WallFollowerHusky()
-    wfh.run()
+    def callback_laser(self, scan):
+        closest_distance, element_index = min(
+            (val, idx) for (idx, val) in enumerate(scan.ranges)
+            if scan.range_min < val < scan.range_max
+        )
+        angle_closest_distance = (element_index / 2)
+
+        rospy.loginfo(
+            "Closest distance of %5.2f m at %5.1f degrees.",
+            closest_distance,
+            angle_closest_distance,
+        )
+
+        # Angle error
+        angle_error = angle_closest_distance - 90.0
+
+        # Angle controller
+        p_term_angle = self._kp_angle * angle_error
+        self._integral_angle += angle_error
+        i_term_angle = self._ki_angle * self._integral_angle
+        d_term_angle = self._kd_angle * (angle_error - self._prev_error_angle)
+        control_signal_angle = p_term_angle + i_term_angle + d_term_angle
+        self._prev_error_angle = angle_error
+
+        # Distance error
+        distance_error = self._distance_laser - closest_distance
+
+        # Distance controller
+        p_term_distance = self._kp_distance * distance_error
+        self._integral_distance += distance_error
+        i_term_distance = self._ki_distance * self._integral_distance
+        d_term_distance = self._kd_distance * (
+            distance_error - self._prev_error_distance
+        )
+        control_signal_distance = p_term_distance + i_term_distance + d_term_distance
+        self._prev_error_distance = distance_error
+
+        # Update twist message
+        self._msg.linear.x = self._forward_speed * self._speed_factor
+        self._msg.linear.y = control_signal_distance *self._forward_speed * self._speed_factor
+        self._msg.angular.z = control_signal_angle * self._rotation_speed * self._speed_factor
+
+        # Log case
+        if closest_distance < self._distance_laser and angle_closest_distance < 90.0:
+            rospy.logwarn(
+                "Case 1. Driving the robot (vy=%4.1f, w=%4.1f)...", self._msg.linear.y, self._msg.angular.z
+            )
+        elif (
+            closest_distance < self._distance_laser
+            and 90.0 <= angle_closest_distance < 180.0
+        ):
+            rospy.logwarn(
+                "Case 2. Driving the robot (vy=%4.1f, w=%4.1f)...", self._msg.linear.y, self._msg.angular.z            )
+        else:
+            # Reset integrals
+            self._integral_angle = 0.0
+            self._integral_distance = 0.0
+            # Log case
+            rospy.logwarn("Case 3. robot (vx=%4.1f)...", self._msg.linear.x)
+
+    def shutdown(self):
+        self._msg.linear.x = 0
+        self._msg.linear.y = 0
+        self._msg.angular.z = 0
+        self._cmd_vel.publish(self._msg)
+        rospy.loginfo("Stop")
+
+
+if __name__ == "__main__":
+    try:
+        rUBot1 = rUBot()
+        rUBot1.start()
+        rospy.spin()
+        rUBot1.shutdown()
+    except rospy.ROSInterruptException:
+        rUBot1.shutdown()

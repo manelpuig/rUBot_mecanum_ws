@@ -198,6 +198,7 @@ Simply go to the Google Playstore Website of the ROS-Mobile app and download it.
 
 ![](./Images/03_Control/07_ros_mobile.png)
 
+> Every change you make you have to disconnect and connect again to proper operation
 
 #### **d) Python programming control**
 In the previous session we have created a python node to publish a Twist message in /cmd_vel topic. Verify the previous rubot_nav.launch file created for this purpose:
