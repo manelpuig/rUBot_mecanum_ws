@@ -1,0 +1,15 @@
+<launch>
+  <!-- Navigation Program   -->
+    <arg name="distance_laser" default="0.4" />
+    <arg name="speed_factor" default="0.1" />
+    <arg name="forward_speed" default="1" />
+    <arg name="backward_speed" default="-2" />
+    <arg name="rotation_speed" default="15" />
+  <node name="rubot_nav" pkg="rubot_control" type="rubot_wall_follower_pid2.py" output="screen" >
+        <param name="distance_laser" value="$(arg distance_laser)"/>
+        <param name="speed_factor" value="$(arg speed_factor)"/>
+        <param name="forward_speed" value="$(arg forward_speed)"/>
+        <param name="backward_speed" value="$(arg backward_speed)"/>
+        <param name="rotation_speed" value="$(arg rotation_speed)"/>
+  </node>
+</launch>

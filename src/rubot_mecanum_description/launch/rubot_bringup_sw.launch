@@ -1,6 +1,6 @@
 <launch>
     <arg name="world" default="square.world"/> 
-    <arg name="model" default="rubot.urdf" />
+    <arg name="model" default="rubot_mpuig.urdf" />
     <arg name="x_pos" default="0.7"/>
     <arg name="y_pos" default="0.0"/>
     <arg name="z_pos" default="0.0"/>
