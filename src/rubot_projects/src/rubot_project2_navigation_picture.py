@@ -50,10 +50,10 @@ def nav2goals():
             rospy.signal_shutdown("Action server not available!")
         else:
             rospy.loginfo("Goal execution done!")
-            if TakePhoto(img_topic,photos[i]):
-                rospy.loginfo("Saved image " + photos[i])
-            else:
-                rospy.loginfo("No images received")   
+            camera = TakePhoto(img_topic, photos[i])
+            # Important! Allow up to one second for connection
+            rospy.sleep(1)
+            camera.save_picture(photos[i])
 
 if __name__ == '__main__':
     try:

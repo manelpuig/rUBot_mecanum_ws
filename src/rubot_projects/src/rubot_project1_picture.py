@@ -9,35 +9,25 @@ class TakePhoto:
     def __init__(self, img_topic, image_title):
         self.bridge = CvBridge()
         self.image_received = False
+        self.cv_image = None
 
         # Connect image topic
         self.image_sub = rospy.Subscriber(img_topic, Image, self.callback)
 
-        # Allow up to one second for connection
-        rospy.sleep(1)
-
-        # Take a photo
-        if self.take_picture(image_title):
-            rospy.loginfo("Saved image " + image_title)
-        else:
-            rospy.loginfo("No images received")
-
     def callback(self, data):
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            cv.putText(cv_image, "Image 1", (100, 290), cv.FONT_HERSHEY_TRIPLEX, 1, (0, 255, 255), 1)
+            self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            cv.putText(self.cv_image, "Image 1", (100, 290), cv.FONT_HERSHEY_TRIPLEX, 1, (0, 255, 255), 1)
+            self.image_received = True
         except CvBridgeError as e:
-            print(e)
+            rospy.logerr(e)
 
-        self.image_received = True
-        self.image = cv_image
-
-    def take_picture(self, img_title):
+    def save_picture(self, img_title):
         if self.image_received:
-            cv.imwrite(img_title, self.image)
-            return True
+            cv.imwrite(img_title, self.cv_image)
+            rospy.loginfo("Saved image " + img_title)
         else:
-            return False
+            rospy.loginfo("No images received")
 
 if __name__ == '__main__':
     # Initialize
@@ -49,6 +39,9 @@ if __name__ == '__main__':
 
     # Create TakePhoto instance
     camera = TakePhoto(img_topic, img_title)
-
-   # Keep the node running
+    # Allow up to one second for connection
+    rospy.sleep(1)
+    camera.save_picture(img_title)
+    # Keep the node running
     rospy.spin()
+

@@ -107,12 +107,12 @@ Proceed with the following steps:
   ```shell
   roslaunch rubot_projects rubot_projects_bringup_sw.launch
   ```
-- Run the navigation demo:
+- Run the navigation (verify the map file!):
 
   ```shell
   roslaunch rubot_slam rubot_navigation.launch
   ```
-- Launch the "rubot_nav_picture.launch" program:
+- Launch the "rubot_project2_navigation_picture.launch" program:
 
   ```shell
   roslaunch rubot_projects rubot_project2_navigation_picture.launch
@@ -123,7 +123,6 @@ Proceed with the following steps:
 
 ![](./Images/05_Projects/project2_nav_photo.png)
 
-**Exercise:** Note that the picture is not saved!. Solve this issue.
 
 ## **Project 3: Follow a point based trajectory with traffic signs**
 
