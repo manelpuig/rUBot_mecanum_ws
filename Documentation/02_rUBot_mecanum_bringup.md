@@ -646,6 +646,11 @@ roslaunch rubot_mecanum_driver pigpio_deamon
 ````shell
 roslaunch rubot_mecanum_driver rubot_mecanum_driver.launch
 ````
+>Carefull. First time you need to change the owner and properties of rubot_mecanum_driver.py python file:
+````shell
+sudo chown root:root rubot_mecanum_driver.py 
+sudo chmod 4777 rubot_mecanum_driver.py 
+````
 
 
 ### **4.2. Launch LIDAR node**
