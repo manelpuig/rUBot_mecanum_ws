@@ -523,6 +523,12 @@ To Bingup our real robot we have to:
 
 ### **4.1. Launch the "Mecanum-drive control" module**
 
+We have 2 HW robot versions:
+- Arduino Mega based control board
+- RaspberryPi4 custom shield based control board
+
+#### **4.1.1 Arduino Mega based control board**
+
 The 4 mecanum wheels will be controlled by the Arduino board. 
 
 The Arduino is great tool for quickly and easily programming hardware. You can integrate ROS in Arduino hardware with:
@@ -622,6 +628,25 @@ Graphically we have designed a **Closed loop PID CD-motor speed control**:
 ![](./Images/02_Bringup/19_pid.png)
 
 Each wheel is turning at a precise speed defined by the inverse kinematics. The speed dynamics and steady state value is ensured by the designed PID closed loop.
+
+#### **4.1.2 RaspberryPi4 custom shield based control board**
+
+The 4 mecanum wheels will be controlled by a RaspberryPi4 custom shield based control board.
+
+To launch the mecanum drive functionality we have to:
+- launch the pigpiod (deamon) to properly control the GPIO pins of raspberry when using the pigpio library instead of the rpi.gpio less performand library. We can do it either in a new terminal:
+````shell
+sudo pigpiod
+````
+or launching a new created node to execute pigpiod
+````shell
+roslaunch rubot_mecanum_driver pigpio_deamon
+````
+- launch the "rubot_mecanum_driver" node:
+````shell
+roslaunch rubot_mecanum_driver rubot_mecanum_driver.launch
+````
+
 
 ### **4.2. Launch LIDAR node**
 
