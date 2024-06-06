@@ -633,6 +633,8 @@ Each wheel is turning at a precise speed defined by the inverse kinematics. The 
 
 The 4 mecanum wheels will be controlled by a RaspberryPi4 custom shield based control board.
 
+We have created a new "rubot_mecanum_driver" package where we have created a python based driver "rubot_mecanum_driver.py".
+
 To launch the mecanum drive functionality we have to:
 - launch the pigpiod (deamon) to properly control the GPIO pins of raspberry when using the pigpio library instead of the rpi.gpio less performand library. We can do it either in a new terminal:
 ````shell
@@ -658,7 +660,7 @@ sudo chmod 4777 rubot_mecanum_driver.py
 The rpLidar sensor is directly connected to the USB port of Rock5b board.
 To launch the rpLIDAR sensor, connect the LIDAR sensor to rock5b and execute:
 ```shell
-roslaunch rubot_mecanum_description rplidar_rock.launch
+roslaunch rubot_mecanum_description rplidar_custom.launch
 ```
 Verify:
 - the port to: /dev/ttyUSB0
@@ -668,7 +670,7 @@ Verify:
 The usb-camera sensor is directly connected to the USB port of Rock5b board. We have created a speciffic launch file to open properly the camera
 To launch the raspicam sensor, execute:
 ```shell
-roslaunch rubot_mecanum_description usb_cam_rock.launch
+roslaunch rubot_mecanum_description usb_cam_custom.launch
 ```
 Verify:
 - the video_device param to: "/dev/video1"
@@ -685,9 +687,17 @@ We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
 >Important!: Change the **"rubot_custom.urdf"** as the model name according to the robot model you have designed in the previous activity.
 
-To launch the bringup file type:
+To launch the bringup when using arduino based driver,  type:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
+```
+Graphically we have this structure:
+
+![](./Images/02_Bringup/17_nodes_topics.png)
+
+To launch the bringup when using python based driver in raspberrypi,  type:
+```shell
+roslaunch rubot_mecanum_description rubot_bringup_hw_pi.launch
 ```
 Graphically we have this structure:
 
