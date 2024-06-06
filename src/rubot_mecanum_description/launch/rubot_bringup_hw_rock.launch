@@ -16,7 +16,7 @@
       <param name="baud" type="int" value="57600"/>
     </node>
   <!-- launch rplidar  -->
-    <include file="$(find rubot_mecanum_description)/launch/rplidar_rock.launch"/> 
+    <include file="$(find rubot_mecanum_description)/launch/rplidar_custom.launch"/> 
   <!-- launch usb-cam   -->
-    <include file="$(find rubot_mecanum_description)/launch/usb_cam_rock.launch"/> 
+    <include file="$(find rubot_mecanum_description)/launch/usb_cam_custom.launch"/> 
 </launch>
