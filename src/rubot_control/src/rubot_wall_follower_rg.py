@@ -116,8 +116,4 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         shutdown()
 
-    
 
-
-if __name__ == '__main__':
-    main()

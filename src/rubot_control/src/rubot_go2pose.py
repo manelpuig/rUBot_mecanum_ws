@@ -1,122 +1,125 @@
 #!/usr/bin/env python3
 import rospy
-from geometry_msgs.msg import Twist, Pose, Quaternion
+from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from math import pow, atan2, sqrt, degrees, radians
+from math import pow, atan2, sqrt, radians, degrees
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
-class rubot:
-
+class Rubot:
     def __init__(self):
-        # Creates a node with name 'turtlebot_controller' and make sure it is a
-        # unique node (using anonymous=True).
+        # Initialize the ROS node
         rospy.init_node('rubot_control', anonymous=True)
-        # Define goal odometry from parameters
-        self.x_goal = rospy.get_param("~x")
-        self.y_goal = rospy.get_param("~y")
-        self.f_goal = radians(rospy.get_param("~f"))
-        self.q_goal = quaternion_from_euler(0,0,self.f_goal)
-        # Define initial values for actual odometry (read in callback function)
-        self.x_pose=0
-        self.y_pose=0
-        self.yaw=0
-        
-        # Publisher which will publish to the topic '/cmd_vel'.
+
+        # Retrieve goal parameters
+        self.x_goal = rospy.get_param("~x", 0.0)
+        self.y_goal = rospy.get_param("~y", 0.0)
+        f_goal_deg = rospy.get_param("~f", 0.0)
+        self.f_goal = radians(f_goal_deg)
+        q = quaternion_from_euler(0, 0, self.f_goal)
+        self.q_goal.x = q[0]
+        self.q_goal.y = q[1]
+        self.q_goal.z = q[2]
+        self.q_goal.w = q[3]
+
+        # Initialize current pose variables
+        self.x_pose = 0.0
+        self.y_pose = 0.0
+        self.yaw = 0.0
+
+        # Publisher for velocity commands
         self.velocity_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-        # A subscriber to the topic '/odom'. self.update_pose is called
-        # when a message of type Odometry is received.
+        # Subscriber for odometry updates
         self.odom_subscriber = rospy.Subscriber('/odom', Odometry, self.update_odom)
 
         self.odom = Odometry()
         self.rate = rospy.Rate(10)
 
+        # Set up shutdown handler
+        rospy.on_shutdown(self.shutdown_handler)
+
     def update_odom(self, data):
-        """Callback function which is called when a new message of type Pose is
-        received by the subscriber."""
+        """Callback function for updating the robot's current odometry."""
         self.odom = data
         self.x_pose = round(self.odom.pose.pose.position.x, 2)
         self.y_pose = round(self.odom.pose.pose.position.y, 2)
-        self.z_pose = round(self.odom.pose.pose.position.z, 2)
-        self.orientation_q = self.odom.pose.pose.orientation
-        self.orientation_list = [self.orientation_q.x, self.orientation_q.y, self.orientation_q.z, self.orientation_q.w]
-        self.rpw = euler_from_quaternion (self.orientation_list)
-        self.yaw = self.rpw[2]
-        
-    def euclidean_distance(self, goal_odom):
-        """Euclidean distance between current pose and the goal."""
-        return sqrt(pow((goal_odom.pose.pose.position.x - self.x_pose), 2) +
-                    pow((goal_odom.pose.pose.position.y - self.y_pose), 2))
+        orientation_q = self.odom.pose.pose.orientation
+        orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+        self.yaw = euler_from_quaternion(orientation_list)[2]
 
-    def linear_vel(self, goal_odom, constant=0.5):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return constant * self.euclidean_distance(goal_odom)
+    def euclidean_distance(self):
+        """Calculate the Euclidean distance between the current pose and the goal."""
+        return sqrt(pow((self.x_goal - self.x_pose), 2) + pow((self.y_goal - self.y_pose), 2))
 
-    def steering_angle(self, goal_odom):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return atan2(goal_odom.pose.pose.position.y - self.y_pose, goal_odom.pose.pose.position.x - self.x_pose)
+    def linear_vel(self, constant=0.5):
+        """Calculate the linear velocity towards the goal."""
+        return constant * self.euclidean_distance()
 
-    def angular_vel(self, goal_odom, constant=5):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return constant * (self.steering_angle(goal_odom) - self.yaw)
+    def steering_angle(self):
+        """Calculate the steering angle towards the goal."""
+        return atan2(self.y_goal - self.y_pose, self.x_goal - self.x_pose)
 
-    def move2pose(self):
-        """Moves the turtle to the goal."""
-        goal_odom = Odometry()
+    def angular_vel(self, constant=5):
+        """Calculate the angular velocity towards the goal."""
+        return constant * (self.steering_angle() - self.yaw)
 
-        # Get the input from the user.
-        goal_odom.pose.pose.position.x = self.x_goal
-        goal_odom.pose.pose.position.y = self.y_goal
-                
-        # Please, insert tolerances a number slightly greater than 0 (e.g. 0.01).
+    def move_to_pose(self):
+        """Move the robot towards the goal pose."""
         distance_tolerance = 0.1
         angle_tolerance = 0.1
 
         vel_msg = Twist()
 
-        while self.euclidean_distance(goal_odom) >= distance_tolerance:
+        # Move towards the goal position
+        while not rospy.is_shutdown() and self.euclidean_distance() >= distance_tolerance:
             # Linear velocity in the x-axis.
-            vel_msg.linear.x = self.linear_vel(goal_odom)
+            vel_msg.linear.x = self.linear_vel()
             vel_msg.linear.y = 0
             vel_msg.linear.z = 0
+
             # Angular velocity in the z-axis.
             vel_msg.angular.x = 0
             vel_msg.angular.y = 0
-            vel_msg.angular.z = self.angular_vel(goal_odom)
-            # Publishing our vel_msg
-            self.velocity_publisher.publish(vel_msg)
-            rospy.loginfo("Distance to target: " + str(round(self.euclidean_distance(goal_odom), ndigits=2)))
-            # Publish at the desired rate.
-            self.rate.sleep()
-        else:
-            while abs(self.f_goal-self.yaw) >= angle_tolerance:
-                # Linear velocity in the x-axis.
-                vel_msg.linear.x = 0
-                vel_msg.linear.y = 0
-                vel_msg.linear.z = 0
-                # Angular velocity in the z-axis.
-                vel_msg.angular.x = 0
-                vel_msg.angular.y = 0
-                vel_msg.angular.z = (self.f_goal-self.yaw)*0.5
-                 # Publishing our vel_msg
-                self.velocity_publisher.publish(vel_msg)
-                rospy.loginfo("Orientation error: " + str(round(degrees(self.f_goal-self.yaw), ndigits=2)))
-                # Publish at the desired rate.
-                self.rate.sleep()
+            vel_msg.angular.z = self.angular_vel()
 
-        # Stopping our robot after the movement is over.
+            # Publish velocity message
+            self.velocity_publisher.publish(vel_msg)
+            rospy.loginfo("Distance to target: %.2f", self.euclidean_distance())
+
+            # Maintain the loop rate
+            self.rate.sleep()
+
+        # Align with the final orientation
+        while not rospy.is_shutdown() and abs(self.f_goal - self.yaw) >= angle_tolerance:
+            vel_msg.linear.x = 0
+            vel_msg.angular.z = (self.f_goal - self.yaw) * 0.5
+
+            # Publish velocity message
+            self.velocity_publisher.publish(vel_msg)
+            rospy.loginfo("Orientation error: %.2f", abs(degrees(self.f_goal - self.yaw)))
+
+            # Maintain the loop rate
+            self.rate.sleep()
+
+        # Stop the robot
+        self.stop_robot()
+
+    def stop_robot(self):
+        """Send a zero velocity command to stop the robot."""
+        vel_msg = Twist()
         vel_msg.linear.x = 0
         vel_msg.angular.z = 0
-        # Publishing our vel_msg
         self.velocity_publisher.publish(vel_msg)
-        rospy.loginfo("Goal POSE reached!")
+        rospy.loginfo("Robot stopped.")
 
-        # If we press control + C, the node will stop.
-        rospy.spin()
+    def shutdown_handler(self):
+        """Handle the shutdown signal by stopping the robot."""
+        self.stop_robot()
+        rospy.loginfo("Shutdown initiated. Robot stopped.")
 
 if __name__ == '__main__':
     try:
-        rubot1 = rubot()
-        rubot1.move2pose()
+        rubot = Rubot()
+        rubot.move_to_pose()
     except rospy.ROSInterruptException:
-        pass
+        rubot.shutdown_handler()
