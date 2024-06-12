@@ -99,7 +99,7 @@ The objective of this activity is:
 
 To bringup the real robot for the SLAM process use the speciffic launch file:
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_rock.launch
+roslaunch rubot_slam rubot_slam_bringup_hw_pi.launch
 ```
 
 Upload:
@@ -266,7 +266,7 @@ The objective of this activity is:
 
 To bringup the real robot for the SLAM process use the speciffic launch file:
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_rock.launch
+roslaunch rubot_slam rubot_slam_bringup_hw_pi.launch
 ```
 
 Upload:
