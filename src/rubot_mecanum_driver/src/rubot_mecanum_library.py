@@ -130,11 +130,13 @@ class MPID(object):
         self.currentError += self.Ki * self.error
         if (self.currentError > 100):
             self.currentError = 100
+        if (self.currentError < -100):
+            self.currentError = -100
         if given == 0 and self.error == 0:
             self.currentError = 0    
         s = self.Kp * self.error + self.currentError + self.Kd * (self.error - self.lastError)
         self.lastError = self.error
-        return max(min(s, 200), -200)
+        return max(min(s, 255), -255)
     
     def get_deltaT(self):
         return self.deltaT
@@ -167,15 +169,15 @@ class DCMotorController():
     def speed(self,pi,speed):
         #If the speed given is > 1 the motor goes forward
         if(speed >= 1):
-            pi.write(self.input1_pin, 0)
-            pi.write(self.input2_pin, 1)
+            pi.write(self.input1_pin, 1)
+            pi.write(self.input2_pin, 0)
             pi.write(self.standby_pin, 1)
-            pi.set_PWM_dutycycle( self.enable_pin,abs(speed))
+            pi.set_PWM_dutycycle( self.enable_pin, speed)
             #rospy.loginfo('Motor Forward')
         #If the speed given is > 1 the motor goes backwards    
         elif(speed <= -1):
-            pi.write(self.input1_pin, 1)
-            pi.write(self.input2_pin, 0)
+            pi.write(self.input1_pin, 0)
+            pi.write(self.input2_pin, 1)
             pi.write(self.standby_pin, 1)
             pi.set_PWM_dutycycle( self.enable_pin,abs(speed))
             #rospy.loginfo('Motor Backwards')

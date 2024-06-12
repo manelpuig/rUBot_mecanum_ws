@@ -1,7 +1,7 @@
 <launch>
   <!-- launch pigpiod -->
-    <node name="pigpiod" pkg="rubot_mecanum_driver" type="pigpio_daemon" />
-  <!-- launch rUBot mecanum  -->
-    <node name="rubot_mecanum" pkg="rubot_mecanum_driver" type="rubot_mecanum_driver.py">
+    <node name="pigpiod" pkg="rubot_mecanum_driver" type="pigpio_daemon" />
+  <!-- launch rubot_mecanum_driver -->
+    <node name="rubot_mecanum_node" pkg="rubot_mecanum_driver" type="rubot_mecanum_driver.py" >
     </node>
 </launch>
