@@ -523,9 +523,37 @@ To Bingup our real robot we have to:
 
 ### **4.1. Launch the "Mecanum-drive control" module**
 
-We have designed a custom RaspberryPi4 shield to control the 4 wheels and other sensors&actuators for proper functionality:
-- IMU sensor for orientation accuracy
-- PWM servomotors for robot arm in the robot mecanum platform 
+We have 2 HW robot versions:
+- Arduino Mega based control board
+- RaspberryPi4 custom shield based control board
+
+#### **4.1.1 Arduino Mega based control board**
+
+The 4 mecanum wheels will be controlled by the Arduino board. 
+
+The Arduino is great tool for quickly and easily programming hardware. You can integrate ROS in Arduino hardware with:
+- the **rosserial_arduino package**: to use ROS directly with the Arduino IDE.
+- the **rosserial package**: to provide a ROS communication protocol that works over your Arduino's UART. It allows your Arduino to create a ROS node which can directly publish and subscribe to ROS messages, publish TF transforms, and get the ROS system time.
+
+You can install rosserial for Arduino by running:
+```shell
+sudo apt-get install ros-noetic-rosserial-arduino
+sudo apt-get install ros-noetic-rosserial
+```
+Once you have installed Arduino IDE, you can install the ROS libraries with:
+```shell
+cd <sketchbook>/libraries
+rm -rf ros_lib
+rosrun rosserial_arduino make_libraries.py .
+```
+We have created a custom Arduino program for rubot_mecanum robot. This program is able to:
+- Communicate with ROS environment to subscribe to the topic **/cmd_vel** the desired rUBot movement
+- Apply the kinematics of the Mecanum robot to control the 4 mecanum wheels 
+- Read the encoders to calculate the odometry
+- Communicate with ROS environment to publish to the topic **/odom** the odometry in real-time
+- Interface with all the other sensors/actuators connected to arduino-mega board
+
+The "**rUBot_drive.ino**" arduino program is located on /Documentation/files/arduino/ folder
 
 Let's see some important characteristics:
 - You need to install Encoder.h lib: https://www.arduino.cc/reference/en/libraries/encoder/
@@ -541,6 +569,59 @@ Let's see some important characteristics:
 
 ![](./Images/02_Bringup/16_pinout.png)
 
+- We need to increase the buffer size of /odom publisher because the Arduino MEGA Buffer size for messages is 512bits (not enough for Odometry messages). To perform this modification, in **ROS.h** file from the Arduino library you have to add (at the end in else case section):
+  ```python
+  #else
+  //typedef NodeHandle_<ArduinoHardware> NodeHandle; // default 25, 25, 512, 512
+  typedef NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024> NodeHandle;
+  #endif
+  ```
+  > In older versions the syntax was:
+  >
+  >typedef NodeHandle_<ArduinoHardware, 5, 5, 1024, 1024, FlashReadOutBuffer_> NodeHandle;
+- The default baudrate to communicate with Arduino board is 47600. I suggest to maintain the Baudrate to 57600!
+  >
+  >In some cases is necessary to increase it. To increase this baudrate you need in **ArduinoHardware.h** file from the Arduino >library to change this default baudrate:
+  ```python
+  class ArduinoHardware {
+    public:
+      ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
+      //ArduinoHardware(SERIAL_CLASS* io , long baud= 115200){
+        iostream = io;
+        baud_ = baud;
+      }
+      ArduinoHardware()
+      {
+  #if defined(USBCON) and !(defined(USE_USBCON))
+        /* Leonardo support */
+        iostream = &Serial1;
+  #elif defined(USE_TEENSY_HW_SERIAL) or defined(USE_STM32_HW_SERIAL)
+        iostream = &Serial1;
+  #else
+        iostream = &Serial;
+  #endif
+        baud_ = 57600;
+        //baud_ = 115200;
+      }
+  ```
+  > Important!: This changes have to be made in the library files where Arduino is installed (usually in /home/arduino/libraries). This can be found when in arduino IDLE we go to settings to see the Exemples folder.
+
+Let's **upload the Arduino program: rUBot_drive_mpuig.ino** (there is a number version):
+- with filesystem manager go to Documentation/files/Arduino folder
+- Select the last program version and uncompress the file in the same folder
+- Open the main program rUBot_drive_mpuig.ino
+- verify the board is Arduino Mega and port tty/ACM0
+- upload the program to arduino board (any ROS bringup previous execution has to be closed!)
+
+When we power the arduino board, this program starts and a new node appears in the ROS environment. To test its behaviour we have to run:
+```xml
+roscore
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=57600
+rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '[0.5, 0, 0]' '[0, 0, 0]'
+```
+> the port to which the Arduino is connected,is usually /dev/ttyACM0. Change it if you have another one.
+
+> The last command sends a Twist message to the robot. The wheels should be moving forward. You can try different movements by modifying the numbers inside the brackets: '[vx, vy, vz]' '[wx, wy, wz]'
 
 Graphically we have designed a **Closed loop PID CD-motor speed control**:
 
