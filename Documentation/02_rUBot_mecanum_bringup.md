@@ -7,7 +7,7 @@ The objectives of this chapter are:
 - Bringup the real robot.
 
 The rUBot mecanum robot we will work is represented in the picture:
-![](./Images/01_Setup/1_osoyoo.png)
+![](./Images/01_Setup/01_rubot_pi.jpg)
 
 **Bibliography:**
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
@@ -519,7 +519,7 @@ To Bingup our real robot we have to:
 - Launch the RPlidar distance sensor
 - Launch the usb camera sensor
 
-![](./Images/01_Setup/1_osoyoo.png)
+![](./Images/01_Setup/01_rubot_pi.jpg)
 
 ### **4.1. Launch the "Mecanum-drive control" module**
 
