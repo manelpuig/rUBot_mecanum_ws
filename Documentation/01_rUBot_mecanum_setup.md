@@ -54,8 +54,6 @@ The raspberrypi4 onboard is preinstalled with:
 - NoMachine remote desktop
 - ROS Noetic
 
-You can find the image in OneDrive: Documents/Software/ROS/RBPi/Noetic_rbpi4.img.gz (ready for Pi Imager)
-
 When connected to power, it is configured to:
 - generate a hotspot "rubot_XX"
 - virtual monitor installed
@@ -80,30 +78,10 @@ For a proper Display resolution in Nomachine, select: Display --> Change the siz
 
 You will have the rUBot desktop on your windows nomachine screen
 
-To change the hotspot SSID, use:
-```shell
-sudo nm-connection-editor
-```
-
-### **Extra Wifi connection**
-
-To have internet access, you can connect and install USB wireless adapter:
-https://www.amazon.es/Archer-T2U-Nano-inal%C3%A1mbrico-Escritorio/dp/B07LGSDBTF
-or 
-https://www.amazon.es/TP-Link-Archer-T2U-Nano-Adaptador/dp/B07PB1X4CN
-
-- Install the device:
-```shell
-sudo apt install dkms
-git clone https://github.com/aircrack-ng/rtl8812au.git
-cd rtl8812au
-sudo make dkms_install
-```
-You will need to shutdown the raspberrypi4 to finish the installation 
 
 ### **Copy a repository**
 
-Every laboratory session you have to copy your updeted "rUBot_mecanum_ws" repository to the home/ubuntu/Desktop folder.
+Every laboratory session you have to copy your updated "rUBot_mecanum_ws" repository to the home/ubuntu/Desktop folder.
 
 If you have not internet connection you can:
 - obtain the zip file of repository from github 
@@ -115,3 +93,5 @@ Review the ~/.bashrc: Verify the last lines:
 source /opt/ros/noetic/setup.bash
 source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
 ```
+
+You are ready to work for the laboratory session!

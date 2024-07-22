@@ -4,7 +4,9 @@ The raspberrypi4 onboard has to be preinstalled with:
 - Ubuntu 20 server 64bits
   - NoMachine remote desktop
 - ROS Noetic
- 
+
+You can find the image in OneDrive: Documents/Software/ROS/RBPi/Noetic_rbpi4.img.gz (ready for Pi Imager), or you can install all from scratch in a 32GB SD card
+
 
 ## **1. Install Ubuntu 20 server 64bits**
 
@@ -93,4 +95,22 @@ Follow the instructions on: http://wiki.ros.org/noetic/Installation/Ubuntu
 sudo apt update
 sudo apt upgrade
 ```
-Your SD is ready
+
+
+## **5. Extra Wifi connection**
+
+To have internet access, you can connect and install USB wireless adapter:
+https://www.amazon.es/Archer-T2U-Nano-inal%C3%A1mbrico-Escritorio/dp/B07LGSDBTF
+or 
+https://www.amazon.es/TP-Link-Archer-T2U-Nano-Adaptador/dp/B07PB1X4CN
+
+- Install the device:
+```shell
+sudo apt install dkms
+git clone https://github.com/aircrack-ng/rtl8812au.git
+cd rtl8812au
+sudo make dkms_install
+```
+You will need to shutdown the raspberrypi4 to finish the installation 
+
+Your SD is ready for ROS programming rUBot!
