@@ -113,4 +113,17 @@ sudo make dkms_install
 ```
 You will need to shutdown the raspberrypi4 to finish the installation 
 
+## **6. Install PIGPIO**
+
+To work properly with raspberrypi GPIOs properly, you have to install PIGPIO library:
+https://abyz.me.uk/rpi/pigpio/download.html
+
+````shell
+wget https://github.com/joan2937/pigpio/archive/master.zip
+unzip master.zip
+cd pigpio-master
+make
+sudo make install
+````
+
 Your SD is ready for ROS programming rUBot!
