@@ -18,7 +18,7 @@ class rubot_drive():
         #Robot Constant Parameter definition
         self.xn = 0.082 
         self.yn = 0.105 
-        self.r = 0.025 # Other robot 0.04
+        self.r = 0.03 # Other robot 0.025
         self.K = abs(self.xn) + abs(self.yn) - 0.02
         self.max_rmp = 330
         self.resolution = 2 * math.pi * self.r / 1320 # 1440
@@ -35,9 +35,9 @@ class rubot_drive():
         self.wi = 0
         
         # PID
-        self.kp = 0.1 #0.1
-        self.kd = 0.1 #0.1
-        self.ki = 0.4 #0.45
+        self.kp = 0.2 #0.4
+        self.kd = 0.4 #0.8
+        self.ki = 0.25 #0.35
         
         #Encoder position variables 
         self.position1 = 0
@@ -188,7 +188,7 @@ class rubot_drive():
             #Odometry
             self.vxi, self.vyi, self.wi = self.ForwardKinematic(wa, wb, wc, wd)
             dt = self.PIDA.get_deltaT()
-            self.theta += self.wi * (dt*1.075) 
+            self.theta += self.wi * (dt*1.175)  
             if self.theta > 2 * math.pi:
                 self.theta -= 2 * math.pi
             elif self.theta < 0:
@@ -202,7 +202,7 @@ class rubot_drive():
             rate.sleep()
  
     def open_thread(self):
-        rate1 = rospy.Rate(10)  # Frecuencia de actualización de 10 Hz
+        rate1 = rospy.Rate(12)  # Frecuencia de actualización de 10 Hz
         self.duty1 = 0        
         self.duty2 = 0
         self.duty3 = 0 
@@ -226,13 +226,13 @@ class rubot_drive():
             
             self.PIDB.tic(self.position2)
             self.duty2 = self.PIDB.set_pwm(self.pwmb)
-            #self.MotorB.speed(self.pi,self.pwmb)
+            self.MotorB.speed(self.pi,self.pwmb)
             wb += self.PIDB.getWheelRotatialSpeed()
             self.PIDB.toc()
             
             self.PIDC.tic(self.position3)
             self.duty3 = self.PIDC.set_pwm(self.pwmc)
-            #self.MotorC.speed(self.pi,self.pwmc)
+            self.MotorC.speed(self.pi,self.pwmc)
             wc += self.PIDC.getWheelRotatialSpeed() 
             self.PIDC.toc()
           
@@ -246,7 +246,7 @@ class rubot_drive():
             if self.constant == self.sample:
                 self.constant = 0
                 self.vxi, self.vyi, self.wi = self.ForwardKinematic(wa/self.sample, wb/self.sample, wc/self.sample, wd/self.sample)
-                
+                """
                 print("MotorA dut: " + str(self.duty1))
                 print("MotorB dut: " + str(self.duty2))
                 print("MotorC dut: " + str(self.duty3))
@@ -261,9 +261,9 @@ class rubot_drive():
                 print("W: " + str(self.wi))
                 print("N: " +str(self.num))
                 
-                print("posD: " + str(self.position1))
+                print("posA: " + str(self.position1))
                 print("posD: " + str(self.position4))
-                """
+                
                 print("PWMA: " + str(self.position1))
                 print("PWMB: " + str(self.position2))
                 print("PWMC: " + str(self.position3))
