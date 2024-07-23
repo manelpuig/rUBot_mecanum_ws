@@ -15,11 +15,11 @@ class Rubot:
         self.y_goal = rospy.get_param("~y", 0.0)
         f_goal_deg = rospy.get_param("~f", 0.0)
         self.f_goal = radians(f_goal_deg)
-        q = quaternion_from_euler(0, 0, self.f_goal)
-        self.q_goal.x = q[0]
-        self.q_goal.y = q[1]
-        self.q_goal.z = q[2]
-        self.q_goal.w = q[3]
+        #q = quaternion_from_euler(0, 0, self.f_goal)
+        #self.q_goal.x = q[0]
+        #self.q_goal.y = q[1]
+        #self.q_goal.z = q[2]
+        #self.q_goal.w = q[3]
 
         # Initialize current pose variables
         self.x_pose = 0.0

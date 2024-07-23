@@ -18,7 +18,7 @@ class rubot_drive():
         #Robot Constant Parameter definition
         self.xn = 0.082 
         self.yn = 0.105 
-        self.r = 0.03 # Other robot 0.025
+        self.r = 0.04 # Other robot 0.025
         self.K = abs(self.xn) + abs(self.yn) - 0.02
         self.max_rmp = 330
         self.resolution = 2 * math.pi * self.r / 1320 # 1440
