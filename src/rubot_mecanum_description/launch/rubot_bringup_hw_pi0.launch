@@ -12,8 +12,8 @@
     <node name="rviz" pkg="rviz" type="rviz"  args="-d $(find rubot_mecanum_description)/rviz/rubot_rock.rviz"/> 
   <!-- launch rUBot mecanum  -->
     <include file="$(find rubot_mecanum_driver)/launch/rubot_mecanum_driver.launch"/>
-  <!-- launch rplidar  -->
-    <include file="$(find rubot_mecanum_description)/launch/rplidar_custom.launch"/> 
-  <!-- launch usb-cam   -->
-    <include file="$(find rubot_mecanum_description)/launch/usb_cam_custom.launch"/> 
+  <!-- launch rplidar  
+    <include file="$(find rubot_mecanum_description)/launch/rplidar_custom.launch"/> -->
+  <!-- launch usb-cam   
+    <include file="$(find rubot_mecanum_description)/launch/usb_cam_custom.launch"/> -->
 </launch>
