@@ -45,10 +45,6 @@ sudo apt install ubuntu-desktop
 ````shell
 sudo shutdown now
 ````
-If the desktop is not working, restart the display manager:
-````shell
-sudo systemctl restart gdm3
-````
 
 ## **2. Create Wi-Fi Hotspot**
 
@@ -74,7 +70,7 @@ nmcli con mod Hotspot connection.autoconnect yes
 nmcli con show Hotspot
 ```
 - Identify the IP of the rbpi4 Hotspot:
-  - type ifconfig
+  - type "ip add"
   - in wlan0 you identify the inet address: 10.42.0.1
 
 
@@ -124,6 +120,10 @@ unzip master.zip
 cd pigpio-master
 make
 sudo make install
+````
+To use this library you have to open a terminal and type:
+````shell
+sudo pigpiod
 ````
 
 Your SD is ready for ROS programming rUBot!
