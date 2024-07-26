@@ -125,5 +125,85 @@ To use this library you have to open a terminal and type:
 ````shell
 sudo pigpiod
 ````
+## **7. Install Arduino**
 
-Your SD is ready for ROS programming rUBot!
+Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/Driving%20Husky%20with%20ROSSerial.html
+
+- You need to install it with snap to be sure you have all dependencies. You can install Arduino IDE on Ubuntu using command line:
+  ````shell
+  sudo snap install arduino
+  sudo usermod -a -G tty ubuntu
+  sudo usermod -a -G dialout ubuntu
+  sudo reboot
+  ````
+
+  To avoid any possible problems when using Arduino IDE, you have added your system user to the dialout and tty groups.
+
+  If there is a problem, contact: https://github.com/snapcrafters/arduino/issues/
+
+- Install ROS Packages for Arduino:
+  ````shell
+  sudo apt install ros-noetic-rosserial
+  sudo apt install ros-noetic-rosserial-arduino
+  ````
+
+- Install ROS Libraries:
+
+  Go to the Arduino Sketchbook location and install libraries:
+
+  ````shell
+  cd /home/ubuntu/snap/arduino/current/Arduino/libraries
+  rosrun rosserial_arduino make_libraries.py .
+  ````
+
+  Restart your Arduino IDE and you should see the ros_lib part of your libraries!
+
+## **8. Install Keyboard and Joy control**
+
+You will be able to control your robot either with the Keyboard or with a PS2 gamepad.
+
+**a) Keyboard control**
+
+Follow instructions in: https://wiki.ros.org/teleop_twist_keyboard
+
+You can control the rUBot with the keyboard installing the following package:
+````shell
+sudo apt install ros-noetic-teleop-twist-keyboard
+````
+Then you will be able to control the robot with the Keyboard typing:
+````shell
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+````
+**b) Joy control**
+
+You can control the rUBot with the Joypad following the instructions in: https://dev.to/admantium/radu-control-the-robot-using-a-joystick-976
+
+- In order to work with any gamepad, we need to install additional ROS packages:
+````shell
+sudo apt-get install ros-noetic-teleop-twist-joy ros-noetic-joy
+````
+These packages provide several ways to interact with a connected joypad. 
+- To get started, we will run a ROS node called joy_node with the parameter of the detected device file.
+````shell
+rosrun joy joy_node dev:=/dev/input/js0
+````
+- to translate the messages from the /joy topic to TWIST messages, another ROS package already performs this translation. We just need to start the teleop_twist_joy node:
+````shell
+rosrun teleop_twist_joy teleop_node 
+````
+
+- connect the gamepad and select the Mode2 (green and red leds)
+- Subscribe to the topic /cmd_vel. Then, on your gamepad, identify the deadman switch button (in our gamepad is the triangle button) and you should see messages published on /cmd_vel topic.
+- You can see that this enable a non-holonomic movement
+- To enable the holonomic movement, you have to configure the proper parameters.
+- An exemple is created to start the 2 nodes with the proper configuration parameters. This is the rubot_joy.launch file.
+````shell
+roslaunch rubot_control rubot_joy.launch
+````
+For button mapping documentation refer to: http://wiki.ros.org/joy or http://wiki.ros.org/ps3joy 
+
+For detailed configuration of launch file refer to: https://github.com/ros-teleop/teleop_twist_joy/blob/indigo-devel/launch/teleop.launch
+
+Cool! If you have made the bringup of your robot, you will automatically feed these messages to your robot, and you can start moving around, controlled with a gamepad.
+
+Your SD is ready for ROS programming rUBots!
