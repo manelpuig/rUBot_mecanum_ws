@@ -511,7 +511,7 @@ The rUBot Mecanum real hardware is based on:
 - 2D-Camera to generate front images
 - Lidar for Navigation with obstacle avoidance
 - Arduino Mega with custom Shield: to control the 4 Mecanum Wheels (and other sensors onboard in function of the application)
-- Rock5b Computer on-board: for high level control in ROS environment. He will also control directly the usb-camera and the Lidar.
+- Raspberrypi4b Computer on-board: for high level control in ROS environment. He will also control directly the usb-camera and the Lidar.
 
 To Bingup our real robot we have to:
  
@@ -523,9 +523,13 @@ To Bingup our real robot we have to:
 
 ### **4.1. Launch the "Mecanum-drive control" module**
 
-We have designed a custom RaspberryPi4 shield to control the 4 wheels and other sensors&actuators for proper functionality:
-- IMU sensor for orientation accuracy
-- PWM servomotors for robot arm in the robot mecanum platform 
+The 4 mecanum wheels can be controlled by:
+- Arduino Mega based control shield
+- Raspberrypi4b custom shield
+
+#### **4.1.2 Arduino Mega based control shield**
+
+The 4 mecanum wheels will be controlled by a Arduino Mega shield based control board.
 
 Let's see some important characteristics:
 - You need to install Encoder.h lib: https://www.arduino.cc/reference/en/libraries/encoder/
@@ -548,9 +552,20 @@ Graphically we have designed a **Closed loop PID CD-motor speed control**:
 
 Each wheel is turning at a precise speed defined by the inverse kinematics. The speed dynamics and steady state value is ensured by the designed PID closed loop.
 
+To enable this control mode shield you have to include in the bringup file:
+````shell
+<!-- launch rUBot mecanum  -->
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+      <param name="port" type="string" value="/dev/ttyACM0"/>
+      <param name="baud" type="int" value="57600"/>
+    </node>
+````
+
 #### **4.1.2 RaspberryPi4 custom shield based control board**
 
-The 4 mecanum wheels will be controlled by a RaspberryPi4 custom shield based control board.
+We have designed a custom RaspberryPi4 shield to control the 4 wheels and other sensors&actuators for proper functionality:
+- IMU sensor for orientation accuracy
+- PWM servomotors for robot arm in the robot mecanum platform 
 
 We have created a new "rubot_mecanum_driver" package where we have created a python based driver "rubot_mecanum_driver.py".
 
@@ -572,7 +587,6 @@ roslaunch rubot_mecanum_driver rubot_mecanum_driver.launch
 sudo chown root:root rubot_mecanum_driver.py 
 sudo chmod 4777 rubot_mecanum_driver.py 
 ````
-
 
 ### **4.2. Launch LIDAR node**
 
@@ -606,21 +620,21 @@ We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
 
 >Important!: Change the **"rubot_custom.urdf"** as the model name according to the robot model you have designed in the previous activity.
 
-To launch the bringup when using arduino based driver,  type:
+To launch the bringup when using **arduino based driver**,  type:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 Graphically we have this structure:
 
-![](./Images/02_Bringup/17_nodes_topics.png)
+![](./Images/02_Bringup/17_nodes_bringup_arduino.jpg)
 
-To launch the bringup when using python based driver in raspberrypi,  type:
+To launch the bringup when using **python based driver in raspberrypi**,  type:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_pi.launch
 ```
 Graphically we have this structure:
 
-![](./Images/02_Bringup/17_nodes_topics.png)
+![](./Images/02_Bringup/18_nodes_bringup_pi.jpg)
 
 
 ### **Lab Activity 1: rUBot bringup HW**
