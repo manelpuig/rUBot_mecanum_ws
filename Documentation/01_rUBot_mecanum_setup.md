@@ -7,7 +7,7 @@ His main characteristics are:
 - RaspberryPi4 computer onboard control with Ubuntu20 and ROS Noetic
   - RPlidar distance sensor
   - usb camera sensor
-- RaspberryPi4 custom shield for sensors & actuators control
+- Arduino MEGA with shield for sensors & actuators control
   - Servomotor actuators for the 4 mecanum wheels
   
 ![](./Images/01_Setup/1_osoyoo.png)

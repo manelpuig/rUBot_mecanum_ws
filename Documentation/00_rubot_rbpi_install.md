@@ -187,7 +187,7 @@ These packages provide several ways to interact with a connected joypad.
 ````shell
 rosrun joy joy_node dev:=/dev/input/js0
 ````
-- to translate the messages from the /joy topic to TWIST messages, another ROS package already performs this translation. We just need to start the teleop_twist_joy node:
+- to translate the messages from the /joy topic to TWIST messages, another ROS package already performs this translation. We just need to start the teleop_node from teleop_twist_joy package:
 ````shell
 rosrun teleop_twist_joy teleop_node 
 ````

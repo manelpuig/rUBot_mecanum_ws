@@ -481,7 +481,7 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 
 Now we are ready to control our robot in this virtual environment!
 
-**Activity 3: rUBot Bringup SW**
+**Activity: rUBot Bringup SW**
 
 The objective of this activity is to spawn our custom rUBot in a virtual world.
 
@@ -590,8 +590,8 @@ sudo chmod 4777 rubot_mecanum_driver.py
 
 ### **4.2. Launch LIDAR node**
 
-The rpLidar sensor is directly connected to the USB port of Rock5b board.
-To launch the rpLIDAR sensor, connect the LIDAR sensor to rock5b and execute:
+The rpLidar sensor is directly connected to the USB port of RaspberryPi4 board.
+To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi4 and execute:
 ```shell
 roslaunch rubot_mecanum_description rplidar_custom.launch
 ```
@@ -616,7 +616,7 @@ Verify:
 
 ### **Final bringup launch file**
 
-We will create a "rubot_bringup_hw_rock.launch" file to setup the rUBot_mecanum.
+We will create a "rubot_bringup_hw.launch" file to setup the rUBot_mecanum.
 
 >Important!: Change the **"rubot_custom.urdf"** as the model name according to the robot model you have designed in the previous activity.
 
@@ -637,7 +637,7 @@ Graphically we have this structure:
 ![](./Images/02_Bringup/18_nodes_bringup_pi.jpg)
 
 
-### **Lab Activity 1: rUBot bringup HW**
+### **Lab Activity: rUBot bringup HW**
 
 The objective of this session is to understand the diferent nodes we have to launch to bringup our robot and verify the working performances.
 - Verify the nodes and topics 
@@ -651,7 +651,7 @@ Upload the following:
 - Picture of the RVIZ screen obtained
 - Picture with the nodes and topics obtained with the instruction rqt_graph
 
-### **Lab Activity 2: Lidar test and final bringup HW**
+### **Lab Activity: Lidar test and final bringup HW**
 
 The objectives of this activity are:
 - Final bringup file:
