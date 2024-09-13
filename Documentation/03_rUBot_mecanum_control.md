@@ -1,14 +1,14 @@
-# **rUBot mecanum navigation control**
+# **rUBot mecanum control**
 
 The objectives of this chapter are:
-- Navigation control in virtual environment 
-- Navigation control with real rUBot
+- control in virtual environment 
+- control with real rUBot
 
 We have created different activities in this section:
-- Robot Navigation performances
+- Robot performances
     - Keyboard control
     - Python programming control
-- Autonomous navigation with obstacle avoidance
+- Autonomous control with obstacle avoidance
 - Robot Wall follower
 - Robot go to pose
 
@@ -21,7 +21,7 @@ The rUBot mecanum robot we will work is represented in the picture:
 - https://bitbucket.org/theconstructcore/workspace/projects/PS
 
 
-## **1. rUBot mecanum navigation performances**
+## **1. rUBot mecanum performances**
 
 For navigation control of our robot, I have created a ROS Package "rubot_control". If you want to create it from scratch you would have to type:
 ```shell
@@ -78,7 +78,7 @@ The analytical expressions are explained graphically in the picture:
 
 In the case of real mecanum robot this is calculated by the robot driver as an arduino program in arduino-mega platform.
 
-### **1.2. Navigation control in VIRTUAL environment**
+### **1.2. rUBot control in VIRTUAL environment**
 We can control the movement of our robot using:
 - the keyboard or a joypad
 - programatically in python creating a "/rubot_nav" node
@@ -119,28 +119,28 @@ roslaunch rubot_control rubot_nav.launch
 ```
 Verify first that the code is working in the simulated environment.
 
-**Activity 4: rUBot navigation in a predefined Trajectory**
+**Activity 4: rUBot control in a predefined Trajectory**
 
 If the robot moves in the correct direction, you can follow with the next objective: Create a new node for **path trajectory** definition:
 
-- Write a new rubot_path_nav.py python file that:
+- Write a new rubot_path_control.py python file that:
     - creates a rubot_nav node
     - includes parameters: v, w, and trajectory time
     - verify the functions: square_path() and triangular_path()
     - define your proper function (star(), rombe(), etc.)
-- Write the corresponding rubot_path_nav.launch file
+- Write the corresponding rubot_path_control.launch file
 - Verify and demonstrate the execution:
 ``` shell
-roslaunch rubot_control rubot_path_nav.launch
+roslaunch rubot_control rubot_path_control.launch
 ```
 
-### **1.3. Navigation control in REAL environment**
+### **1.3. rUBot control in REAL environment**
 
 In real environment, the bringup process depends on the real robot.
 
 To bringup the rUBot_mecanum, execute in a first terminal:
 ``` shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 ![](./Images/03_Control/08_bringup.png)
 
@@ -203,7 +203,7 @@ Simply go to the Google Playstore Website of the ROS-Mobile app and download it.
 #### **d) Python programming control**
 In the previous session we have created a python node to publish a Twist message in /cmd_vel topic. Verify the previous rubot_nav.launch file created for this purpose:
 ``` shell
-roslaunch rubot_control rubot_nav.launch
+roslaunch rubot_control rubot_control.launch
 ```
 **Lab Activity 3: rUBot navigation in a predefined Trajectory**
 
@@ -217,30 +217,30 @@ If the robot moves in the correct direction, you can follow with the next object
 - Write the corresponding rubot_path_nav.launch file
 - Verify and demonstrate the execution:
 ``` shell
-roslaunch rubot_control rubot_path_nav.launch
+roslaunch rubot_control rubot_path_control.launch
 ```
 Verify different trajectories inside your world
 Upload the:
 
-- rubot_path_nav.launch and rubot_path_nav.py files
+- rubot_path_nav.launch and rubot_path_control.py files
 - Video of the execution in REAL environment
 
 ## **2. Autonomous navigation with obstacle avoidance**
 We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
 
-The algorithm description functionality, created in "rubot_self_nav.py" file,is:
+The algorithm description functionality, created in "rubot_self_control.py" file,is:
 - The created node makes the robot go forward.
     - LIDAR is allways searching the closest distance and the angle
     - when this distance is lower than a threshold, the robot goes backward with angular speed in the oposite direction of the minimum distance angle.
 
 Let's verify first this behaviour in virtual environment
 
-### **2.1. Self-navigation control in VIRTUAL environment**
+### **2.1. Self-control in VIRTUAL environment**
 
-We have to launch the "rubot_self_nav.launch" file in the "rubot_control" package.
+We have to launch the "rubot_self_control.launch" file in the "rubot_control" package.
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
-roslaunch rubot_control rubot_self_nav.launch
+roslaunch rubot_control rubot_self_control.launch
 ```
 
 ![](./Images/03_Control/09_rubot_self.png)
@@ -248,35 +248,35 @@ roslaunch rubot_control rubot_self_nav.launch
 >- Verify in rviz if you have to change the fixed frame to "odom" frame
 >- You can test the behaviour when tunning the parameters defined
 
-**Activity 5: rUBot self-navigation**
+**Activity: rUBot self-control**
 
 The objective of this activity is to modify the code to move the robot in Holonomic way, for exemple:
 -  When the minimum distance is in the right side move the robot over the left side
 
 Design the code using the Holonomic robot performances, and upload:
-- the file "rubot_self_nav_holonomic.py"
-- a video of the current behaviour in your desoigned world
+- the file "rubot_self_control_holonomic.py"
+- a video of the current behaviour in your designed world
 
-### **2.2. Self-navigation control in REAL environment**
+### **2.2. Self-control control in REAL environment**
 
 To bringup the rUBot mecanum robot, execute:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduinom.launch
 ```
 Then verify the obstacle avoidance behaviour for different parameter values.
 ```shell
-roslaunch rubot_control rubot_self_nav.launch
+roslaunch rubot_control rubot_self_control.launch
 ```
 The robot is not working as expected because the number of laser beams is nor 720 as in simulation!
 
-**Lab Activity 4: rUBot self-navigation**
+**Lab Activity: rUBot self-control**
 
 The objective of this lab session is:
 - take into account the number of laser beams of your Lidar in the python code
 - verify the designed holonomic self-navigation node you have created for virtual environment in the previous activity.
 
 Upload the:
-- rubot_self_nav_holonomic.launch and rubot_self_nav_holonomic.py files
+- rubot_self_control_holonomic.launch and rubot_self_control_holonomic.py files
 - Video of the execution in REAL environment
 
 ## **3. Wall Follower**
@@ -302,7 +302,7 @@ roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 The wall-follower algorithm is not finished and surelly your robot is not able to follow the wall!
 
-**Activity 6: rUBot wall-follower**
+**Activity: rUBot wall-follower**
 
 The objective of this activity is:
 - Understand the wall-follower algorithm
@@ -320,7 +320,7 @@ Upload:
 
 To bringup the Mecanum robot, execute in a first terminal:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 Then verify the obstacle avoidance behaviour for different created programs.
 
@@ -371,7 +371,7 @@ We will have to:
 - Calibrate the IMU sensor only a first time with speciffic arduino program
 - Bringup the Mecanum robot, using a new arduino program to measure the robot orientation with the IMU sensor:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_rock_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 - Then verify the same node with the real Mecanum robot:
 ```shell
