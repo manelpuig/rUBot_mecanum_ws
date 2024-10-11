@@ -270,10 +270,7 @@ The rUBot_mecanum contains a "Mecanum drive actuator" based on:
 - able to move the robot in x and y directions
 - and able to obtain the Odometry information
 
-Each of the 4 wheels have speciffic:
-- link with the visual, collision and inertial properties
-- joint of continuous type
-- Gazebo plugin as a sort of "driver" to simulate the Kinematics of our rUBot_mecanum.
+Gazebo plugin is a sort of "driver" to simulate the Kinematics of our rUBot_mecanum.
 
 The **rUBot_mecanum kinematics** describes the relationship between the robot wheel speeds and the robot velocity. We have to distinguish:
 - **Forward kinematics**: obtains the robot velocity (linear and angular in /cmd_vel) and POSE (odometry) for speciffic robot wheel speeds
