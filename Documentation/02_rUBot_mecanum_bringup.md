@@ -280,18 +280,6 @@ The different movements the Mecanum robot is able to perform are:
 
 ![](./Images/02_Bringup/03_mecanum_movements.png)
 
-The forward kinematics is described by:
-
-![](./Images/02_Bringup/04_mecanum_fkine.png)
-
-The inverse kinematics is described by:
-
-![](./Images/02_Bringup/05_mecanum_ikine.png)
-
-The Odometry calculation is obtained by:
-
-![](./Images/02_Bringup/05_mecanum_odom.png)
-
 This kinematics and odometry calculations are described in the "libgazebo_ros_planar_move.so" file and the URDF model will contain the specific gazebo plugin.
 
 This driver is the "Planar Move Plugin" and is described in Gazebo tutorials: http://gazebosim.org/tutorials?tut=ros_gzplugins#AddingaModelPlugin
@@ -332,7 +320,7 @@ We use a specific "display.launch" launch file where we specify the robot model 
 </launch>
 ```
 ```shell
-roslaunch rubot_mecanum_description display.launch
+roslaunch rubot_mecanum_description rubot_rviz.launch
 ```
 ![](./Images/02_Bringup/06_rviz_rubot.png)
 
@@ -377,7 +365,7 @@ We will create a new rubot_gazebo.launch file to spawn the robot in an empty wor
 Open a new terminal and launch this file:
 ```shell
 roslaunch rubot_mecanum_description rubot_gazebo.launch
-roslaunch rubot_mecanum_description display.launch
+roslaunch rubot_mecanum_description rubot_rviz.launch
 ```
 ![](./Images/02_Bringup/07_rubot_gazebo.png)
 
