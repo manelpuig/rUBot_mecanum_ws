@@ -651,7 +651,9 @@ The objectives of this activity are:
   - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
 
 Upload a zip file including:
-- picture of rviz screen where you can see the lidar distances
+- picture containing:
+  - rviz screen where you can see the lidar distances
+  - terminal running the "rubot_lidar_test_custom.launch" with distances readings
 - the rubot_lidar_test_custom.py, 
 - rubot_custom.urdf, 
 - rplidar_custom.launch, 
