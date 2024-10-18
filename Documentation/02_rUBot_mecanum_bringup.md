@@ -578,7 +578,7 @@ sudo chmod 4777 rubot_mecanum_driver.py
 The rpLidar sensor is directly connected to the USB port of RaspberryPi4 board.
 To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi4 and execute:
 ```shell
-roslaunch rubot_mecanum_description rplidar_custom.launch
+roslaunch rubot_mecanum_description rplidar.launch
 ```
 Verify:
 - the port to: /dev/ttyUSB0
@@ -588,10 +588,10 @@ Verify:
 The usb-camera sensor is directly connected to the USB port of Rock5b board. We have created a speciffic launch file to open properly the camera
 To launch the raspicam sensor, execute:
 ```shell
-roslaunch rubot_mecanum_description usb_cam_custom.launch
+roslaunch rubot_mecanum_description usb_cam.launch
 ```
 Verify:
-- the video_device param to: "/dev/video1"
+- the video_device param to: "/dev/video0" (or video1 if you find errors when launching)
 - the camera_frame_id param to: "usb_cam"
 - the topic to subscribe to the image data:
   ```shell
@@ -640,20 +640,20 @@ Upload the following:
 
 The objectives of this activity are:
 - Final bringup file:
-  - Launch the **rubot_bringup_hw_rock.launch** with the previously created **rubot_custom.urdf** file.
+  - Launch the **rubot_bringup_hw_arduino.launch** with the previously created **rubot_custom.urdf** file.
   - In RVIZ, verify the position of the obstacles around the robot. Are them in the correct orientation? 
-  - create another **rplidar_rock_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
- - Create a new **rubot_bringup_hw_rock_custom.launch** file containing:
+  - create another **rplidar_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
+ - Create a new **rubot_bringup_hw_arduino.launch** file containing:
     - rubot_custom.urdf final model
-    - rplidar_rock_custom.launch final file
+    - rplidar_custom.launch final file
 - Lidar test:
-  - Put your robot inside a real world and launch the **rubot_bringup_hw_rock_custom.launch** file
+  - Put your robot inside a real world and launch the **rubot_bringup_hw_arduino.launch** file
   - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
 
 Upload a zip file including:
 - picture of rviz screen where you can see the lidar distances
 - the rubot_lidar_test_custom.py, 
 - rubot_custom.urdf, 
-- rplidar_rock_custom.launch, 
-- rubot_bringup_hw_rock_custom.launch 
+- rplidar_custom.launch, 
+- rubot_bringup_hw_arduino.launch 
 

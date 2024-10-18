@@ -111,11 +111,11 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 A first simple navigation program is created to move the robot according to a speciffic Twist message.
 
 We will create now a first navigation python files in "src" folder:
-- rubot_nav.py: to define a rubot movement with linear and angular speed during a time td
+- rubot_control.py: to define a rubot movement with linear and angular speed during a time td
 
 Specific launch file have been created to launch the node and python file created above:
 ```shell
-roslaunch rubot_control rubot_nav.launch
+roslaunch rubot_control rubot_control.launch
 ```
 Verify first that the code is working in the simulated environment.
 
@@ -222,7 +222,7 @@ roslaunch rubot_control rubot_path_control.launch
 Verify different trajectories inside your world
 Upload the:
 
-- rubot_path_nav.launch and rubot_path_control.py files
+- rubot_path_control.launch and rubot_path_control.py files
 - Video of the execution in REAL environment
 
 ## **2. Autonomous navigation with obstacle avoidance**
@@ -261,7 +261,7 @@ Design the code using the Holonomic robot performances, and upload:
 
 To bringup the rUBot mecanum robot, execute:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduinom.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 Then verify the obstacle avoidance behaviour for different parameter values.
 ```shell
@@ -273,7 +273,7 @@ The robot is not working as expected because the number of laser beams is nor 72
 
 The objective of this lab session is:
 - take into account the number of laser beams of your Lidar in the python code
-- verify the designed holonomic self-navigation node you have created for virtual environment in the previous activity.
+- verify the designed holonomic self-control node you have created for virtual environment in the previous activity.
 
 Upload the:
 - rubot_self_control_holonomic.launch and rubot_self_control_holonomic.py files

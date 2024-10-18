@@ -148,7 +148,7 @@
       <mass value="0.2"/>
       <inertia ixx="0.000166" ixy="0" ixz="0" iyy="0.000303" iyz="0" izz="0.000166"/>
     </inertial>
-  </link> -->
+  </link>
 <!-- 2D Camera as a mesh of actual PiCamera -->
   <joint name="joint_camera" type="fixed">
     <origin rpy="0 0 0" xyz="0.120 0.0 0.09"/>
@@ -160,7 +160,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/Camera.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/piCamera.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="black"/>
     </visual>
@@ -179,7 +179,7 @@
   <!-- LIDAR base_scan -->
   <link name="base_scan">
     <visual>
-      <origin rpy="0 0 3.14" xyz="0 0 0.0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry>
         <mesh filename="package://rubot_mecanum_description/meshes/rubot/Lidar.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -199,7 +199,7 @@
   </link>
   <joint name="scan_joint" type="fixed">
     <axis xyz="0 0 1"/>
-    <origin rpy="0 0 3.14" xyz="0 0 0.15"/>
+    <origin rpy="0 0 0" xyz="0 0 0.15"/>
     <parent link="base_link"/>
     <child link="base_scan"/>
   </joint>
@@ -213,7 +213,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/number2.stl" scale="0.0008 0.0008 0.0008"/>
+        <box size="0.05 0.05 0.025"/>
       </geometry>
       <material name="black"/>
     </visual>

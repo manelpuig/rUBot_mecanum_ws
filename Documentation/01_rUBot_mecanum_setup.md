@@ -85,7 +85,7 @@ Every laboratory session you have to copy your updated "rUBot_mecanum_ws" reposi
 
 If you have not internet connection you can:
 - obtain the zip file of repository from github 
-- drag the zip file from coputer directory to the raspberrypi4 Desktop folder
+- drag the zip file from computer directory to the raspberrypi4 Desktop folder
 - Unzip the file and compile
 
 Review the ~/.bashrc: Verify the last lines:
