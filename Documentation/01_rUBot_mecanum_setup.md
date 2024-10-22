@@ -79,7 +79,7 @@ For a proper Display resolution in Nomachine, select: Display --> Change the siz
 You will have the rUBot desktop on your windows nomachine screen
 
 
-### **Copy a repository**
+#### **Copy a repository**
 
 Every laboratory session you have to copy your updated "rUBot_mecanum_ws" repository to the home/ubuntu/Desktop folder.
 
@@ -95,3 +95,22 @@ source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
 ```
 
 You are ready to work for the laboratory session!
+
+### **Using VS code remote deskconnectiontop**
+To connect your computer to the robot using VS code with "Remote connection" extension:
+- Open VS code and select "Remote Explorer"
+- Select the connection "SSH-10.42.0.1"
+- specify the password
+
+>Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type:
+````shell
+ssh-keygen -R 10.42.0.1
+````
+
+You are now inside the rUBot_xx raspberrypi!
+
+When finish, in a rUBot terminal type:
+````shell
+sudo shutdown now
+````
+You will be automatically disconnected from VS code and after 1 minute, you can switch off the raspberryPi.
