@@ -96,11 +96,12 @@ source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
 
 You are ready to work for the laboratory session!
 
-### **Using VS code remote deskconnectiontop**
+### **Using VS code remote connection**
 To connect your computer to the robot using VS code with "Remote connection" extension:
 - Open VS code and select "Remote Explorer"
 - Select the connection "SSH-10.42.0.1"
-- specify the password
+- Verify on ssh/settings the user as "ubuntu"
+- specify the password as "ubuntu1234"
 
 >Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type:
 ````shell
@@ -109,8 +110,26 @@ ssh-keygen -R 10.42.0.1
 
 You are now inside the rUBot_xx raspberrypi!
 
-When finish, in a rUBot terminal type:
+To finish, follow the steps:
+- in a VScode rUBot terminal type:
 ````shell
 sudo shutdown now
 ````
+- in VS code choose "Close remote connection"
+
 You will be automatically disconnected from VS code and after 1 minute, you can switch off the raspberryPi.
+
+## **2.2. Using The Construct Environment**
+
+To connect your rUBot mecanum robot to the The Construct environment you have to:
+- Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
+- Specify the name and the ROS version
+- Copy the code line to setup the robot to the TheConstruct environment
+- Connect VScode to the rUBot
+- It is better to update and upgrade the ubuntu
+- Open a terminal and paste the "robot setup code line". After some minutes the robot will be properly installed.
+- Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
+- Bringup the robot
+- You can control the robot from TheConstruct Terminal
+
+

@@ -152,10 +152,15 @@ Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/D
   Go to the Arduino Sketchbook location and install libraries:
 
   ````shell
-  cd /home/ubuntu/snap/arduino/current/Arduino/libraries
+  cd /home/ubuntu/snap/arduino/current/Arduino/
   rosrun rosserial_arduino make_libraries.py .
   ````
-
+  >To know the path for "arduino" program type:
+  ````shell
+  which arduino
+  ````
+  > In this case you need to install the libraries in the /home/ubuntu/snap/arduino/current/Arduino/ folder
+  
   Restart your Arduino IDE and you should see the ros_lib part of your libraries!
 
 ## **8. Install Keyboard and Joy control**
