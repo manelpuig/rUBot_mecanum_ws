@@ -141,15 +141,39 @@ You will be automatically disconnected from VS code and after 1 minute, you can 
 
 ## **2.2. Using The Construct Environment**
 
-To connect your rUBot mecanum robot to the The Construct environment you have to:
+To connect your rUBot mecanum robot to the The Construct environment you have to first Add a new robot:
 - Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
 - Specify the name and the ROS version
 - Copy the code line to setup the robot to the TheConstruct environment
+
+Then connect to your own rUBot:
 - Connect VScode to the rUBot
 - It is better to update and upgrade the ubuntu
 - Open a terminal and paste the "robot setup code line". After some minutes the robot will be properly installed.
 - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
 - Bringup the robot
+
+Now you connect the The Construct environment to your own rUBot:
+- Open the The Construct environment and choose "Your own ROSjects"
+- Select "Real robots" and "connect"
 - You can control the robot from TheConstruct Terminal
 
+If you want to connect the same robot to another TheConstruct environment account, you have to:
+- In rUBot VScode terminal: Close the bringup and all the open processes
+- In TheConstruct environment: 
+  - Close rviz, gazebo and all the open processes 
+  - Disconnect the rUBot from the "Real robots" menu
+  - Exit the ROSject
+  - logout your TheConstruct account
 
+Open a new account of TheConstruct environment:
+- Select my ROSjects
+- Select the rUBot from the "Real robots" menu
+- Select "Configure" and copy the code line to setup the rUBot to this new environment
+- In rUBot VScode terminal:
+  - Run this code line to setup the rUBot in the VScode terminal
+  - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
+  - Bringup the robot
+- In TheConstruct environment:
+  - Select "Real robots" and "connect"
+  - You can control the robot from TheConstruct Terminal
