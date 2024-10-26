@@ -46,7 +46,7 @@ To **sync the repository** with the one in your github account, follow the instr
 - Access to the TheConstruct environment local repository:
   ````shell
   cd /local repository path
-  ´´´´
+  ````
 - Update the local repository with possible changes in github origin repository
   ````shell
   git pull origin master
