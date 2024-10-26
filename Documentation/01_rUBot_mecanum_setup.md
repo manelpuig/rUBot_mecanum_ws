@@ -24,7 +24,7 @@ The main objectives of this chapter are:
 
 ## **1. Getting started with rUBot_mecanum in simulation environment**
 
-To **setup** the repository in your ROS environment, you need to:
+To **setup the repository** in your ROS environment, you need to:
 - Fork my repository in your github account
 - Open your ROS Noetic environment: https://app.theconstructsim.com/
 - Clone your forked directory in your home directory
@@ -41,6 +41,26 @@ source /opt/ros/noetic/setup.bash
 source /home/user/rUBot_mecanum_ws/devel/setup.bash
 ```
 You are ready to work with your repository!
+
+To **sync the repository** with the one in your github account, follow the instructions:
+- Access to the TheConstruct environment local repository:
+  ````shell
+  cd /local repository path
+  ´´´´
+- Update the local repository with possible changes in github origin repository
+  ````shell
+  git pull origin master
+  ````
+- You can work with your local repository for the speciffic project session
+- Once you have finished and you want to syncronize the changes you have made and update the github origin repository, type:
+  ````shell
+  git add .
+  git commit -m "Message"
+  git push origin master
+  ````
+- You will have to specify the Username and Password (Token you have generated)
+
+Your github origin repository has been updated!
 
 ## **2. Getting started with rUBot_mecanum in real robot**
 
