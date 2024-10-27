@@ -123,7 +123,7 @@ To connect your computer to the robot using VS code with "Remote connection" ext
 - Verify on ssh/settings the user as "ubuntu"
 - specify the password as "ubuntu1234"
 
->Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type:
+>Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type the instuction and you will be able to connect with VScode:
 ````shell
 ssh-keygen -R 10.42.0.1
 ````
@@ -141,7 +141,20 @@ You will be automatically disconnected from VS code and after 1 minute, you can 
 
 ## **2.2. Using The Construct Environment**
 
-To connect your rUBot mecanum robot to the The Construct environment you have to first Add a new robot:
+To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet. This is ensured if:
+- Add and Connect to the desired Wi-Fi Network on startup
+````shell
+sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
+sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
+sudo nmcli connection modify "Manel" connection.autoconnect yes
+````
+- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the hotspot only if "Desired WIFI" isn’t found.
+
+Let's configure this on our rUBots:
+- 
+
+We have to first Add a new robot:
 - Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
 - Specify the name and the ROS version
 - Copy the code line to setup the robot to the TheConstruct environment
