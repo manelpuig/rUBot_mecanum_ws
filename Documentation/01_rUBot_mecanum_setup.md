@@ -142,34 +142,36 @@ You will be automatically disconnected from VS code and after 1 minute, you can 
 ## **2.2. Using The Construct Environment**
 
 To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet. This is ensured if:
-- Add and Connect to the desired Wi-Fi Network on startup
+- Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
 ````shell
 sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
 sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
 sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
 ````
-- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the hotspot only if "Desired WIFI" isn’t found.
+- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the "Hotspot" only if "Desired WIFI" isn’t found.
 ````shell
 sudo nmcli connection modify "Manel" connection.autoconnect yes
 sudo nmcli connection modify "Manel" connection.autoconnect-priority 10
 sudo nmcli connection modify "Hotspot" connection.autoconnect yes
 sudo nmcli connection modify "Hotspot" connection.autoconnect-priority 1
 ````
->To know the IP address of the raspberrypi4 when connectes to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
 
-Let's configure our rUBots in th The Construct environment:
+Let's configure our rUBots in the The Construct environment:
 
-We have to first Add a new robot:
+We have to first **Add a new robot**:
 - Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
 - Specify the name and the ROS version
 - Copy the code line to setup the robot to the TheConstruct environment
 
-Then connect to your own rUBot:
+Then connect to your own rUBot-raspberrypi:
 - Connect VScode to the rUBot
 - It is better to update and upgrade the ubuntu
 - Open a terminal and paste the "robot setup code line". After some minutes the robot will be properly installed.
 - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
 - Bringup the robot
+>To know the IP address of the raspberrypi4 when connectes to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). 
+>- Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
+>- You can change the name of the Device with "rUBot_xx" to identify the robot connected
 
 Now you connect the The Construct environment to your own rUBot:
 - Open the The Construct environment and choose "Your own ROSjects"
