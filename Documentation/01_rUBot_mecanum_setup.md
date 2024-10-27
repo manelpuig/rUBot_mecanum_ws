@@ -147,12 +147,17 @@ To connect your rUBot mecanum robot to the The Construct environment you need th
 sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
 sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
 sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
-sudo nmcli connection modify "Manel" connection.autoconnect yes
 ````
 - Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the hotspot only if "Desired WIFI" isn’t found.
+````shell
+sudo nmcli connection modify "Manel" connection.autoconnect yes
+sudo nmcli connection modify "Manel" connection.autoconnect-priority 10
+sudo nmcli connection modify "Hotspot" connection.autoconnect yes
+sudo nmcli connection modify "Hotspot" connection.autoconnect-priority 1
+````
+>To know the IP address of the raspberrypi4 when connectes to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
 
-Let's configure this on our rUBots:
-- 
+Let's configure our rUBots in th The Construct environment:
 
 We have to first Add a new robot:
 - Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
