@@ -119,8 +119,8 @@ You are ready to work for the laboratory session!
 ### **2.2. Using VS code remote connection with graphical display**
 To connect your computer to the robot using VS code with "Remote connection" extension:
 - Open VS code and select "Remote Explorer"
-- Select the connection "SSH-10.42.0.1"
-- Verify on ssh/settings the user as "ubuntu"
+- Add a new SSH connection as: "ssh -X ubuntu@10.42.0.1"
+- Verify on ssh/settings "ForwardX11 yes" and "user ubuntu" 
 - specify the password as "ubuntu1234"
 
 >Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type the instuction and you will be able to connect with VScode:
