@@ -86,7 +86,7 @@ To connect your PC to the Robot, we have to:
     - password "rUBot_Mec"
 
 
-### **Using nomachine remote desktop**
+### **2.1. Using nomachine remote desktop**
 To connect your computer to the robot using Nomachine, follow the same procedure and take into account:
 
 - user: ubuntu
@@ -116,7 +116,7 @@ source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
 
 You are ready to work for the laboratory session!
 
-### **Using VS code remote connection**
+### **2.2. Using VS code remote connection with graphical display**
 To connect your computer to the robot using VS code with "Remote connection" extension:
 - Open VS code and select "Remote Explorer"
 - Select the connection "SSH-10.42.0.1"
@@ -139,22 +139,22 @@ sudo shutdown now
 
 You will be automatically disconnected from VS code and after 1 minute, you can switch off the raspberryPi.
 
-## **2.2. Using The Construct Environment**
+**Graphical display**
+To have graphical display we need:
+- In your PC: Install Xlaunch 
+  - Start XLaunch and in first window choose "Multiple windows" and Display 0
+  - in second window select "Start no client".
+  - In the third window, ensure that "Disable access control" is selected (this allows your Raspberry Pi to connect).
+  - Finish the setup and let XLaunch run in the background.
+- Obtain the IP of your PC (i.e. 10.42.0.78)
+- In VScode raspberrypi4:
+  - Add to .bashrc file the line: export DISPLAY=10.42.0.78:0.0
 
-To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet. This is ensured if:
-- Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
-````shell
-sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
-sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
-sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
-````
-- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the "Hotspot" only if "Desired WIFI" isn’t found.
-````shell
-sudo nmcli connection modify "Manel" connection.autoconnect yes
-sudo nmcli connection modify "Manel" connection.autoconnect-priority 10
-sudo nmcli connection modify "Hotspot" connection.autoconnect yes
-sudo nmcli connection modify "Hotspot" connection.autoconnect-priority 1
-````
+Graphical windows will be displayed in your PC Display!
+
+### **2.3. Using The Construct Environment**
+
+To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet within a WiFi network. 
 
 Let's configure our rUBots in the The Construct environment:
 

@@ -46,7 +46,7 @@ sudo apt install ubuntu-desktop
 sudo shutdown now
 ````
 
-## **2. Create Wi-Fi Hotspot**
+## **2. Create Wi-Fi connections and Hotspot**
 
 To create a Hotspot, follow instructions in: https://www.debugpoint.com/2020/04/how-to-create-wifi-hotspot-in-ubuntu-20-04-lts/
 
@@ -73,6 +73,22 @@ nmcli con show Hotspot
   - type "ip add"
   - in wlan0 you identify the inet address: 10.42.0.1
 
+A very intesresting configuration is to connect the robots to a speciffic WiFi network connection (if available) or gererate a Hotspot if this network is not available.
+
+This can be done following the steps:
+- Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
+````shell
+sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
+sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
+````
+- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the "Hotspot" only if "Desired WIFI" isn’t found.
+````shell
+sudo nmcli connection modify "Manel" connection.autoconnect yes
+sudo nmcli connection modify "Manel" connection.autoconnect-priority 10
+sudo nmcli connection modify "Hotspot" connection.autoconnect yes
+sudo nmcli connection modify "Hotspot" connection.autoconnect-priority 1
+````
 
 ## **3. Install nomachine remote desktop**
 

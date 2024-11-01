@@ -1,0 +1,46 @@
+PC: Xlaunch
+
+Start XLaunch and choose "Multiple windows" and Display 0
+Select "Start no client".
+In the next window, ensure that "Disable access control" is selected (this allows your Raspberry Pi to connect).
+Finish the setup and let XLaunch run in the background.
+Obtain the IP of your PC (10.42.0.78)
+
+Configuring Your Raspberry Pi:
+For Docker:
+export DISPLAY=10.42.0.78:0.0
+xhost +local:docker  # Allow Docker to use X11 on your host
+sudo docker run \
+    --name ros_noetic_arm \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -it ros:noetic-ros-base-focal
+
+update and upgrade
+
+Install docker extension (from Microsoft)
+
+sudo usermod -aG docker ubuntu
+
+restart VScode and remote connection
+
+Click on docker view, run container and attach to container
+
+Open Home and /root/.bashrc and add:
+source /opt/ros/noetic/setup.bash
+
+sudo apt update
+sudo apt upgrade
+sudo apt install ros-noetic-rviz
+
+
+For Remote connection VScode:
+#Obtain with ipconfig in your local machine and add it to .bashrc
+export DISPLAY=10.42.0.78:0.0 
+#surely not necessary:
+sudo apt update
+sudo apt install qt5-default qtbase5-dev
+#to allow local connections to your X server
+xhost +local:
+
+
