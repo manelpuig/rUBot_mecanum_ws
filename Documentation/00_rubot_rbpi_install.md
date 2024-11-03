@@ -73,14 +73,20 @@ nmcli con show Hotspot
   - type "ip add"
   - in wlan0 you identify the inet address: 10.42.0.1
 
-A very intesresting configuration is to connect the robots to a speciffic WiFi network connection (if available) or gererate a Hotspot if this network is not available.
+This can be done without graphical interface using a terminal:
+````shell
+sudo nmcli connection add type wifi ifname wlan0 mode ap con-name "Hotspot" ssid "rUBot_xx"
+sudo nmcli connection modify "Hotspot" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "Hotspot" wifi-sec.psk "your_password"
+````
+A very intesresting configuration is to connect the robots to a speciffic WiFi network connection (if available) or gererate this Hotspot if this network is not available.
 
 This can be done following the steps:
 - Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
 ````shell
 sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
 sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
-sudo nmcli connection modify "Manel" wifi-sec.psk "pass"
+sudo nmcli connection modify "Manel" wifi-sec.psk "your_password"
 ````
 - Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the "Hotspot" only if "Desired WIFI" isn’t found.
 ````shell

@@ -1,4 +1,4 @@
-# rUBot_mecanum lidar
+# rUBot_mecanum
 This rubot_mecanum workspace is organized in the following sections:
 | Document | Contents   |
 |------|------|

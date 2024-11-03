@@ -85,6 +85,7 @@ To connect your PC to the Robot, we have to:
     - SSID name: rubot_XX 
     - password "rUBot_Mec"
 
+To control remotelly your raspberrypi from your local PC, you have different options:
 
 ### **2.1. Using nomachine remote desktop**
 To connect your computer to the robot using Nomachine, follow the same procedure and take into account:
@@ -141,8 +142,9 @@ You will be automatically disconnected from VS code and after 1 minute, you can 
 
 **Graphical display**
 To have graphical display we need:
-- In your PC: Install Xlaunch 
-  - Start XLaunch and in first window choose "Multiple windows" and Display 0
+- In your PC: Install Xlaunch
+  - Download and install "Xming X Server for Windows" from: https://sourceforge.net/projects/xming/
+  - Start XLaunch and in first window choose "Multiple windows" and Display "0"
   - in second window select "Start no client".
   - In the third window, ensure that "Disable access control" is selected (this allows your Raspberry Pi to connect).
   - Finish the setup and let XLaunch run in the background.
@@ -156,40 +158,38 @@ Graphical windows will be displayed in your PC Display!
 
 To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet within a WiFi network. 
 
-Let's configure our rUBots in the The Construct environment:
+Let's configure our rUBots:
+- In the **TheConstruct environment**, we have to first Add a new robot:
+  - Open your TheConstruct environment and choose "Real Robots". Here you can add your robot.
+  - Specify the name and the ROS version
+  - Copy the "robot setup code line" used later to setup the robot to the TheConstruct environment
 
-We have to first **Add a new robot**:
-- Open TheConstruct environment and choose "Real Robots". Here you can add your robot.
-- Specify the name and the ROS version
-- Copy the code line to setup the robot to the TheConstruct environment
+- In the **VScode terminal on rUBot-raspberrypi**:
+  - It is better first to update and upgrade the ubuntu20
+  - Paste the "robot setup code line". After some minutes the robot will be properly installed.
+  - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
+  - Bringup the robot
+  >To know the IP address of the raspberrypi4 when connectes to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). 
+  >- Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
+  >- You can change the name of the Device with "rUBot_xx" to identify the robot connected
 
-Then connect to your own rUBot-raspberrypi:
-- Connect VScode to the rUBot
-- It is better to update and upgrade the ubuntu
-- Open a terminal and paste the "robot setup code line". After some minutes the robot will be properly installed.
-- Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
-- Bringup the robot
->To know the IP address of the raspberrypi4 when connectes to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). 
->- Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
->- You can change the name of the Device with "rUBot_xx" to identify the robot connected
+Now you connect the "TheConstruct environment" to your own rUBot:
+- Select my ROSjects and open your ROSject environment (i.e. "ROS_Noetic_rUBot") 
+- Select "Real robots", select the rUBot you have configured previously and "connect"
+- You can control the robot from the same TheConstruct environment you are using for simulation
 
-Now you connect the The Construct environment to your own rUBot:
-- Open the The Construct environment and choose "Your own ROSjects"
-- Select "Real robots" and "connect"
-- You can control the robot from TheConstruct Terminal
-
-If you want to connect the same robot to another TheConstruct environment account, you have to:
-- In rUBot VScode terminal: Close the bringup and all the open processes
-- In TheConstruct environment: 
-  - Close rviz, gazebo and all the open processes 
-  - Disconnect the rUBot from the "Real robots" menu
+If **another student** wants to connect to the same robot from his own "TheConstruct" environment, he has to:
+- Be sure the rUBot is not connected to any other user, the bringup and all the open processes are closed
+- Be sure that the previous student in his own "TheConstruct environment" has: 
+  - Closed rviz, gazebo and all the opened processes 
+  - Disconnected the rUBot from the "Real robots" menu
   - Exit the ROSject
-  - logout your TheConstruct account
+  - logout his TheConstruct account
 
-Open a new account of TheConstruct environment:
-- Select my ROSjects
+Then this new student can open his account of TheConstruct environment:
+- Select my ROSjects and open your ROSject environment (i.e. "ROS_Noetic_rUBot") 
 - Select the rUBot from the "Real robots" menu
-- Select "Configure" and copy the code line to setup the rUBot to this new environment
+- Select "Configure" and copy the "robot setup code line" to setup the rUBot to this new environment
 - In rUBot VScode terminal:
   - Run this code line to setup the rUBot in the VScode terminal
   - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
