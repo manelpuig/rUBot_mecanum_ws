@@ -150,6 +150,19 @@ To have graphical display we need:
   - Finish the setup and let XLaunch run in the background.
 - Obtain the IP of your PC (i.e. 10.42.0.78)
 - In VScode raspberrypi4:
+  - update and upgrade the raspberrypi ubuntu
+  - Perhaps the firewall will block the connection, you have to create a new firewall rule:
+    - Open the Windows Defender Firewall settings.
+    - Go to Advanced Settings.
+    - Create a new inbound rule:
+      - Rule Type: Custom
+      - Program: All programs
+      - Protocol: TCP
+      - Local Port: All ports
+      - Remote IP Address: 10.42.0.0/24
+      - Action: Allow the connection
+      - Profile: Check only "Private" to allow traffic when connected to private networks.
+  - reboot
   - Add to .bashrc file the line: export DISPLAY=10.42.0.78:0.0
 
 Graphical windows will be displayed in your PC Display!
