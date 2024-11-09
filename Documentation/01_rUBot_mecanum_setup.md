@@ -107,7 +107,8 @@ Every laboratory session you have to copy your updated "rUBot_mecanum_ws" reposi
 If you have not internet connection you can:
 - obtain the zip file of repository from github 
 - drag the zip file from computer directory to the raspberrypi4 Desktop folder
-- Unzip the file and compile
+- Unzip the file. Taka care with the name of folder has surely changed to "rUBot_mecanum_ws-master" and perhaps another subfolder with the same name has been added. Make the necessary modifications before compilation.
+- Compile with "catkin_make"
 
 Review the ~/.bashrc: Verify the last lines:
 ```shell
@@ -118,11 +119,11 @@ source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
 You are ready to work for the laboratory session!
 
 ### **2.2. Using VS code remote connection with graphical display**
-To connect your computer to the robot using VS code with "Remote connection" extension:
+To connect your computer to the robot using VS code with "Remote Explorer" extension installed:
 - Open VS code and select "Remote Explorer"
 - Add a new SSH connection as: "ssh -X ubuntu@10.42.0.1"
 - Verify on ssh/settings "ForwardX11 yes" and "user ubuntu" 
-- specify the password as "ubuntu1234"
+- After connection specify the password as "ubuntu1234"
 
 >Note: When you connect to another rUBot from the same computer, you will have to regenerate the KEYS. In a new cmd on your PC, type the instuction and you will be able to connect with VScode:
 ````shell
@@ -135,6 +136,8 @@ To finish, follow the steps:
 - in a VScode rUBot terminal type:
 ````shell
 sudo shutdown now
+or
+sudo poweroff
 ````
 - in VS code choose "Close remote connection"
 
@@ -148,7 +151,7 @@ To have graphical display we need:
   - in second window select "Start no client".
   - In the third window, ensure that "Disable access control" is selected (this allows your Raspberry Pi to connect).
   - Finish the setup and let XLaunch run in the background.
-- Obtain the IP of your PC (i.e. 10.42.0.78)
+- Obtain the IP of your PC using "cmd" and type "ipconfig" (i.e. 10.42.0.78)
 - In VScode raspberrypi4:
   - update and upgrade the raspberrypi ubuntu
   - Perhaps the firewall will block the connection, you have to create a new firewall rule:
