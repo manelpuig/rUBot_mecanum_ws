@@ -625,12 +625,13 @@ Graphically we have this structure:
 ### **Lab Activity: rUBot bringup HW**
 
 The objective of this session is to understand the diferent nodes we have to launch to bringup our robot and verify the working performances.
+- Launch the **rubot_bringup_hw_arduino.launch** 
 - Verify the nodes and topics 
 - verify the Camera images
 - Verify the Lidar performances
 - Verify the arduino node
 
-Have you something that is not working as you expected?
+Do you think that all is working as you expected? why?
 
 Upload the following:
 - Picture of the RVIZ screen obtained
