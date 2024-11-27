@@ -4,7 +4,7 @@
     <arg name="speed_factor" default="1" />
     <arg name="rotation_speed" default="0.2" />
     <arg name="forward_speed" default="0.1" />
-  <node name="wall_follower" pkg="rubot_control" type="rubot_wall_follower_rg_mpuig2.py" output="screen" >
+  <node name="wall_follower" pkg="rubot_control" type="rubot_wall_follower_rg.py" output="screen" >
     <param name="distance_laser" value="$(arg distance_laser)"/>
     <param name="speed_factor" value="$(arg speed_factor)"/>
     <param name="rotation_speed" value="$(arg rotation_speed)"/>
