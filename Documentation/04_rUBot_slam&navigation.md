@@ -35,7 +35,7 @@ change the path corresponding to your ws
 
 To perform SLAM & Navigation, we need to create a specific **"rubot_slam" package**.
 
-This package is already created in the simulation ws. Take the same "rubot_slam" package and make few modifications to use it to:
+This package is already created. Take the same "rubot_slam" package and make few modifications to use it to:
 - generate the map of your maze
 - navigate to speciffic target points within the map
 
@@ -49,63 +49,49 @@ Now you can follow the next steps:
 
 To generate the map we need first to:
 - Bringup rUBot_mecanum
-```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
-```
+  ```shell
+  roslaunch rubot_slam rubot_slam_bringup_sw.launch
+  ```
+  >Verify the robot model and world files
 - Start the slam_gmapping node
-```shell
-roslaunch rubot_slam rubot_slam.launch
-```
-This node is highly configurable and has lots of parameters you can change in order to improve the mapping performance. (http://wiki.ros.org/gmapping)
+  ```shell
+  roslaunch rubot_slam rubot_slam.launch
+  ```
+    >Verify the robot model
 
-Let's now check some of the most important ones that usually have to be changed:
+  This starts the "slam_gmapping" node that is highly configurable and has lots of parameters you can change in order to improve the mapping performance. (http://wiki.ros.org/gmapping).
 
-- base_frame (default: "base_link"): Indicates the name of the frame attached to the mobile base.
-- map_update_interval (default: 5.0): Sets the time (in seconds) to wait until update the map. (I take 1s)
-- delta (default: 0.05): Sets the resolution of the map (I take 0.01m)
+  Open the "gmapping.launch" file and change properly the parameters you consider:
 
-Open the "gmapping.launch" file and change properly the parameters you consider. 
+  - base_frame (default: "base_link"): Indicates the name of the frame attached to the mobile base.
+  - map_update_interval (default: 5.0): Sets the time (in seconds) to wait until update the map. (I take 1s)
+  - delta (default: 0.05): Sets the resolution of the map (I take 0.01m)
 
-- use the navigation program you have designed to follow the walls for exemple to properly generate the map.
-```shell
-roslaunch rubot_control rubot_wall_follower_rg.launch
-```
-- or let's do this as usual with the teleoperation package:
-```shell
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-```
+- use teleop_twist_keyboard or the wall_follower program to properly generate the map.
+  ```shell
+  rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+  or
+  roslaunch rubot_control rubot_wall_follower_rg.launch
+  ```
+
 ![](./Images/04_Slam/1_rubot_map1.png)
 
 - Once you have finish the map, you need to launch the map_saver program from map_server package:
-```shell
-cd src/rubot_slam/maps
-rosrun map_server map_saver -f test_map
-```
-The map files will be saved in local directory
+  ```shell
+  cd src/rubot_slam/maps
+  rosrun map_server map_saver -f test_map
+  ```
+  >Change the map name. This will be used later.
 
-You will get two files in the specified folder of your workspace: 
-- test_map.pgm (2D B&W map picture)
-- test_map.yaml (map parameters)
+  The map files will be saved in local directory
+
+  You will get two files in the specified folder of your workspace: 
+  - test_map.pgm (2D B&W map picture)
+  - test_map.yaml (map parameters)
 
 Provided with the map, we are ready to perform robot navigation with the rUBot_mecanum robot.
 
 You can close now the "rubot_slam.launch" file.
-
-**Lab Activity 6: rUBot SLAM HW**
-
-The objective of this activity is:
-- Construct the project world in the laboratory and generate the MAP with your real rUBot
-- Consider to create a big map because of the size of our robot. Change the parameters you consider for the final map
-
-To bringup the real robot for the SLAM process use the speciffic launch file:
-```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_pi.launch
-```
-
-Upload:
-- video of real process for map generation
-- the list of parameters you have changed and a short explanation about the reasons for this change
-
 
 ## **2. Navigate to speciffic target points within the map**
 
@@ -132,14 +118,14 @@ These parameters will allow you to configure the way that the navigation is perf
 
 - footprint: dimensions of the base_footprint for colision information
 - Inflation radius: increase dimensions of obstacles to prevent colisions
-- cost scaling factor: to define allowed regions among obstacles to define the optimal trajectory.
+- cost scaling factor: to define allowed regions among obstacles and obtain the optimal trajectory.
 
 Review these parameters in "costmap_common_params.yaml"
 
 **move_base Parameters**
 
 Consider to modify:
-- controller_frequency to 5.0Hz instead of 10.0Hz
+- controller_frequency to 2.0Hz instead of 10.0Hz
 
 You can refine some parameters considering the recommendations in: https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#tuning-guide
 
@@ -149,34 +135,49 @@ You can refine some parameters considering the recommendations in: https://emanu
 
 To navigate within the map we need first to:
 - Bringup rUBot_mecanum (if you have closed it before)
-```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
-```
+  ```shell
+  roslaunch rubot_slam rubot_slam_bringup_sw.launch
+  ```
 - Launch the rubot_navigation file
-```shell
-roslaunch rubot_slam rubot_navigation.launch
-```
->Take care in launch file to read the correct robot model name and the correct map file in "maps" folder
+  ```shell
+  roslaunch rubot_slam rubot_navigation.launch
+  ```
+  >Write the correct robot model and map name
 - Set up an initial pose by using the 2D Pose Estimate tool (which published that pose to the /initialpose topic).
 - To obtain a proper localisation of your robot, move it right and left using the key_teleop.
-```shell
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-```
-![](./Images/04_Slam/2_rubot_nav1.png)
+  ```shell
+  rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+  ```
+  ![](./Images/04_Slam/2_rubot_nav1.png)
 
 - Select the target goal to navigate with the tool "2D-Nav-Goal"
 - With a "Differential Drive" kinematics robot structure, the mobility is not optimum and some target poits are not accessible and the program is aborted
 
-![](./Images/04_Slam/3_rubot_abort.png)
+  ![](./Images/04_Slam/3_rubot_abort.png)
 
 - Using "omni" drive performances, the robot is able to move also in y direction and the mobility is much better.
 
-- You need to modify the "dwa_local_planner_params_burger.yaml parameters. 
+- You need to modify the "dwa_local_planner_params.yaml parameters. 
 
-![](./Images/04_Slam/4_rubot_lateral.png)
+  ![](./Images/04_Slam/4_rubot_lateral.png)
 
 You can see the optimized trajectory. The robot starts to follow this trajectory and if an obstacle appears, the robot avoid this obstacle and find in realtime the new optimal trajectory to the target point. 
 
+**Lab Activity: Generate the map with rUBot real HW environment**
+
+The objective of this activity is:
+- Construct the project world in the laboratory and generate the MAP with your real rUBot
+- Consider to create a big map because of the size of our robot. Change the parameters you consider for the final map
+
+To bringup the real robot for the SLAM process use the speciffic launch file:
+```shell
+roslaunch rubot_slam rubot_slam_bringup_hw_arduino.launch
+```
+Follow the previous instructions for virtual environment to generate the MAP with your real rUBot.
+
+Upload:
+- video of real process for map generation
+- the list of parameters you have changed and a short explanation about the reasons for this change
 
 ## **3. Programatic control of Robot Navigation**
 
@@ -257,7 +258,7 @@ roslaunch rubot_slam rubot_navigation.launch
 roslaunch rubot_slam waypoints_goal.launch
 ```
 
-**Lab Activity 7: rUBot SLAM-Navigation HW**
+**Lab Activity: Programmatic Navigation with real rUBot**
 
 The objective of this activity is:
 - Considering the generated MAP, create a new waypoints.yaml file with the desired navigation target points
@@ -266,7 +267,7 @@ The objective of this activity is:
 
 To bringup the real robot for the SLAM process use the speciffic launch file:
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_pi.launch
+roslaunch rubot_slam rubot_slam_bringup_hw_arduino.launch
 ```
 
 Upload:
