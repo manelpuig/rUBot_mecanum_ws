@@ -49,14 +49,14 @@ To **sync the repository** with the one in your github account, follow the instr
   ````
 - Update the local repository with possible changes in github origin repository
   ````shell
-  git pull origin master
+  git pull
   ````
 - You can work with your local repository for the speciffic project session
 - Once you have finished and you want to syncronize the changes you have made and update the github origin repository, type:
   ````shell
   git add .
   git commit -m "Message"
-  git push origin master
+  git push
   ````
 - You will have to specify the Username and Password (Token you have generated)
 
