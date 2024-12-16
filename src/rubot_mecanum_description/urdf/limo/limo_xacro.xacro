@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot name="limo_xacro" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="limo_wheel" params="parent_prefix wheel_prefix reflect *joint_pose">
+        <link name="${wheel_prefix}_wheel_link">
+            <inertial>
+                <origin xyz="0 0.022 0" />
+                <mass value="0.2" />
+                <inertia ixx="0.000147" ixy="0" ixz="0" iyy="0.00023" iyz="0" izz="0.000147" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://limo_description/meshes/limo_wheel.dae" />
+                </geometry>
+            </visual>
+            <collision>
+              <origin xyz="0 ${wheel_length/2} 0" rpy="1.57 0 0" />
+              <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}" />
+              </geometry>
+            </collision>
+        </link>
+
+        <joint name="${wheel_prefix}_wheel" type="continuous">
+            <parent link="${parent_prefix}"/>
+            <child link="${wheel_prefix}_wheel_link"/>
+            <xacro:insert_block name="joint_pose"/>
+            <axis xyz="0 ${reflect*1} 0"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="limo_laser" params="parent_prefix frame_prefix *joint_pose">
+        <link name='${frame_prefix}_link' />
+        <joint type="fixed" name="laser_joint">
+            <xacro:insert_block name="joint_pose"/>
+            <child link="${frame_prefix}_link"/>
+            <parent link="${parent_prefix}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="limo_depth_camera" params="parent_prefix frame_prefix *joint_pose">
+        <link name='${frame_prefix}_link' />
+          
+        <joint type="fixed" name="depth_camera_joint">
+            <xacro:insert_block name="joint_pose"/>
+            <child link="${frame_prefix}_link"/>
+            <parent link="${parent_prefix}"/>
+        </joint>
+
+        <link name="depth_link" />
+        
+        <joint name="${frame_prefix}_to_camera_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2} "/>
+            <parent link="${frame_prefix}_link"/>
+            <child link="depth_link"/>
+          </joint>
+    </xacro:macro>
+
+    <xacro:macro name="limo_imu" params="parent_prefix frame_prefix  *joint_pose">
+        <link name='${frame_prefix}_link'/>
+        <joint type="fixed" name="imu_joint">
+            <xacro:insert_block name="joint_pose"/>
+            <child link="${frame_prefix}_link"/>
+            <parent link="${parent_prefix}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:include filename="$(optenv URDF_EXTENSION empty.urdf)" />
+</robot>
