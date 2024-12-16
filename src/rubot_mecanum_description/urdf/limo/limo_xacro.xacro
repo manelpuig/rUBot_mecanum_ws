@@ -10,7 +10,7 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://limo_description/meshes/limo_wheel.dae" />
+                    <mesh filename="package://rubot_mecanum_description/meshes/limo/limo_wheel.dae" />
                 </geometry>
             </visual>
             <collision>

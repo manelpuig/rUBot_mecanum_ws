@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <robot name="limo_four_diff" xmlns:xacro="http://ros.org/wiki/xacro">
-    <xacro:include filename="$(find limo_description)/urdf/limo_gazebo.gazebo" />
+    <xacro:include filename="$(find rubot_mecanum_description)/urdf/limo/limo_gazebo.gazebo" />
 
     <!-- Actuator configurations -->
     <xacro:limo_wheel_transmission wheel_prefix="front_right" />
