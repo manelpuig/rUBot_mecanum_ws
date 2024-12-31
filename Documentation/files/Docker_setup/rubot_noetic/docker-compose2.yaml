@@ -1,0 +1,20 @@
+services:
+  ros-noetic-rubot-mecanum:
+    image: ros-noetic-rubot-mecanum:v2  # La imatge personalitzada
+    privileged: true
+    network_mode: host # Comparteix la xarxa amb l'amfitrió
+    container_name: container-ros-noetic-rubot-mecanum2
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_MASTER_URI=http://${RUBOT}:11311
+      - ROS_IP=${RUBOT}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+    devices:
+      - /dev/video0  # Activa si està disponible
+      - /dev/ttyUSB0  # Activa si està disponible
+      - /dev/ttyACM0  # Activa si està disponible
+    entrypoint: /root/entrypoint2.sh
+    command: ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]
+    restart: always  # Reengega el contenidor si falla
