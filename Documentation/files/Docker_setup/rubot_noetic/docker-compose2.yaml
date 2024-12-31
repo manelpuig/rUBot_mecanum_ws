@@ -6,15 +6,11 @@ services:
     container_name: container-ros-noetic-rubot-mecanum2
     environment:
       - DISPLAY=${DISPLAY}
-      - ROS_MASTER_URI=http://${RUBOT}:11311
-      - ROS_IP=${RUBOT}
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=localhost
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /dev:/dev
-    devices:
-      - /dev/video0  # Activa si està disponible
-      - /dev/ttyUSB0  # Activa si està disponible
-      - /dev/ttyACM0  # Activa si està disponible
     entrypoint: /root/entrypoint2.sh
     command: ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]
     restart: always  # Reengega el contenidor si falla

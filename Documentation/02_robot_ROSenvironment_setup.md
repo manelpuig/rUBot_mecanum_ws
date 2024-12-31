@@ -19,10 +19,17 @@ His main characteristics are:
 
 The main objectives of this chapter are:
 
-- Getting started with rUBot_mecanum in simulation environment
-- Getting started with rUBot_mecanum in real robot
+- Setup the ROS environment to work with rUBot_mecanum_ws in simulation mode
+- Connect the ROS environment with the real rUBot_mecanum
 
-## **1. Getting started with rUBot_mecanum in simulation environment**
+## **1. Setup the ROS environment**
+
+For a proper ROS environment we can use:
+- The third party TheConstruct ROS environment (recommended)
+- ROS environment based on WSL
+- ROS environment based on Docker
+
+### **1.1 TheConstruct ROS environment (recommended)**
 
 To **setup the repository** in your ROS environment, you need to:
 - Fork my repository in your github account
@@ -58,67 +65,198 @@ To **sync the repository** with the one in your github account, follow the instr
   git commit -m "Message"
   git push
   ````
-- You will have to specify the Username and Password (Token you have generated)
+- You will have to specify the Username and Password (Personal Access Token you have generated)
+
+To obtain the **PAT** in github follow the instructions:
+
+- Log in to GitHub
+- Go to Developer Settings
+- Select Access Personal Access Tokens: Choose Tokens (classic)
+- Click Generate new token (classic) and configure it:
+  - Add a note to describe the purpose of the token, e.g., "ROS repo sync."
+  - Set the expiration (e.g., 30 days, 60 days, or no expiration).
+  - Under Scopes, select the permissions required:
+    - For repository sync, you usually need: repo (full control of private repositories)
+  - Click Generate token
+- Once the token is generated, copy it immediately. You won't be able to see it again after leaving the page.
 
 Your github origin repository has been updated!
 
-## **2. Getting started with rUBot_mecanum in real robot**
+### **1.2 WSL ROS environment**
+
+Windows Subsystem for Linux is a good method to install a Linux Virtual Machine with ROS in a **windows PC**.
+
+You will have to download and install Ubuntu from Microsoft store
+
+You will have a **fast** and robust ROS environment in your windows PC
+
+To properly work with WSL, use VScode with "Remote Explorer" extension installed:
+- Open VS code and select "Remote Explorer"
+- Select "WSL targets" and the "ubuntu20" 
+- Connect to a new window
+- Install ROS
+
+To finish, in a VScode choose "Close remote connection"
+
+You will be automatically disconnected from WSL Virtual machine.
+
+### **1.3 Docker ROS environment**
+
+Docker is also a good option to install a ROS Virtual machine. This is compatible for Windows and MAC.
+
+You will have to:
+- Download and install Docker: https://docs.docker.com/desktop/setup/install/windows-install/
+- All official Docker Images available are located in: [DockerHub](https://hub.docker.com/)
+- Create a container with name, graphical display and Interactivelly type:
+  ````shell
+  docker run -it --name ros_noetic_desktop_rubot_container --env DISPLAY=host.docker.internal:0.0 --network=host --privileged ros_noetic_desktop_rubot /bin/bash
+  ````
+- Start XLaunch on your Windows PC for graphical interface and configure it with these settings:
+    - Select "Multiple windows" or "One large window", depending on your preference.
+    - Set Display number to 0 (default).
+    - Enable "No Access Control" if you're having trouble connecting. This is less secure but helpful for initial setup and debugging.
+    - Click Next and complete the setup.
+
+- From VScode select Docker Extension and attach to the new running container and open folder in /root. 
+
+You are now ready to work on your custom ROS container with graphical display!
+
+To Exit the container:
+- Close remote connection in VScode attached to Container
+- In PC VScode terminal on container, type "exit"
+- You can also user the Docker Extension to start and stop the container
+
+## **2. Connect the ROS environment with the real rUBot**
 
 The main objectives are:
 
-- Setup the rUBot with raspberrypi4-B 8GB
-- Copy the "rUBot_mecanum_ws" workspace to be ready
+- Connect the ROS environment to the real rUBot 
+- Control the real rUBot with the previously simulated packages
 
-The raspberrypi4 onboard is preinstalled with:
-- Ubuntu20.04 server 64bits
-- NoMachine remote desktop
-- ROS Noetic
+There are different options:
+- When real rUBot is connected to a Public Nerwork, we can use:
+  - The Construct ROS Environment (recommended)
+  - WSL ROS environment
+  - Docker ROS environment
+- When real rUBot starts a local hotspot, we can use:
+  - Remote Desktop
+  - VScode with grahical interface
 
-When connected to power, it is configured to:
-- generate a hotspot "rubot_XX"
-- virtual monitor installed
+### **2.1. When real rUBot is connected to a Public Nerwork**
 
-### **Robot connection from PC**
+When real rUBot is connected to a Public Nerwork we can connect to the real rUBot using:
+  - TheConstruct ROS Environment (recommended)
+  - WSL ROS environment
+  - Docker ROS environment
 
-To connect your PC to the Robot, we have to:
-- select the rubot hotspot:
-    - SSID name: rubot_XX 
-    - password "rUBot_Mec"
+### **2.1.1. TheConstruct ROS Environment (recommended)**
 
-To control remotelly your raspberrypi from your local PC, you have different options:
+To connect your rUBot mecanum robot to the The Construct environment (https://www.robotigniteacademy.com/) you need the rUBot to be connected to Ethernet within a WiFi network. 
 
-### **2.1. Using nomachine remote desktop**
-To connect your computer to the robot using Nomachine, follow the same procedure and take into account:
+The **Instructor** will configure our rUBot:
+- In the master **TheConstruct account**, we have to first Add a new robot:
+  - Open the TheConstruct account and choose "Real Robots". Here you can add your robot.
+  - Specify the name and the ROS version
+  - Copy the "robot setup code line" used later to setup the robot to the TheConstruct environment
 
+- In the **VScode terminal on rUBot-raspberrypi**:
+  - It is better first to update and upgrade the ubuntu20
+  - Paste the "robot setup code line". After some minutes the robot will be properly installed.
+  - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
+  - Bringup the robot. This will be done automatically every time the robot is swhitched on.
+
+The **students** will be able to connect to specific real robot:
+- Connect to the proper account: robotics.ub1@gmail.com
+- In the **TheConstruct environment ROS_Noetic_course** from "my ROSjects": 
+  - Select "Real robots", select the rUBot you have configured previously and "connect"
+  - You can control the robot from the same TheConstruct environment you are using for simulation
+
+The real rUBot is usually connectet to a public network with "robotics_ub" hotspot and the ROS environment is installed in a PC connected to a public network (the same "robotics_ub" or a different one).
+
+### **2.1.2 WSL ROS environment**
+
+To work with a real rUBot, connect your computer to the same Public Network your robot is connected to.
+
+Using VS code with "Remote Explorer" extension installed:
+- Open VS code and select "Remote Explorer"
+- Select "WSL targets" and the "ubuntu20" 
+- Connect to a new window
+
+To control your real rUBot, you will have to specify that:
+
+- The master is running in the rUBot board
+- Your ROS environment is located in another PC
+
+You will have to configure:
+- The .bashrc from rUBot raspberrypi board with:
+````shell
+export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
+export ROS_IP=<raspberry_pi_ip>
+````
+- The .bashrc from PC ROS environment with:
+````shell
+export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
+export ROS_IP=<WSL2_ip>
+````
+Now you can control and view graphic windows with your PC under WSL ROS Virtual Machine! 
+
+To finish, follow the steps:
+- in a VScode rUBot terminal type:
+  ````shell
+  sudo poweroff
+  ````
+- in VS code choose "Close remote connection"
+
+You will be automatically disconnected from VS code and after 1 minute, you can switch off the raspberryPi.
+
+### **2.1.3. Using Docker ROS environment**
+
+To control the real rUBot you will have to connect your PC to the same Public Network your real rUBot is connected to.
+
+You will have to specify that:
+
+- The master is running in the rUBot board
+- Your ROS environment is located in another PC
+
+You will have to configure:
+- The .bashrc from rUBot raspberrypi board with:
+````shell
+export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
+export ROS_IP=<raspberry_pi_ip>
+````
+- The .bashrc from PC ROS environment with:
+````shell
+export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
+export ROS_IP=<Docker_ip>
+````
+Now you can control and view graphic windows with your PC under Docker container!
+
+
+### **2.2. When real rUBot starts a local hotspot**
+
+When real rUBot starts a local hotspot, we can connect to the real rUBot using:
+  - Remote Desktop
+  - VScode with grahical interface
+
+### **2.2.1 Remote Desktop**
+
+To connect your PC to the Robot Hotspot, we have to select the rubot hotspot network:
+  - SSID name: rubot_XX 
+  - password "rUBot_Mec"
+
+We will use Nomachine as a remote Desktop, select:
+- IP address: 10.42.0.1
 - user: ubuntu
 - password: ubuntu1234
-
->You do not need a Dongle HDMI
 
 For a proper Display resolution in Nomachine, select: Display --> Change the size of remote screen
 
 You will have the rUBot desktop on your windows nomachine screen
 
-
-#### **Copy a repository**
-
-Every laboratory session you have to copy your updated "rUBot_mecanum_ws" repository to the home/ubuntu/Desktop folder.
-
-If you have not internet connection you can:
-- obtain the zip file of repository from github 
-- drag the zip file from computer directory to the raspberrypi4 Desktop folder
-- Unzip the file. Take care with the name of folder has surely changed to "rUBot_mecanum_ws-master" and perhaps another subfolder with the same name has been added. Make the necessary modifications before compilation.
-- Compile with "catkin_make"
-
-Review the ~/.bashrc: Verify the last lines:
-```shell
-source /opt/ros/noetic/setup.bash
-source /home/ubuntu/Desktop/rUBot_mecanum_ws/devel/setup.bash
-```
-
 You are ready to work for the laboratory session!
 
-### **2.2. Using VS code remote connection with graphical display**
+### **2.2.2. VS code with graphical display**
+
 To connect your computer to the robot using VS code with "Remote Explorer" extension installed:
 - Open VS code and select "Remote Explorer"
 - Add a new SSH connection as: "ssh -X ubuntu@10.42.0.1"
@@ -135,8 +273,6 @@ You are now inside the rUBot_xx raspberrypi!
 To finish, follow the steps:
 - in a VScode rUBot terminal type:
 ````shell
-sudo shutdown now
-or
 sudo poweroff
 ````
 - in VS code choose "Close remote connection"
@@ -175,35 +311,3 @@ To have graphical display we need:
 
 Graphical windows will be displayed in your PC Display!
 
-### **2.3. Using The Construct Environment**
-
-To connect your rUBot mecanum robot to the The Construct environment you need the rUBot to be connected to Ethernet within a WiFi network. 
-
-Let's configure our rUBots:
-- In the **TheConstruct account**, we have to first Add a new robot:
-  - Open the TheConstruct account and choose "Real Robots". Here you can add your robot.
-  - Specify the name and the ROS version
-  - Copy the "robot setup code line" used later to setup the robot to the TheConstruct environment
-
-- In the **VScode terminal on rUBot-raspberrypi**:
-  - It is better first to update and upgrade the ubuntu20
-  - Paste the "robot setup code line". After some minutes the robot will be properly installed.
-  - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
-  - Bringup the robot
-  >To know the IP address of the raspberrypi4 when connected to "Manel" WiFi network, the best tool is "Advanced IP Scanner" (https://www.advanced-ip-scanner.com/download/). 
-  >- Run this application in your PC when your PC is also connected to the "Manel" WiFi network.
-  >- You can change the name of the Device with "rUBot_xx" to identify the robot connected
-
-- In the **TheConstruct environment ROS_Noetic_course** from "my ROSjects": 
-  - Select "Real robots", select the rUBot you have configured previously and "connect"
-  - You can control the robot from the same TheConstruct environment you are using for simulation
-
-If **another student** wants to connect to the same robot from his own "TheConstruct" environment, he has to:
-- Be sure the rUBot is not connected to any other user
-- Be sure the bringup and all the open processes are closed
-- Be sure that the previous student in his own "TheConstruct environment" has: 
-  - Closed rviz, gazebo and all the opened processes 
-  - Disconnected the rUBot from the "Real robots" menu
-  - Exit the ROSject
-  - logout his TheConstruct account
-- He has then to proceed to Add and install the robot in his TheConstruct account and connect the robot to its TheConstruct environment ROS_Noetic_course RosJect like the first student.

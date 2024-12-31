@@ -203,15 +203,15 @@ sudo reboot
 
 ### **Create a custom Docker image**
 
-We first create a Docker_rubot folder where we:
+We first create a Docker folder where we:
 - Copy the rUBot_mecanum_ws
 - Install the Docker extension
 - Create a Dockerfile file to specify the image characteristics:
     - Image from arm64v8/ros:noetic
-    - install git, ros-noetic-rosserial, ros-noetic-rosserial-arduino, arduino with ros libraries, slam gmapping 
-    - X11 libraries to allow graphical applications
+    - install all needed ros packages 
+    - install X11 libraries to allow graphical applications
     - Optionally: Copy the rUBot_mecanum_ws to the /root/ folder and run "roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch"
-- Create the Docker Image
+- Create the Docker Image (ros-noetic-rubot-mecanum) from the Dockerfile
 ````shell
 cd /home/ubuntu/Desktop/Docker
 sudo docker build -t ros-noetic-rubot-mecanum .
@@ -222,37 +222,30 @@ sudo docker build -t ros-noetic-rubot-mecanum:v2 -f Dockerfile2 .
 
 Docker Compose is the best way to automate and manage container startup, as it allows you to easily specify the configuration for starting your container
 
-- Create first the DISPLAY and RUBOT environment variables:
+- Create first the DISPLAY and RUBOT environment variables in ".env" file:
   ````shell
   export DISPLAY=192.168.88.72
   export RUBOT=192.168.88.93
   ````
+  > Change the IP in function of the choosen network
 - Create a file "docker-compose.yaml" with:
   ````shell
   services:
-    ros-noetic-rubot-mecanum:
-      image: ros-noetic-rubot-mecanum  # Your custom image
-      container_name: container-ros-noetic-rubot-mecanum
-      environment:
-        - DISPLAY=${DISPLAY}
-        - ROS_MASTER_URI=http://${RUBOT}:11311
-        - ROS_IP=${RUBOT}
-      volumes:
-        - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      ports:
-        - "11311:11311"  # Expose the ROS master port
-      devices:
-        - /dev/video0  # Uncomment if the device is available
-        - /dev/ttyUSB0  # Uncomment if the device is available
-        - /dev/ttyACM0  # Uncomment if the device is available
-      network_mode: "host"  # Ensures the container shares the network with the host
-      #command: /bin/bash -c "source /opt/ros/noetic/setup.bash && roscore"  # Start roscore
-      command: /bin/bash -l -c "\
-        source /opt/ros/noetic/setup.bash && \
-        source /root/rUBot_mecanum_ws/devel/setup.bash && \
-        cd /root/rUBot_mecanum_ws && \
-        roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch"
-      restart: always  # Automatically restart the container if it stops
+  ros-noetic-rubot-mecanum:
+    image: ros-noetic-rubot-mecanum:v2  # La imatge personalitzada
+    privileged: true
+    network_mode: host # Comparteix la xarxa amb l'amfitrió
+    container_name: container-ros-noetic-rubot-mecanum2
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=localhost
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+    entrypoint: /root/entrypoint2.sh
+    command: ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]
+    restart: always  # Reengega el contenidor si falla
   ````
 
 - Start the container manually the first with Docker Compose to test if works properly
