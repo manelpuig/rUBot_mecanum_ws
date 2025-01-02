@@ -91,12 +91,13 @@ Your github origin repository has been updated!
 To **connect your rUBot mecanum**  to the TheConstruct environment you have to configure your robot to be used in your ROSject. 
 
 The **Instructor** will configure the rUBot:
-- In the master **TheConstruct account**, we have to first Add a new robot:
+- In the master **TheConstruct account**, we have to first add a new robot:
   - Open the TheConstruct account and choose "Real Robots". Here you can add your robot.
   - Specify the name and the ROS version
   - Copy the "robot setup code line" used later to setup the robot to the TheConstruct environment
 
 - In the **VScode terminal on rUBot-raspberrypi**:
+  - Remember to be connected temporally to the same network as the real rUBot.
   - It is better first to update and upgrade the ubuntu20
   - Paste the "robot setup code line". After some minutes the robot will be properly installed.
   - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
@@ -108,7 +109,7 @@ The **students** will be able to connect to specific real robot:
   - Select "Real robots", select the rUBot you have configured previously and "connect"
   - You can control the robot from the same TheConstruct environment you are using for simulation
 
-The real rUBot is usually connectet to a public network with "robotics_ub" hotspot and the ROS environment is installed in a PC connected to a public network (the same "robotics_ub" or a different one).
+The real rUBot is usually connected to a public network with "robotics_ub" hotspot and the ROS environment is installed in a PC connected to a public network (the same "robotics_ub" or a different one).
 
 ### **2.1.2 WSL ROS environment**
 
@@ -143,14 +144,21 @@ To control your real rUBot, you will have to specify that:
 You will have to configure:
 - The .bashrc from rUBot raspberrypi board with:
   ````shell
-  export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
-  export ROS_IP=<raspberry_pi_ip>
+  export ROS_MASTER_URI=http://localhost:11311
+  export ROS_IP=localhost
   ````
-- The .bashrc from PC ROS environment with:
+- The .bashrc from PC ROS environment with (obtained with a cmd):
   ````shell
   export ROS_MASTER_URI=http://<raspberry_pi_ip>:11311
   export ROS_IP=<WSL2_ip>
   ````
+- Verify that the rUBot has started the Bringup
+- Start XLaunch on your Windows PC for graphical interface and configure it with these settings:
+    - Select "Multiple windows" or "One large window", depending on your preference.
+    - Set Display number to 0 (default).
+    - Enable "No Access Control" if you're having trouble connecting. This is less secure but helpful for initial setup and debugging.
+    - Click Next and complete the setup.
+- Verify the DISPLAY variable
 Now you can control and view graphic windows with your PC under WSL ROS Virtual Machine! 
 
 To finish, follow the steps:
