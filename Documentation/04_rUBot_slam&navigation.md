@@ -50,7 +50,7 @@ Now you can follow the next steps:
 To generate the map we need first to:
 - Bringup rUBot_mecanum
   ```shell
-  roslaunch rubot_slam rubot_slam_bringup_sw.launch
+  roslaunch rubot_mecanum_description rubot_bringup_sw.launch
   ```
   >Verify the robot model and world files
 - Start the slam_gmapping node
@@ -136,7 +136,7 @@ You can refine some parameters considering the recommendations in: https://emanu
 To navigate within the map we need first to:
 - Bringup rUBot_mecanum (if you have closed it before)
   ```shell
-  roslaunch rubot_slam rubot_slam_bringup_sw.launch
+  roslaunch rubot_mecanum_description rubot_bringup_sw.launch
   ```
 - Launch the rubot_navigation file
   ```shell
@@ -171,7 +171,7 @@ The objective of this activity is:
 
 To bringup the real robot for the SLAM process use the speciffic launch file:
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_arduino.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 Follow the previous instructions for virtual environment to generate the MAP with your real rUBot.
 
@@ -195,7 +195,7 @@ The message type is "PoseWithCovarianceStamped"
 A simple program has been designed for this purpose in "init_pose.py". You have to select the correct pose in python file
 
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_slam rubot_navigation.launch
 rosrun rubot_slam init_pose.py
 ```
@@ -222,7 +222,7 @@ We can create a node to:
 The code is created in "first_goal.py" code
 
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_slam rubot_navigation.launch
 rosrun rubot_slam first_goal.py
 ```
@@ -234,7 +234,7 @@ When different goals have to be defined, We will use a yaml file to define the w
 We have to specify the waypoints as pose in (x,y,w) values and create a new create_pose_stamped(position_x, position_y, rotation_z) function
 
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_slam rubot_navigation.launch
 rosrun rubot_slam waypoints_goal.py
 ```
@@ -253,7 +253,7 @@ and load the yaml file in a "waypoints_goal.launch" file:
 ```
 
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_slam rubot_navigation.launch
 roslaunch rubot_slam waypoints_goal.launch
 ```
@@ -267,7 +267,7 @@ The objective of this activity is:
 
 To bringup the real robot for the SLAM process use the speciffic launch file:
 ```shell
-roslaunch rubot_slam rubot_slam_bringup_hw_arduino.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 
 Upload:

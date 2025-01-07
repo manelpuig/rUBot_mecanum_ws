@@ -87,7 +87,7 @@ We are now ready to launch control actions.
 
 We first bringup our robot:
 ``` shell
-roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 ![](./Images/03_Control/06_bringup_sw.png)
 
@@ -239,7 +239,7 @@ Let's verify first this behaviour in virtual environment
 
 We have to launch the "rubot_self_control.launch" file in the "rubot_control" package.
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_self_control.launch
 ```
 
@@ -297,7 +297,7 @@ The algorith is based on laser ranges test and depends on the LIDAR type:
 
 Open a terminal and type:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 The wall-follower algorithm is not finished and surelly your robot is not able to follow the wall!
@@ -325,7 +325,7 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 Then verify the obstacle avoidance behaviour for different created programs.
 
 ```shell
-roslaunch rubot_control rubot_wall_follower_rg_custom.launch
+roslaunch rubot_control rubot_wall_follower_rg.launch
 ```
 **Lab Activity 5: rUBot wall-follower HW**
 
@@ -349,7 +349,7 @@ A node is created in "rubot_go2pose.py" file to reach the POSE destination with 
 
 For validation type:
 ```shell
-roslaunch rubot_mecanum_description rubot_bringup_sw_custom.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 roslaunch rubot_control rubot_go2pose.launch
 ```
 ![](./Images/03_Control/13_rubot_go2pose.png)

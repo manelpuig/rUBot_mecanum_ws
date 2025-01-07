@@ -59,13 +59,13 @@ Follow the procedure:
 **For virtual environment use:**
 
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_sw.launch 
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 rostopic list
 ```
 **For real rUBot use:**
 
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch 
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 rostopic list
 ```
 - Then modify the "take_photo.py" python file with:
@@ -105,7 +105,7 @@ Proceed with the following steps:
 - Launch bringup in Gazebo virtual environment: square2.world
 
   ```shell
-  roslaunch rubot_projects rubot_projects_bringup_sw.launch
+  roslaunch rubot_mecanum_description rubot_bringup_sw.launch
   ```
 - Run the navigation (verify the map file!):
 
@@ -222,7 +222,7 @@ The best way to create a world, you can:
 We spawn our robot into gazebo world: "square4m_sign_right.world"
 
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 
 ![](./Images/05_Projects/project3_bringup.png)
@@ -305,7 +305,7 @@ The objective of this activity is:
 
 To bringup the real robot for the Project process use the speciffic launch file:
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 
 Upload:
@@ -326,12 +326,12 @@ First of all you have to bringup your rUBot:
 
 when simulating in virtual environment:
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_sw.launch
+roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 
 when using the real robot:
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 You will have then to execute the Navigation on the project Map: "project3_map.yaml"
 ```shell
@@ -364,7 +364,7 @@ To accomplish the objective you will have to:
 
 To bringup the real robot for the Project process use the speciffic launch file:
 ```shell
-roslaunch rubot_projects rubot_projects_bringup_hw_rock.launch
+roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 
 Upload:
