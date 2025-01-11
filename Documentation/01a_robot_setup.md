@@ -19,16 +19,16 @@ There are 2 different options for this installation:
 
 ### **1.1. Install Ubuntu20 server image and ROS Noetic**
 
-Follow the steps in order to properly install the Raspberrypi:
+Follow the steps in order to properly install the Ubuntu20 on Raspberrypi:
 
 - Run Raspberry Pi Imager (https://www.raspberrypi.org/software/)
   - select Device: Raspberrypi4
   - select OS Ubuntu --> Ubuntu 20 server 64bits to the SD card
   - Select the configurations:
-    - Name: Raspberry
+    - Name: rUBot_X
     - User: ubuntu
     - Pass: ubuntu1234
-    - LAN config: wifi you want to connect (i.e. robotics-ub)
+    - LAN config: wifi you want to connect (i.e. rUBotics)
     - Regional settings: ES
     - Services: activate ssh
 - Insert the SD in a RBPi board and connect it to screen and ethernet cable to the router
@@ -36,65 +36,39 @@ Follow the steps in order to properly install the Raspberrypi:
   - login: ubuntu
   - password: ubuntu1234
 - update the OS:
-````shell
-sudo apt update
-sudo apt upgrade
-sudo reboot
-````
-- Install ubuntu Desktop (optional):
-````shell
-sudo apt install ubuntu-desktop
-````
-> this will take 10 minutes and you have to select "gdm3" during process
-- shutdown and you will be on Desktop
-````shell
-sudo shutdown now
-````
-
-### **Create Wi-Fi connections**
-
-To can create other wifi connections and a Hotspot
-
-To create a **Hotspot** follow instructions in: https://www.debugpoint.com/2020/04/how-to-create-wifi-hotspot-in-ubuntu-20-04-lts/
-
-- Select Wi-Fi settings
-- Select "Turn On Wi-Fi Hotspot"
-  >Carefull!:
-  >- If "Turn On Wi-Fi Hotspot" is disabled select another setting (i.e. Bluetooth) and come back to Wi-Fi setting
-- Choose a SSID corresponding to your robot name
-  - Name: rubot_01
-  - Pass: rUBot_Mec
-- To change the Hotspot settings (name or password):
-  ```shell
-  sudo nm-connection-editor
-  ```
-- Make the connection "Hotspot" start automatically:
-  ```shell
-  nmcli con mod Hotspot connection.autoconnect yes
-  ``` 
-- This can be done without graphical interface using a terminal:
   ````shell
-  sudo nmcli connection add type wifi ifname wlan0 mode ap con-name "Hotspot" ssid "rUBot_xx"
-  sudo nmcli connection modify "Hotspot" wifi-sec.key-mgmt wpa-psk
-  sudo nmcli connection modify "Hotspot" wifi-sec.psk "your_password"
+  sudo apt update
+  sudo apt upgrade
+  sudo reboot
   ````
-To create other **wi-fi connections**, a very intesresting configuration is to connect the robots to a speciffic WiFi network connection (if available) or gererate this Hotspot if this network is not available.
 
-- Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
-````shell
-sudo nmcli connection add type wifi ifname wlan0 con-name "Manel" ssid "Manel"
-sudo nmcli connection modify "Manel" wifi-sec.key-mgmt wpa-psk
-sudo nmcli connection modify "Manel" wifi-sec.psk "your_password"
-````
-- Configure the Raspberry Pi to connect to "Desired WIFI" when available and start the "Hotspot" only if "Desired WIFI" isn’t found.
-````shell
-sudo nmcli connection modify "Manel" connection.autoconnect yes
-sudo nmcli connection modify "Manel" connection.autoconnect-priority 10
-sudo nmcli connection modify "Hotspot" connection.autoconnect yes
-sudo nmcli connection modify "Hotspot" connection.autoconnect-priority 1
-````
+If you want to create other **wifi connections and a Hotspot**.
 
-### **Install ROS Noetic Desktop**
+- Install ubuntu Desktop:
+  ````shell
+  sudo apt install ubuntu-desktop
+  sudo reboot
+  ````
+  > this will take 10 minutes and you have to select "gdm3" during process
+
+- In Ubuntu Desktop graphical interface, create a **Hotspot** following instructions in: https://www.debugpoint.com/2020/04/how-to-create-wifi-hotspot-in-ubuntu-20-04-lts/
+
+  - Select Wi-Fi settings
+  - Select "Turn On Wi-Fi Hotspot"
+    >Carefull!:
+    >- If "Turn On Wi-Fi Hotspot" is disabled select another setting (i.e. Bluetooth) and come back to Wi-Fi setting
+  - Choose a SSID corresponding to your robot name
+    - Name: rubot_01
+    - Pass: rUBot_Mec
+  - To change the Hotspot settings (name or password):
+    ```shell
+    sudo nm-connection-editor
+    ```
+- To create other **wifi networks**, use the Desktop graphical interface to easy select the available wifi and configure to start automatically with priorities (higher number corresponds to higher priority)
+  >Review the default wifi network defined on the Ubuntu20 image creation with "Imager"
+- If you want to use the robot Hotspot within Nomachine remote desktop, you will have to install Nomachine in raspberypi: https://downloads.nomachine.com/es/download/?id=106&distro=Raspberry&hw=Pi4
+
+### **1.2. Install ROS Noetic Desktop**
 
 Follow the instructions on: http://wiki.ros.org/noetic/Installation/Ubuntu
 > Is recommended to update and upgrade first:
@@ -103,7 +77,7 @@ sudo apt update
 sudo apt upgrade
 ```
 
-### **Install Arduino**
+### **1.3. Install Arduino**
 
 Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/Driving%20Husky%20with%20ROSSerial.html
 
@@ -130,14 +104,14 @@ Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/D
   
   Restart your Arduino IDE and you should see the ros_lib part of your libraries!
 
-### **Install rplidar**
+### **1.4. Install rplidar**
 You need to install the package: http://wiki.ros.org/rplidar
 
 ```shell
 sudo apt install ros-noetic-rplidar-ros
 ```
 
-### **Install usb-cam**
+### **1.5. Install usb-cam**
 You need to install the package: https://wiki.ros.org/usb_cam
 
 ```shell
@@ -148,14 +122,16 @@ sudo apt install ros-noetic-usb-cam
 
 To create a fast and robust image of ROS Noetic for our robot, an improved method is to use Docker.
 
+### **2.1. Install Raspberrypi Desktop**
+
 - Run Raspberry Pi Imager (https://www.raspberrypi.org/software/)
   - select Device: Raspberrypi4
   - select OS: RaspberryPi OS (64Bits) to the SD card
   - Select the configurations:
-    - Name: Raspberry
+    - Name: rUBot_XX
     - User: ubuntu
     - Pass: ubuntu1234
-    - LAN config: wifi you want to connect (i.e. robotics-ub)
+    - LAN config: wifi you want to connect (i.e. rUBotics)
     - Regional settings: ES
     - Services: activate ssh
 - Insert the SD in a RBPi board and connect an ethernet cable to the router
@@ -168,7 +144,10 @@ To create a fast and robust image of ROS Noetic for our robot, an improved metho
   sudo apt upgrade
   sudo reboot
   ````
-- Connect to the raspberrypi with ssh and activate VNC connections:
+
+  ### **2.2. Install VNC connections**
+
+- Connect to the raspberrypi with ssh and activate **VNC connections**:
   - type: sudo raspi-config
   - Navigate to: Interface Options > VNC > Select Yes to enable it.
   - sudo reboot
@@ -176,12 +155,18 @@ To create a fast and robust image of ROS Noetic for our robot, an improved metho
 
 - If you want to connect to another network, you have to be connected first manually to the different networks to enable raspberrypi to connect to on reboot
 - reboot and it will be connected to the first network available
-- Open VScode and connect remotelly to the Raspberrypi with ssh -X ubuntu@192.168.72.xxx
+
+### **2.3. Using VScode remote explorer**
+
+You can install the Extension "Remote explorer" on VScode:
+
+- Open VScode and connect remotelly to the Raspberrypi with ssh -X ubuntu@192.168.xxx.xxx
 - If you can not connect to the raspberrypi, perhaps you have to regenerate permissions (replace IP-raspberrypi by 192.168.xx.xx):
   ````shell
   ssh-keygen -R IP-raspberrypi
   ````
-### **Docker setup**
+
+### **2.4. Install Docker**
 
 In raspberrypi, add Docker’s official repository for Ubuntu
 ````shell
@@ -201,7 +186,7 @@ sudo usermod -aG docker $USER
 sudo reboot
 ````
 
-### **Create a custom Docker image**
+**Create a custom Docker image**
 
 We first create a Docker folder where we:
 - Copy the rUBot_mecanum_ws
@@ -218,7 +203,7 @@ sudo docker build -t ros-noetic-rubot-mecanum .
 or
 sudo docker build -t ros-noetic-rubot-mecanum:v2 -f Dockerfile2 .
 ````
-### **Start Docker Container automatically**
+**Ceate and Start Docker Container automatically**
 
 Docker Compose is the best way to automate and manage container startup, as it allows you to easily specify the configuration for starting your container
 
