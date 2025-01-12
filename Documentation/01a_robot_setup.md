@@ -95,10 +95,10 @@ Interesting review: https://www.clearpathrobotics.com/assets/guides/noetic/ros/D
   ````
 - Install ROS Libraries:
 
-  Go to the Arduino Sketchbook location and install libraries:
+  Go to the Arduino Sketchbook location and install libraries. With Arduino core you will surelly have to create the directory. If you have arduino programed, you will not need the ros_libraries:
 
   ````shell
-  cd /home/ubuntu/snap/arduino/current/Arduino/
+  cd /home/ubuntu/snap/arduino/current/libraries/
   rosrun rosserial_arduino make_libraries.py .
   ````
   
@@ -117,6 +117,40 @@ You need to install the package: https://wiki.ros.org/usb_cam
 ```shell
 sudo apt install ros-noetic-usb-cam
 ```
+
+### **1.6. Create a service to Bringup the robot on boot**
+
+You need to create a service rubot_bringup.service in the /etc/systemd/system/ directory.
+````shell
+sudo nano /etc/systemd/system/rubot_bringup.service
+````
+- Add the Service Configuration:
+````shell
+[Unit]
+Description=ROS Bringup Service for Rubot Mecanum
+After=network.target
+Requires=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu  # Replace with your actual username
+WorkingDirectory=/home/ubuntu/rUBot_mecanum_ws  # Replace with your catkin workspace path
+ExecStart=/bin/bash -c "source /opt/ros/noetic/setup.bash && source devel/setup.bash && roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch"
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+````
+- Enable and Start the Service
+````shell
+sudo systemctl enable rubot_bringup.service
+sudo systemctl start rubot_bringup.service
+````
+- Check the Service Status:
+````shell
+sudo systemctl status rubot_bringup.service
+````
 
 ## **2. Install Raspberrypi Desktop and ROS Noetic with Docker**
 
