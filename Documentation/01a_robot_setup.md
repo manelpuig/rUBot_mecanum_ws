@@ -129,7 +129,7 @@ Documentation: https://roboticsbackend.com/make-ros-launch-start-on-boot-with-ro
 
 You need to Install robot_upstart package
 ````shell
-sudo apt-get install ros-noetic-robot-upstart
+sudo apt install ros-noetic-robot-upstart
 ````
 Verify your .bashrc:
 ````shell

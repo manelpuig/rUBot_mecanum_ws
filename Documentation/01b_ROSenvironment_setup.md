@@ -111,6 +111,18 @@ The **students** will be able to connect to specific real robot:
 
 The real rUBot is usually connected to a public network with "robotics_ub" hotspot and the ROS environment is installed in a PC connected to a public network (the same "robotics_ub" or a different one).
 
+**Uninstall rUBot on TheConstruct**
+
+You have to:
+- Uninstall the robot from the TheConstruc web
+- Uninstall the rrl service from the rUBot terminal
+````shell
+rrl-uninstall
+````
+- Delete the last lines from /etc/hosts related to "husarnet"
+- Delete the lines added to .bashrc
+- reboot
+
 ### **2.1.2 WSL ROS environment**
 
 Windows Subsystem for Linux is a good method to install a Linux Virtual Machine with ROS in a **windows PC**.
