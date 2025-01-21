@@ -123,11 +123,44 @@ You need to install the package: https://wiki.ros.org/usb_cam
 sudo apt install ros-noetic-usb-cam
 ```
 
-### **1.6. Create a service to Bringup the robot on boot**
+### **1.6. Setup for robot_upstart**
 
-You need to create a service rubot_bringup.service in the /etc/systemd/system/ directory.
+Documentation: https://roboticsbackend.com/make-ros-launch-start-on-boot-with-robot_upstart/
+
+You need to Install robot_upstart package
 ````shell
-sudo nano /etc/systemd/system/rubot_bringup.service
+sudo apt-get install ros-noetic-robot-upstart
+````
+Verify your .bashrc:
+````shell
+source /opt/ros/noetic/setup.bash
+source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+cd /home/ubuntu/rUBot_mecanum_ws
+````
+We’ll use the “install” script from the robot_upstart package to make a launch file start on boot.
+````shell
+rosrun robot_upstart install rubot_mecanum_description/launch/rubot_bringup_hw_arduino.launch --job my_robot_ros --symlink
+````
+You will have to give your user’s password to complete the installation. 
+
+After that, just run
+````shell
+sudo systemctl daemon-reload
+````
+For test, just run those 2 commands to start and stop your ROS launch file:
+````shell
+sudo systemctl start my_robot_ros.service
+rosnode list
+sudo systemctl stop my_robot_ros.service
+rosnode list
+````
+You can simply disable the execution of the launch file on boot
+````shell
+sudo systemctl disable my_robot_ros.service
+````
+If you really want to completely uninstall, run:
+````shell
+rosrun robot_upstart uninstall my_robot_ros
 ````
 
 ## **2. Install Raspberrypi Desktop and ROS Noetic with Docker**
