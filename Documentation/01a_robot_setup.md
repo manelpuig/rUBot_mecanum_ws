@@ -154,6 +154,11 @@ rosnode list
 sudo systemctl stop my_robot_ros.service
 rosnode list
 ````
+To test the service:
+````shell
+sudo systemctl status my_robot_ros.service
+sudo journalctl -f -u my_robot_ros.service
+````
 You can simply disable the execution of the launch file on boot
 ````shell
 sudo systemctl disable my_robot_ros.service
