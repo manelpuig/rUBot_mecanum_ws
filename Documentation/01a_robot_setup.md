@@ -123,50 +123,82 @@ You need to install the package: https://wiki.ros.org/usb_cam
 sudo apt install ros-noetic-usb-cam
 ```
 
-### **1.6. Setup for robot_upstart**
+### **1.6. Create the Service to bringup on boot**
 
-Documentation: https://roboticsbackend.com/make-ros-launch-start-on-boot-with-robot_upstart/
+It will be good to bringup the robot on boot:
 
-You need to Install robot_upstart package
-````shell
-sudo apt install ros-noetic-robot-upstart
-````
-Verify your .bashrc:
-````shell
-source /opt/ros/noetic/setup.bash
-source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
-cd /home/ubuntu/rUBot_mecanum_ws
-````
-We’ll use the “install” script from the robot_upstart package to make a launch file start on boot.
-````shell
-rosrun robot_upstart install rubot_mecanum_description/launch/rubot_bringup_hw_arduino.launch --job my_robot_ros --symlink
-````
-You will have to give your user’s password to complete the installation. 
+- Create the script file:
+  ````shell
+  nano /home/ubuntu/start_rubot.sh
+  ````
+- Edit the script file:
+  ````shell
+  #!/bin/bash
+  source /opt/ros/noetic/setup.bash
+  source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+  roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
+  ````
+- Make the script executable:
+  ````shell
+  chmod +x /home/ubuntu/start_rubot.sh
+  ````
+- Create the service file:
+  ````shell
+  sudo nano /etc/systemd/system/rubot.service
+  ````
+- Edit the service file:
+  ````shell
+  [Unit]
+  Description=Run robot bringup
+  After=network.target
 
-After that, just run
-````shell
-sudo systemctl daemon-reload
-````
-For test, just run those 2 commands to start and stop your ROS launch file:
-````shell
-sudo systemctl start my_robot_ros.service
-rosnode list
-sudo systemctl stop my_robot_ros.service
-rosnode list
-````
-To test the service:
-````shell
-sudo systemctl status my_robot_ros.service
-sudo journalctl -f -u my_robot_ros.service
-````
-You can simply disable the execution of the launch file on boot
-````shell
-sudo systemctl disable my_robot_ros.service
-````
-If you really want to completely uninstall, run:
-````shell
-rosrun robot_upstart uninstall my_robot_ros
-````
+  [Service]
+  ExecStart=/home/ubuntu/start_rubot.sh
+  User=ubuntu
+  Restart=always
+  RestartSec=5
+  Environment=HOME=/home/ubuntu
+  WorkingDirectory=/home/ubuntu
+
+  [Install]
+  WantedBy=multi-user.target
+  ````
+- Reload systemd services:
+  ````shell
+  sudo systemctl daemon-reload
+  ````
+- Enable and start the service:
+  ````shell
+  sudo systemctl enable rubot.service
+  sudo systemctl start rubot.service
+  ````
+**Test the Service**
+
+- Check the status of the service:
+  ````shell
+  sudo systemctl status rubot.service
+  ````
+- Check ROS topics:
+  ````shell
+  rostopic list
+  ````
+**Remove the Service**
+- Disable the service:
+  ````shell
+  sudo systemctl disable rubot.service
+  ````
+- Stop the service:
+  ````shell
+  sudo systemctl stop rubot.service
+  ````
+- Remove the service file:
+  ````shell
+  sudo rm /etc/systemd/system/rubot.service
+  ````
+- Reload systemd services:
+  ````shell
+  sudo systemctl daemon-reload
+  ````
 
 ## **2. Install Raspberrypi Desktop and ROS Noetic with Docker**
 
