@@ -103,6 +103,33 @@ The **Instructor** will configure the rUBot:
   - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
   - Bringup the robot. This will be done automatically every time the robot is swhitched on.
 
+- Modify the service to bringup automatically the robot on boot:
+  - Stop the servide:
+    ````shell
+    sudo systemctl stop rubot.service
+    ````
+  - Make modifications in start_rubot.sh file:
+    ````shell
+    #!/bin/bash
+    source /opt/ros/noetic/setup.bash
+    source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+    cd /home/ubuntu/rUBot_mecanum_ws
+    export ROS_IPV6=on
+    export ROS_MASTER_URI=http://master:11311
+    export ROS_HOSTNAME=master
+    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+    export CYCLONEDDS_URI=file:///var/lib/theconstruct.rrl/cyclonedds.xml
+    export FASTRTPS_DEFAULT_PROFILES_FILE=/var/lib/theconstruct.rrl/fastdds_husarnet.xml
+
+    roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
+    ````
+  - Restart the service
+    ````shell
+    sudo systemctl daemon-reload
+    sudo systemctl start rubot.service
+    ````
+    > If the service was already enabled it is not needed to disable and enable again
+
 The **students** will be able to connect to specific real robot:
 - Connect to the proper account: robotics.ub1@gmail.com
 - In the **TheConstruct environment ROS_Noetic_course** from "my ROSjects": 

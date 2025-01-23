@@ -136,6 +136,7 @@ It will be good to bringup the robot on boot:
   #!/bin/bash
   source /opt/ros/noetic/setup.bash
   source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+  cd /home/ubuntu/rUBot_mecanum_ws
   roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
   ````
 - Make the script executable:
@@ -177,11 +178,26 @@ It will be good to bringup the robot on boot:
 - Check the status of the service:
   ````shell
   sudo systemctl status rubot.service
+  sudo journalctl -u rubot.service -b
   ````
 - Check ROS topics:
   ````shell
   rostopic list
   ````
+**Modify the Service**
+
+- Stop the servide:
+  ````shell
+  sudo systemctl stop rubot.service
+  ````
+- Make modifications in sh file or service file
+- restart the service
+  ````shell
+  sudo systemctl daemon-reload
+  sudo systemctl start rubot.service
+  ````
+> If the service was already enabled it is not needed to disable and enable again
+
 **Remove the Service**
 - Disable the service:
   ````shell
