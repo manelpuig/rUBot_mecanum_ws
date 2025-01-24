@@ -4,10 +4,11 @@ FROM arm64v8/ros:noetic
 # Set environment variables to avoid interactive prompts during installations
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update the system and install dependencies
+# Update the system, install dependencies, and clean up in a single RUN command
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     apt-utils \
     git \
+    curl \
     netcat \
     ros-noetic-rosserial \
     ros-noetic-rosserial-arduino \
@@ -30,18 +31,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     ros-noetic-robot-state-publisher \
     ros-noetic-usb-cam \
     ros-noetic-rplidar-ros \
-    && rm -rf /var/lib/apt/lists/*  # Clean up the package cache
-
-# Install additional Python dependencies
-RUN pip3 install --no-cache-dir setuptools numpy
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir setuptools numpy
 
 # Set up the working directory
 WORKDIR /root
 
-# Copy the rUBot_mecanum_ws.zip file from the host into the container
+# Copy and unzip the rUBot_mecanum_ws.zip file
 COPY rUBot_mecanum_ws.zip /root/rUBot_mecanum_ws.zip
-
-# Unzip the rUBot_mecanum_ws.zip file and remove the zip
 RUN unzip /root/rUBot_mecanum_ws.zip -d /root/ && rm /root/rUBot_mecanum_ws.zip
 
 # Build the ROS workspace
@@ -55,12 +52,5 @@ RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc && \
 # Expose necessary ROS ports (11311 for ROS master)
 EXPOSE 11311
 
-# Copy entrypoint script into the container
-COPY entrypoint2.sh /root/entrypoint2.sh
-RUN chmod +x /root/entrypoint2.sh
-
-# Set entrypoint for the container
-ENTRYPOINT ["/root/entrypoint2.sh"]
-
-# Default command for the container
+# Default command to execute the ROS launch file
 CMD ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]

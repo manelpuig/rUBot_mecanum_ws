@@ -220,6 +220,10 @@ It will be good to bringup the robot on boot:
 
 To create a fast and robust image of ROS Noetic for our robot, an improved method is to use Docker.
 
+References:
+- Docker for LIMO robot: https://hub.docker.com/repository/docker/theconstructai/limo/general
+
+
 ### **2.1. Install Raspberrypi Desktop**
 
 - Run Raspberry Pi Imager (https://www.raspberrypi.org/software/)
@@ -286,63 +290,37 @@ sudo reboot
 
 **Create a custom Docker image**
 
-We first create a Docker folder where we:
-- Copy the rUBot_mecanum_ws
-- Install the Docker extension
-- Create a Dockerfile file to specify the image characteristics:
-    - Image from arm64v8/ros:noetic
-    - install all needed ros packages 
-    - install X11 libraries to allow graphical applications
-    - Optionally: Copy the rUBot_mecanum_ws to the /root/ folder and run "roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch"
-- Create the Docker Image (ros-noetic-rubot-mecanum) from the Dockerfile
+We first create a home/ubuntu/Desktop/Docker folder where we place:
+- rUBot_mecanum_ws.zip
+- Dockerfile
+- rubot_bringup.sh (in executable mode!)
+- docker-compose.yaml
+- .env folder to store the Environment variables (DISPLAY, etc.)
+
+These files are located in this repository on Documentation/files/Docker folder
+
+Follow the instructions:
+- Build the Image
 ````shell
 cd /home/ubuntu/Desktop/Docker
-sudo docker build -t ros-noetic-rubot-mecanum .
-or
-sudo docker build -t ros-noetic-rubot-mecanum:v2 -f Dockerfile2 .
+docker build -t rubot_ros_noetic_image .
 ````
-**Ceate and Start Docker Container automatically**
+- Start the Container
+````shell
+docker compose up -d
+````
+- Stop the Container
+````shell
+docker compose down
+````
+- Enable Docker to Start on Boot
+````shell
+sudo systemctl enable docker
+````
+- To check the running container and to check logs for troubleshooting:
+````shell
+docker ps
+docker logs rubot_ros_noetic_container
+````
+- To modify the rubot_bringup.sh file: Simply edit rubot_bringup.sh on your host machine. Changes will reflect in the container on the next restart.
 
-Docker Compose is the best way to automate and manage container startup, as it allows you to easily specify the configuration for starting your container
-
-- Create first the DISPLAY and RUBOT environment variables in ".env" file:
-  ````shell
-  export DISPLAY=192.168.88.72
-  export RUBOT=192.168.88.93
-  ````
-  > Change the IP in function of the choosen network
-- Create a file "docker-compose.yaml" with:
-  ````shell
-  services:
-  ros-noetic-rubot-mecanum:
-    image: ros-noetic-rubot-mecanum:v2  # La imatge personalitzada
-    privileged: true
-    network_mode: host # Comparteix la xarxa amb l'amfitrió
-    container_name: container-ros-noetic-rubot-mecanum2
-    environment:
-      - DISPLAY=${DISPLAY}
-      - ROS_MASTER_URI=http://localhost:11311
-      - ROS_IP=localhost
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /dev:/dev
-    entrypoint: /root/entrypoint2.sh
-    command: ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]
-    restart: always  # Reengega el contenidor si falla
-  ````
-
-- Start the container manually the first with Docker Compose to test if works properly
-  ````shell
-  export DISPLAY=192.168.88.72:0
-  docker compose up
-  or
-  docker compose -f docker-compose2.yaml up -d
-  ````
-  > You can create a .env folder to store the Environment variables
-
-- Close remote connection
-- Verify on reboot
-
-  > You have NOT to remove the container to ensure it starts automatically on reboot.
-
-This start the container and next time when you connect the raspberrypi, this container will be executed automatically.

@@ -1,0 +1,12 @@
+services:
+  rubot_ros_noetic_service:
+    image: rubot_ros_noetic_image  # No explicit "latest" tag
+    privileged: true
+    network_mode: host
+    container_name: rubot_ros_noetic_container
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+      - ./rubot_bringup.sh:/root/rubot_bringup.sh:ro
+    command: ["/bin/bash", "/root/rubot_bringup.sh"]
+    restart: always  # Automatically restart on error or system boot
