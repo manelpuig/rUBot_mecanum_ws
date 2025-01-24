@@ -158,6 +158,40 @@ Windows Subsystem for Linux is a good method to install a Linux Virtual Machine 
 
 Docker is also a good option to install a ROS Virtual machine. This is compatible for **Windows and MAC**.
 
+- Install and run Docker for windows
+- Open VScode and install Docker extension
+- Create a container using a file: run_noetic_container.sh
+````shell
+#!/bin/bash
+set -e
+
+# Set DISPLAY environment variable for Windows
+export DISPLAY=192.168.0.191:0
+
+# Run the container
+docker run -it --rm \
+    --name PC_rubot_ros_noetic_container \
+    --network host \
+    --env DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    osrf/ros:noetic-desktop-full
+````
+- To execute, open a Git Bash terminal and type:
+````shell
+./run_noetic_container.sh
+````
+- Attach the container to VScode
+- Configure the .bashrc
+````shell
+source /opt/ros/noetic/setup.bash
+#source /root/rUBot_mecanum_ws/devel/setup.bash
+#cd /root/rUBot_mecanum_ws
+
+export ROS_MASTER_URI=http://192.168.0.103:11311
+export ROS_IP=172.17.0.1
+````
+
+
 ## **2. rUBot starts a local hotspot**
 
 When real rUBot starts a local hotspot, we can connect to the real rUBot using:
