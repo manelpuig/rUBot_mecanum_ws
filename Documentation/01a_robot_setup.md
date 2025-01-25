@@ -246,6 +246,18 @@ References:
   sudo apt upgrade
   sudo reboot
   ````
+  - If you want to change the hostname:
+  ````shell
+  sudo hostnamectl set-hostname nou_hostname
+  sudo reboot
+  ````
+  - If you want to configure a fixed IP:
+    - "Edit connections"
+    - Select the "Robotics_UB" wifi connection
+    - In section "IPv4 settings" Select "Manual"
+    - Add IP address and choose the desired IP (192.168.0.61), Netmask (255.255.255.0), Gateway (192.168.0.1)
+    - Add DNS server (8.8.8.8) for google DNS
+    - Apply and reboot
 
   ### **2.2. Install VNC connections**
 

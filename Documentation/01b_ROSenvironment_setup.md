@@ -103,6 +103,7 @@ The **Instructor** will configure the rUBot:
   - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
   - Bringup the robot. This will be done automatically every time the robot is swhitched on.
 
+**Robots with Ubuntu20 Desktop**:
 - Modify the service to bringup automatically the robot on boot:
   - Stop the servide:
     ````shell
@@ -129,6 +130,42 @@ The **Instructor** will configure the rUBot:
     sudo systemctl start rubot.service
     ````
     > If the service was already enabled it is not needed to disable and enable again
+
+**Robots with Docker-compose**:
+- Install the RRL to the Raspberrypi OS
+- Modify the "docker-compose.yml" file to (important to modify the doker-compose.yaml and not the rubot_bringup.sh in order to make the changes in environmental variables persistent!):
+````shell
+services:
+  rubot_ros_noetic_service:
+    image: rubot_ros_noetic_image  # No explicit "latest" tag
+    privileged: true
+    network_mode: host
+    container_name: rubot_ros_noetic_container
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+      - ./rubot_bringup.sh:/root/rubot_bringup.sh:ro
+    environment:
+      - ROS_IPV6=on
+      - ROS_MASTER_URI=http://master:11311
+      - ROS_HOSTNAME=master
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - CYCLONEDDS_URI=file:///var/lib/theconstruct.rrl/cyclonedds.xml
+      - FASTRTPS_DEFAULT_PROFILES_FILE=/var/lib/theconstruct.rrl/fastdds_husarnet.xml
+    command: ["/bin/bash", "/root/rubot_bringup.sh"]
+    restart: always  # Automatically restart on error or system boot
+
+````
+- Stop the Container
+````shell
+docker compose down
+````
+- Start the Container
+````shell
+docker compose up -d
+sudo systemctl enable docker
+````
+
 
 The **students** will be able to connect to specific real robot:
 - Connect to the proper account: robotics.ub1@gmail.com
