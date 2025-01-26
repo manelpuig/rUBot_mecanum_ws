@@ -49,8 +49,5 @@ RUN echo 'source /opt/ros/noetic/setup.bash' >> /root/.bashrc && \
     echo 'source /root/rUBot_mecanum_ws/devel/setup.bash' >> /root/.bashrc && \
     echo 'cd /root/rUBot_mecanum_ws' >> /root/.bashrc
 
-# Expose necessary ROS ports (11311 for ROS master)
-EXPOSE 11311
-
 # Default command to execute the ROS launch file
 CMD ["roslaunch", "rubot_mecanum_description", "rubot_bringup_hw_arduino.launch"]

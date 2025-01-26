@@ -132,19 +132,17 @@ The **Instructor** will configure the rUBot:
     > If the service was already enabled it is not needed to disable and enable again
 
 **Robots with Docker-compose**:
-- Install the RRL to the Raspberrypi OS
-- Modify the "docker-compose.yml" file to (important to modify the doker-compose.yaml and not the rubot_bringup.sh in order to make the changes in environmental variables persistent!):
+- Install the rUBot_XX on TheConstruct environment (RRL service) to the Raspberrypi OS
+- Use the Dockerfile, rubot_bringup.sh and docker-compose.yml files in the Documentation/files/Docker folder
+- Note that the environment variables in docker-compose.yml has to be changed:
 ````shell
+name: rubot-noetic
 services:
   rubot_ros_noetic_service:
     image: rubot_ros_noetic_image  # No explicit "latest" tag
     privileged: true
     network_mode: host
     container_name: rubot_ros_noetic_container
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /dev:/dev
-      - ./rubot_bringup.sh:/root/rubot_bringup.sh:ro
     environment:
       - ROS_IPV6=on
       - ROS_MASTER_URI=http://master:11311
@@ -152,15 +150,22 @@ services:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - CYCLONEDDS_URI=file:///var/lib/theconstruct.rrl/cyclonedds.xml
       - FASTRTPS_DEFAULT_PROFILES_FILE=/var/lib/theconstruct.rrl/fastdds_husarnet.xml
-    command: ["/bin/bash", "/root/rubot_bringup.sh"]
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+      - ./rubot_bringup.sh:/root/rubot_bringup.sh:ro
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+      - "/dev/ttyACM0:/dev/ttyACM0"
+      - "/dev/video0:/dev/video0"
+    command: ["/root/rubot_bringup.sh"]
     restart: always  # Automatically restart on error or system boot
-
 ````
-- Stop the Container
+- Stop and remove the Container
 ````shell
 docker compose down
 ````
-- Start the Container
+- Start and enable the Container
 ````shell
 docker compose up -d
 sudo systemctl enable docker
@@ -197,35 +202,40 @@ Docker is also a good option to install a ROS Virtual machine. This is compatibl
 
 - Install and run Docker for windows
 - Open VScode and install Docker extension
-- Create a container using a file: run_noetic_container.sh
+- Create a custom: pc_noetic_image
 ````shell
-#!/bin/bash
-set -e
-
-# Set DISPLAY environment variable for Windows
-export DISPLAY=192.168.0.191:0
-
-# Run the container
-docker run -it --rm \
-    --name PC_rubot_ros_noetic_container \
-    --network host \
-    --env DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-    osrf/ros:noetic-desktop-full
+docker build -t pc_noetic_image .
 ````
-- To execute, open a Git Bash terminal and type:
+- Create a container using docker-compose.yaml
 ````shell
-./run_noetic_container.sh
+services:
+  pc_noetic_container:
+    image: pc_noetic_image
+    container_name: pc_noetic_container
+    network_mode: host
+    environment:
+      - ROS_IPV6=on # Opcional
+      - ROS_MASTER_URI=http://192.168.0.61:11311 # Usando la IP del robot (RECOMENDADO)
+      - ROS_HOSTNAME=pc_node # Nombre descriptivo para el nodo en el PC (RECOMENDADO)
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    stdin_open: true
+    tty: true
+````
+- Start the Container
+````shell
+docker compose up -d
 ````
 - Attach the container to VScode
 - Configure the .bashrc
 ````shell
 source /opt/ros/noetic/setup.bash
-#source /root/rUBot_mecanum_ws/devel/setup.bash
-#cd /root/rUBot_mecanum_ws
+#source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+#cd /home/ubuntu/rUBot_mecanum_ws
 
-export ROS_MASTER_URI=http://192.168.0.103:11311
-export ROS_IP=172.17.0.1
+export ROS_IPV6=on
+export ROS_MASTER_URI=http://rUBot6:11311
+export ROS_HOSTNAME=192.168.0.191
 ````
 
 
