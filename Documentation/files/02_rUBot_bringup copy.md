@@ -531,11 +531,48 @@ Graphically we have designed a **Closed loop PID CD-motor speed control**:
 
 Each wheel is turning at a precise speed defined by the inverse kinematics. The speed dynamics and steady state value is ensured by the designed PID closed loop.
 
+To enable this control mode shield you have to include in the bringup file:
+````shell
+<!-- launch rUBot mecanum  -->
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
+      <param name="port" type="string" value="/dev/ttyACM0"/>
+      <param name="baud" type="int" value="57600"/>
+    </node>
+````
+
+### **4.2. Launch LIDAR node**
+
+The rpLidar sensor is directly connected to the USB port of RaspberryPi4 board.
+To launch the rpLIDAR sensor, connect the LIDAR sensor to RaspberryPi4 and execute:
+```shell
+roslaunch rubot_mecanum_description rplidar.launch
+```
+Verify:
+- the port to: /dev/ttyUSB0
+- the frame_id to: base_scan
+
+### **4.3. Launch usb_cam node**
+The usb-camera sensor is directly connected to the USB port of Rock5b board. We have created a speciffic launch file to open properly the camera
+To launch the raspicam sensor, execute:
+```shell
+roslaunch rubot_mecanum_description usb_cam.launch
+```
+Verify:
+- the video_device param to: "/dev/video0" (or video1 if you find errors when launching)
+- the camera_frame_id param to: "usb_cam"
+- the topic to subscribe to the image data:
+  ```shell
+  <remap from="image" to="/usb_cam/image_raw"/>
+  ```
+  > This is in case you want to open "Image View". By default is not activated (commented)
+
 ### **Final bringup launch file**
 
-We have created a "rubot_bringup_hw_arduino.launch" file to setup the rUBot_mecanum.
+We will create a "rubot_bringup_hw_arduino.launch" file to setup the rUBot_mecanum.
 
-To launch the bringup **arduino based driver**, the instruction is:
+>Important!: Change the **"rubot_custom.urdf"** as the model name according to the robot model you have designed in the previous activity.
+
+To launch the bringup **arduino based driver**,  type:
 ```shell
 roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
@@ -543,19 +580,41 @@ Graphically we have this structure:
 
 ![](./Images/02_Bringup/17_nodes_bringup_arduino.jpg)
 
-**Important!:** You have not to execute the rubot_bringup_hw_arduino.launch on the robot. There is a service that executes this bringup on boot!
+### **Lab Activity: rUBot bringup HW**
 
-### **Lab Activity: Lidar test**
+The objective of this session is to understand the diferent nodes we have to launch to bringup our robot and verify the working performances.
+- Launch the **rubot_bringup_hw_arduino.launch** 
+- Verify the nodes and topics 
+- verify the Camera images
+- Verify the Lidar performances
+- Verify the arduino node
+
+Do you think that all is working as you expected? why?
+
+Upload the following:
+- Picture of the RVIZ screen obtained
+- Picture with the nodes and topics obtained with the instruction rqt_graph
+
+### **Lab Activity: Lidar test and final bringup HW**
 
 The objectives of this activity are:
-- Put your robot inside a real world
-- Launch the rubot_lidar_test.launch file and verify the number of laser beams. 
-- Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
-- Verify the Lidar is able to identify correctly the obstacles in each angle orientation!
+- Final bringup file:
+  - Launch the **rubot_bringup_hw_arduino.launch** with the previously created **rubot_custom.urdf** file.
+  - In RVIZ, verify the position of the obstacles around the robot. Are them in the correct orientation? 
+  - create another **rplidar_custom.launch** file and modify the Lidar reference-frame to the appropiate frame to see the obstacles in the correct orientation.
+ - Create a new **rubot_bringup_hw_arduino.launch** file containing:
+    - rubot_custom.urdf final model
+    - rplidar_custom.launch final file
+- Lidar test:
+  - Put your robot inside a real world and launch the **rubot_bringup_hw_arduino.launch** file
+  - Launch the rubot_lidar_test.launch file and verify the number of laser beams. Create a new **rubot_lidar_test_custom.launch** and **rubot_lidar_test_custom.py**, including a laser_factor variable as beams/deg.
 
 Upload a zip file including:
 - picture containing:
   - rviz screen where you can see the lidar distances
   - terminal running the "rubot_lidar_test_custom.launch" with distances readings
-- the rubot_lidar_test_custom.py
+- the rubot_lidar_test_custom.py, 
+- rubot_custom.urdf, 
+- rplidar_custom.launch, 
+- rubot_bringup_hw_arduino.launch 
 
