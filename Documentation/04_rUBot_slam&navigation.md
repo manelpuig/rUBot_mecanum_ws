@@ -168,11 +168,8 @@ You can see the optimized trajectory. The robot starts to follow this trajectory
 The objective of this activity is:
 - Construct the project world in the laboratory and generate the MAP with your real rUBot
 - Consider to create a big map because of the size of our robot. Change the parameters you consider for the final map
+- Connect to the **Real robot within RRL service**.
 
-To bringup the real robot for the SLAM process use the speciffic launch file:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
 Follow the previous instructions for virtual environment to generate the MAP with your real rUBot.
 
 Upload:
@@ -246,8 +243,8 @@ goal2: {"x": -0.5, "y": -0.5, "w": 180}
 and load the yaml file in a "waypoints_goal.launch" file:
 ```xml
 <launch>
-  <node pkg="gopigo3_slam" type="waypoints_goal_params.py" name="movebase_client_waypoints" output="screen" >
-    <rosparam file="$(find gopigo3_slam)/config/waypoints.yaml" command="load" />
+  <node pkg="rubot_slam" type="waypoints_goal_params.py" name="movebase_client_waypoints" output="screen" >
+    <rosparam file="$(find rubot_slam)/config/waypoints.yaml" command="load" />
   </node>
 </launch>
 ```
@@ -264,11 +261,7 @@ The objective of this activity is:
 - Considering the generated MAP, create a new waypoints.yaml file with the desired navigation target points
 - Use the previous generated yaml file and Navigate to different points with your real rUBot
 - Consider to change some parameters to take into account the driving performances of your rUBot mecanum.
-
-To bringup the real robot for the SLAM process use the speciffic launch file:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+- Connect to the Real robot within the RRL service of The Construct.
 
 Upload:
 - video of real process for Navigation

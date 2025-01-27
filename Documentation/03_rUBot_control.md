@@ -92,16 +92,13 @@ roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ![](./Images/03_Control/06_bringup_sw.png)
 
 #### **a) Keyboard control**
-You can control the rUBot with the keyboard installing the following packages:
+You can control the rUBot with the keyboard installing the teleop-twist-keyboard package:
 ```shell
-sudo apt-get install ros-noetic-teleop-tools
 sudo apt-get install ros-noetic-teleop-twist-keyboard
 ```
 
 Then you will be able to control the robot with the Keyboard typing:
 ```shell
-rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
-or
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
 ![](./Images/03_Control/07_rubot_teleop.png)
@@ -119,7 +116,7 @@ roslaunch rubot_control rubot_control.launch
 ```
 Verify first that the code is working in the simulated environment.
 
-**Activity 4: rUBot control in a predefined Trajectory**
+**Activity: rUBot control in a predefined Trajectory**
 
 If the robot moves in the correct direction, you can follow with the next objective: Create a new node for **path trajectory** definition:
 
@@ -144,24 +141,17 @@ roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
 ```
 ![](./Images/03_Control/08_bringup.png)
 
-#### **a) Keyboard control**
-You can control the rUBot with the keyboard installing the following packages:
-```shell
-sudo apt-get install ros-noetic-teleop-tools
-sudo apt-get install ros-noetic-teleop-twist-keyboard
-```
+**Important!**: If you are using the RRL service from TheConstruct, the bringup is already done on boot! You have only to connect to the Real Robot.
 
-Then you will be able to control the robot with the Keyboard typing:
-```shell
-rosrun key_teleop key_teleop.py /key_vel:=/cmd_vel
-or
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-```
+#### **a) Keyboard control**
+You can control the rUBot with the keyboard if you have first connected to the real robot within RRL service.
 
 #### **b) Joy control**
+
 You can control the rUBot with the Joypad following the instructions in: 
 https://dev.to/admantium/radu-control-the-robot-using-a-joystick-976
 
+- 
 - In order to work with any gamepad, we need to install additional ROS packages:
 ```shell
 sudo apt-get install ros-noetic-teleop-twist-joy ros-noetic-joy
@@ -205,7 +195,7 @@ In the previous session we have created a python node to publish a Twist message
 ``` shell
 roslaunch rubot_control rubot_control.launch
 ```
-**Lab Activity 3: rUBot navigation in a predefined Trajectory**
+**Lab session: rUBot navigation in a predefined Trajectory**
 
 If the robot moves in the correct direction, you can follow with the next objective: Create a new node for **path trajectory** definition:
 
@@ -259,15 +249,13 @@ Design the code using the Holonomic robot performances, and upload:
 
 ### **2.2. Self-control control in REAL environment**
 
-To bringup the rUBot mecanum robot, execute:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+Connect first to the Real robot within RRL service.
+
 Then verify the obstacle avoidance behaviour for different parameter values.
 ```shell
 roslaunch rubot_control rubot_self_control.launch
 ```
-The robot is not working as expected because the number of laser beams is nor 720 as in simulation!
+The robot is not working as expected because the number of laser beams is not 720 as in simulation!
 
 **Lab Activity: rUBot self-control**
 
@@ -318,10 +306,8 @@ Upload:
 
 ### **3.2. Wall follower in REAL environment**
 
-To bringup the Mecanum robot, execute in a first terminal:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+Connect first to the Real robot within RRL service.
+
 Then verify the obstacle avoidance behaviour for different created programs.
 
 ```shell
@@ -362,17 +348,10 @@ In a real environment, there is very important the POSE precision. The Odometry 
 
 It is important the include other sensors to obtain a better accuracy. In our case we have included an IMU sensor to obtain a better measurement of the orientation.
 
-We will test the obtained POSE accuracy with:
-- Computing the Odometry with the wheel readigns
-- Computing the Odometry with the wheel readigns but measuring the robot orientation using the IMU sensor.
+We will test the obtained POSE accuracy computing the Odometry with the wheel readigns
 
-We will have to:
-- upload a new arduino program to read and calibrate the IMU sensor to measure the robot orientation
-- Calibrate the IMU sensor only a first time with speciffic arduino program
-- Bringup the Mecanum robot, using a new arduino program to measure the robot orientation with the IMU sensor:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+Connect first to the Real robot within RRL service.
+
 - Then verify the same node with the real Mecanum robot:
 ```shell
 roslaunch rubot_mecanum_description rubot_go2pose.launch

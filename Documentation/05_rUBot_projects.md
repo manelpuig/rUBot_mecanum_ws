@@ -64,10 +64,8 @@ rostopic list
 ```
 **For real rUBot use:**
 
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-rostopic list
-```
+- Connect to the Real robot within the RRL service of The Construct.
+
 - Then modify the "take_photo.py" python file with:
   - the proper topic name:
     - for simulation: /rubot/camera1/image_raw
@@ -296,17 +294,14 @@ If you use Image processing techniques to identify the contours:
 
 ![](./Images/05_Projects/project3_signal_id1.png)
 
-**Lab Activity 8: rUBot signal identification**
+**Lab Activity: rUBot signal identification**
 
 The objective of this activity is:
 - Identify the "right" and "left" traffic signals using:
   - Image processing techniques
   - Image Identification techniques
 
-To bringup the real robot for the Project process use the speciffic launch file:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+Remember to connect to the Real robot within the RRL service of The Construct.
 
 Upload:
 - video of real process for signal identiffication
@@ -329,10 +324,8 @@ when simulating in virtual environment:
 roslaunch rubot_mecanum_description rubot_bringup_sw.launch
 ```
 
-when using the real robot:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+when using the real robot, remember to connect to the Real robot within the RRL service of The Construct.
+
 You will have then to execute the Navigation on the project Map: "project3_map.yaml"
 ```shell
 roslaunch rubot_slam rubot_navigation.launch
@@ -350,7 +343,7 @@ You can see a video of the final process:
 Video link: https://youtu.be/lLoMEeCuRck
 
 
-**Lab Activity 9: rUBot drive with traffic signals**
+**Lab Activity: rUBot drive with traffic signals**
 
 The objective of this activity is:
 - To drive the rUBot in a predesigned world considering:
@@ -362,10 +355,7 @@ To accomplish the objective you will have to:
 - import the "TrafficSignalsDetection.py" in previous python file for the identification process
 
 
-To bringup the real robot for the Project process use the speciffic launch file:
-```shell
-roslaunch rubot_mecanum_description rubot_bringup_hw_arduino.launch
-```
+To bringup the real robot for the Project process remember to connect to the Real robot within the RRL service of The Construct.
 
 Upload:
 - video of real process project

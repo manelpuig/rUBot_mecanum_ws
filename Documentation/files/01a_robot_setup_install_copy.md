@@ -72,6 +72,13 @@ If you want to create other **wifi connections and a Hotspot**.
 - To create other **wifi networks**, use the Desktop graphical interface to easy select the available wifi and configure to start automatically with priorities (higher number corresponds to higher priority)
   >Review the default wifi network defined on the Ubuntu20 image creation with "Imager"
 - If you want to use the robot Hotspot within Nomachine remote desktop, you will have to install Nomachine in raspberypi: https://downloads.nomachine.com/es/download/?id=106&distro=Raspberry&hw=Pi4
+- If you want to configure a fixed IP:
+    - "sudo nm-connection-editor"
+    - Select the "Robotics_UB" wifi connection
+    - In section "IPv4 settings" Select "Manual"
+    - Add IP address and choose the desired IP (192.168.0.61), Netmask (255.255.255.0), Gateway (192.168.0.1)
+    - Add DNS server (8.8.8.8) for google DNS
+    - Apply and reboot
 
 ### **1.2. Install ROS Noetic Desktop**
 
