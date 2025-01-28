@@ -2,9 +2,23 @@
 
 We will describe the Computer Vision based method to identify the Traffic Sign
 
-## Using the RbpyCam
+## ROS packages installation
 
+The needed packages installation instructions:
+````shell
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install python3-opencv
+sudo apt install python3-pip
+pip3 install tensorflow
+pip3 install tflite-runtime
+pip3 install numpy matplotlib
+````
+We will use Keras that is a high-level API that runs on top of TensorFlow. By using both TensorFlow and Keras, you get the best of both worlds: the ease of use and simplicity of Keras, combined with the power and flexibility of TensorFlow.
 
+## Using the USB_Cam
+
+A simple program to take Images:
 ```python
 #!/usr/bin/env python
 
@@ -163,3 +177,90 @@ while True:
 camera.release()
 cv2.destroyAllWindows()
 ```
+
+Here's how you can adapt your code to create a ROS node that subscribes to the USB camera topic and identifies traffic signs in real time:
+
+- Set Up ROS Environment: Ensure ROS Noetic is installed and configured on your Raspberry Pi 4.
+
+- Create ROS Node: Develop a ROS node that subscribes to the USB camera topic, processes the images using the Keras model, and publishes the detected traffic signs.
+
+Code Snippet:
+````python
+import rospy
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import cv2
+import numpy as np
+from keras.models import load_model
+
+class TrafficSignRecognizer:
+    def __init__(self):
+        self.bridge = CvBridge()
+        self.model = load_model("keras_Model.h5", compile=False)
+        self.class_names = open("labels.txt", "r").readlines()
+        rospy.init_node('traffic_sign_recognizer', anonymous=True)
+        self.image_sub = rospy.Subscriber("/usb_cam/image_raw", Image, self.callback)
+        self.image_pub = rospy.Publisher("/traffic_sign_detection/image", Image, queue_size=10)
+
+    def callback(self, data):
+        frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        image = cv2.resize(frame, (224, 224), interpolation=cv2.INTER_AREA)
+        image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+        image = (image / 127.5) - 1
+        prediction = self.model.predict(image)
+        index = np.argmax(prediction)
+        class_name = self.class_names[index]
+        confidence_score = prediction[0][index]
+        if confidence_score > 0.5:
+            cv2.putText(frame, f"Sign: {class_name[2:].strip()} ({confidence_score:.2f})", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        self.image_pub.publish(self.bridge.cv2_to_imgmsg(frame, "bgr8"))
+
+if __name__ == '__main__':
+    try:
+        TrafficSignRecognizer()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+````
+With tflite-runtime:
+````python
+import rospy
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import cv2
+import numpy as np
+import tflite_runtime.interpreter as tflite
+
+class TrafficSignRecognizer:
+    def __init__(self):
+        self.bridge = CvBridge()
+        self.interpreter = tflite.Interpreter(model_path="traffic_sign_model.tflite")
+        self.interpreter.allocate_tensors()
+        self.input_details = self.interpreter.get_input_details()
+        self.output_details = self.interpreter.get_output_details()
+        rospy.init_node('traffic_sign_recognizer', anonymous=True)
+        self.image_sub = rospy.Subscriber("/usb_cam/image_raw", Image, self.callback)
+        self.image_pub = rospy.Publisher("/traffic_sign_detection/image", Image, queue_size=10)
+
+    def callback(self, data):
+        frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        image = cv2.resize(frame, (224, 224), interpolation=cv2.INTER_AREA)
+        image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+        image = (image / 127.5) - 1
+        self.interpreter.set_tensor(self.input_details[0]['index'], image)
+        self.interpreter.invoke()
+        output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
+        index = np.argmax(output_data)
+        class_name = self.class_names[index]
+        confidence_score = output_data[0][index]
+        if confidence_score > 0.5:
+            cv2.putText(frame, f"Sign: {class_name[2:].strip()} ({confidence_score:.2f})", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        self.image_pub.publish(self.bridge.cv2_to_imgmsg(frame, "bgr8"))
+
+if __name__ == '__main__':
+    try:
+        TrafficSignRecognizer()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+````
