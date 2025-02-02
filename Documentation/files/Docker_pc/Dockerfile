@@ -5,6 +5,7 @@ FROM osrf/ros:noetic-desktop-full AS base
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     apt-utils \
     iputils-ping \
+    nano \
     git \
     python3-serial \
     build-essential \

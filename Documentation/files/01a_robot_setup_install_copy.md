@@ -318,30 +318,6 @@ We first create a home/ubuntu/Desktop/Docker folder where we place:
 
 These files are located in this repository on Documentation/files/Docker folder
 
-- Note that the docker-compose.yaml is:
-````shell
-name: rubot-noetic
-services:
-  rubot_ros_noetic_service:
-    image: rubot_ros_noetic_image  # No explicit "latest" tag
-    privileged: true
-    network_mode: host
-    container_name: rubot_ros_noetic_container
-    environment:
-      - ROS_IPV6=on
-      - ROS_MASTER_URI=http://rUBot6:11311
-      - ROS_HOSTNAME=rUBot6
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /dev:/dev
-      - ./rubot_bringup.sh:/root/rubot_bringup.sh:ro
-    devices:
-      - "/dev/ttyUSB0:/dev/ttyUSB0"
-      - "/dev/ttyACM0:/dev/ttyACM0"
-      - "/dev/video0:/dev/video0"
-    command: ["/root/rubot_bringup.sh"]
-    restart: always  # Automatically restart on error or system boot
-````
 Follow the instructions:
 - Build the Image
 ````shell

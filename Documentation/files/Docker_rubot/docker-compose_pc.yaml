@@ -7,8 +7,8 @@ services:
     container_name: rubot_ros_noetic_container
     environment:
       - ROS_IPV6=on
-      - ROS_MASTER_URI=http://rUBot6:11311
-      - ROS_HOSTNAME=rUBot6
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_HOSTNAME=localhost
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /dev:/dev
@@ -17,5 +17,6 @@ services:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
       - "/dev/ttyACM0:/dev/ttyACM0"
       - "/dev/video0:/dev/video0"
+    entrypoint: /ros_entrypoint.sh
     command: ["/root/rubot_bringup.sh"]
     restart: always  # Automatically restart on error or system boot

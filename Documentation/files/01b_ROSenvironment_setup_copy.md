@@ -202,29 +202,10 @@ Docker is also a good option to install a ROS Virtual machine. This is compatibl
 
 - Install and run Docker for windows
 - Open VScode and install Docker extension
-- Create a custom: pc_noetic_image
+- Pull an official ROS Image and create a container
 ````shell
-docker build -t pc_noetic_image .
-````
-- Create a container using docker-compose.yaml
-````shell
-services:
-  pc_noetic_container:
-    image: pc_noetic_image
-    container_name: pc_noetic_container
-    network_mode: host
-    environment:
-      - ROS_IPV6=on # Opcional
-      - ROS_MASTER_URI=http://192.168.0.61:11311 # Usando la IP del robot (RECOMENDADO)
-      - ROS_HOSTNAME=pc_node # Nombre descriptivo para el nodo en el PC (RECOMENDADO)
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    stdin_open: true
-    tty: true
-````
-- Start the Container
-````shell
-docker compose up -d
+docker pull osrf/ros:noetic-desktop-full
+docker run -it --name pc-noetic-container --network host osrf/ros:noetic-desktop-full /bin/bash
 ````
 - Attach the container to VScode
 - Configure the .bashrc
@@ -232,10 +213,8 @@ docker compose up -d
 source /opt/ros/noetic/setup.bash
 #source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
 #cd /home/ubuntu/rUBot_mecanum_ws
-
-export ROS_IPV6=on
-export ROS_MASTER_URI=http://rUBot6:11311
-export ROS_HOSTNAME=192.168.0.191
+export ROS_MASTER_URI=http://<rubot-IP>:11311
+export ROS_HOSTNAME=<DockerPC-IP>
 ````
 
 
