@@ -35,7 +35,7 @@ When real rUBot is connected to a Public Nerwork we can connect to the real rUBo
 
   ![](./Images/01_Setup/02_Configuration_setup1.png)
 
-### **2.1.1. TheConstruct ROS Environment (recommended)**
+### **1.1. TheConstruct ROS Environment (recommended)**
 
 To **setup the repository** in your ROS environment, you need to:
 - Fork my repository in your github account
@@ -103,7 +103,7 @@ The **Instructor** will configure the rUBot:
   - Run 'source ~/.bashrc' to re-export ROS variables before running roscore.
   - Bringup the robot. This will be done automatically every time the robot is swhitched on.
 
-**Robots with Ubuntu20 Desktop**:
+#### **1.1.1. Robots with Ubuntu20 Desktop**:
 - Modify the service to bringup automatically the robot on boot:
   - Stop the servide:
     ````shell
@@ -131,7 +131,7 @@ The **Instructor** will configure the rUBot:
     ````
     > If the service was already enabled it is not needed to disable and enable again
 
-**Robots with Docker-compose**:
+#### **1.1.1. Robots with Docker-compose**:
 - Install the rUBot_XX on TheConstruct environment (RRL service) to the Raspberrypi OS
 - Use the Dockerfile, rubot_bringup.sh and docker-compose.yml files in the Documentation/files/Docker folder
 - Note that the environment variables in docker-compose.yml has to be changed:
@@ -192,13 +192,19 @@ rrl-uninstall
 - Delete the lines added to .bashrc
 - reboot
 
-### **2.1.2 WSL ROS environment**
+### **1.2 PC with WSL ROS environment**
 
 Windows Subsystem for Linux is a good method to install a Linux Virtual Machine with ROS in a **windows PC**.
 
-### **2.1.3. Using Docker ROS environment**
+The PC and the robot has to be connected to the same Network
+
+We need to configure Static IP address of WSL (Hyper-V)
+
+### **1.3. PC with Docker ROS environment**
 
 Docker is also a good option to install a ROS Virtual machine. This is compatible for **Windows and MAC**.
+
+The PC and the robot has to be connected to the same Network
 
 - Install and run Docker for windows
 - Open VScode and install Docker extension
@@ -216,7 +222,22 @@ source /opt/ros/noetic/setup.bash
 export ROS_MASTER_URI=http://<rubot-IP>:11311
 export ROS_HOSTNAME=<DockerPC-IP>
 ````
+For the rUBot we have 2 options:
+- rUBot has Ubuntu20 SO (rUBot0x)
+- rUBot has Raspberrypi SO with Docker (rUBot0xD)
 
+**rUBot has Ubuntu20 SO (rUBot0x)**
+- Configure the .bashrc
+````shell
+source /opt/ros/noetic/setup.bash
+#source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
+#cd /home/ubuntu/rUBot_mecanum_ws
+export ROS_MASTER_URI=http://<rubot-IP>:11311
+export ROS_HOSTNAME=<rubot-IP>
+````
+**rUBot has Raspberrypi SO with Docker (rUBot0xD)**
+- Configure the **rubot_bringup.sh** and **docker-compose.yaml** in "Files"
+- configure the ".bashrc" in Container and in rUBot
 
 ## **2. rUBot starts a local hotspot**
 

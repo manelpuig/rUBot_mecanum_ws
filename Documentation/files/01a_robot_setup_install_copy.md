@@ -17,7 +17,7 @@ There are 2 different options for this installation:
 - Install Raspberrypi Desktop and ROS Noetic with Docker
 
 
-### **1.1. Install Ubuntu20 server image and ROS Noetic**
+### **1.1. Install Ubuntu20 server image**
 
 Follow the steps in order to properly install the Ubuntu20 on Raspberrypi:
 
@@ -223,7 +223,7 @@ It will be good to bringup the robot on boot:
   sudo systemctl daemon-reload
   ````
 
-## **2. Install Raspberrypi Desktop and ROS Noetic with Docker**
+## **2. Configure Raspberrypi with Docker**
 
 To create a fast and robust image of ROS Noetic for our robot, an improved method is to use Docker.
 

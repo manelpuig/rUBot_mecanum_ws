@@ -6,9 +6,8 @@ services:
     network_mode: host
     container_name: rubot_ros_noetic_container
     environment:
-      - ROS_IPV6=on
-      - ROS_MASTER_URI=http://localhost:11311
-      - ROS_HOSTNAME=localhost
+      - ROS_MASTER_URI=http://<IP-rubot>:11311
+      - ROS_HOSTNAME=<IP-rubot>
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /dev:/dev
