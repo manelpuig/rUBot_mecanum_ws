@@ -31,6 +31,8 @@ We will use TheConstruct environment to:
 To **setup the repository** in your ROS environment, you need to:
 - Fork my repository (https://github.com/manelpuig/rUBot_mecanum_ws) in your github account
 - Open your ROS Noetic environment: https://app.theconstructsim.com/
+  - Login: robotics.ubx
+  - Password: rubot_0x
 - Clone your forked directory in your home directory
   ```shell
   cd /home/user
