@@ -2,11 +2,12 @@
 
 - Add and Connect to the desired Wi-Fi Network on startup (i.e. "rUBotics" Network)
 ````shell
-sudo nmcli connection add type wifi ifname wlan0 con-name "rUBotics" ssid "rUBotics"
-sudo nmcli connection modify "rUBotics" wifi-sec.key-mgmt wpa-psk
-sudo nmcli connection modify "rUBotics" wifi-sec.psk "rUBot"
-sudo nmcli connection modify "rUBotics" connection.autoconnect yes
-sudo nmcli connection modify "rUBotics" connection.autoconnect-priority 40
+sudo nmcli connection show
+sudo nmcli connection add type wifi ifname wlan0 con-name "Robotics_UB" ssid "Robotics_UB"
+sudo nmcli connection modify "Robotics_UB" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "Robotics_UB" wifi-sec.psk "rUBot_xx"
+sudo nmcli connection modify "Robotics_UB" connection.autoconnect yes
+sudo nmcli connection modify "Robotics_UB" connection.autoconnect-priority 40
 ````
 - Add and Connect to the desired Wi-Fi Network on startup (i.e. "Manel" Network)
 ````shell
