@@ -343,3 +343,8 @@ docker logs rubot_ros_noetic_container
 ````
 - To modify the rubot_bringup.sh file: Simply edit rubot_bringup.sh on your host machine. Changes will reflect in the container on the next restart.
 
+To verify if the container is working type on terminal:
+````shell
+docker exec -it rubot_ros_noetic_container /bin/bash
+````
+

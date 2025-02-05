@@ -20,5 +20,6 @@ services:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
       - "/dev/ttyACM0:/dev/ttyACM0"
       - "/dev/video0:/dev/video0"
+    entrypoint: /ros_entrypoint.sh
     command: ["/root/rubot_bringup.sh"]
     restart: always  # Automatically restart on error or system boot

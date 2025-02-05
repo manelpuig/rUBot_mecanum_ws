@@ -131,7 +131,7 @@ The **Instructor** will configure the rUBot:
     ````
     > If the service was already enabled it is not needed to disable and enable again
 
-#### **1.1.1. Robots with Docker-compose**:
+#### **1.1.2. Robots with Docker-compose**:
 - Install the rUBot_XX on TheConstruct environment (RRL service) to the Raspberrypi OS
 - Use the Dockerfile, rubot_bringup.sh and docker-compose.yml files in the Documentation/files/Docker folder
 - Note that the environment variables in docker-compose.yml has to be changed:

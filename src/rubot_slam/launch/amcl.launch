@@ -15,7 +15,7 @@
     <param name="update_min_d"              value="0.20"/> <!-- Minimum distance before updating particles -->
     <param name="update_min_a"              value="0.20"/> <!-- Minimum angle change before updating particles -->
     <param name="resample_interval"         value="1"/>    <!-- Frequency of particle resampling -->
-    <param name="transform_tolerance"       value="0.5"/>  <!-- Tolerance for transform lookups -->
+    <param name="transform_tolerance"       value="1.0"/>  <!-- Tolerance for transform lookups -->
     <param name="recovery_alpha_slow"       value="0.00"/> <!-- Slow recovery rate for the particle filter -->
     <param name="recovery_alpha_fast"       value="0.00"/> <!-- Fast recovery rate for the particle filter -->
 
