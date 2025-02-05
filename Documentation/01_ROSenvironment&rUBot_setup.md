@@ -105,3 +105,11 @@ To obtain the **PAT** in github follow the instructions:
   - Once the token is generated, copy it immediately. You won't be able to see it again after leaving the page.
 
 Your github origin repository has been updated!
+
+## **4. PC connected to the rUBot with virtual Desktop**
+
+In that case the latency is reduced and is optimum fast robot control 
+
+- Connect the PC to the same network as rUBot
+- Use nomachine (https://www.nomachine.com/?q=download) remote Desktop to connect the PC to the rUBot with graphical interface
+

@@ -222,22 +222,13 @@ source /opt/ros/noetic/setup.bash
 export ROS_MASTER_URI=http://<rubot-IP>:11311
 export ROS_HOSTNAME=<DockerPC-IP>
 ````
-For the rUBot we have 2 options:
-- rUBot has Ubuntu20 SO (rUBot0x)
-- rUBot has Raspberrypi SO with Docker (rUBot0xD)
+### **1.4. PC connected to the rUBot**
 
-**rUBot has Ubuntu20 SO (rUBot0x)**
-- Configure the .bashrc
-````shell
-source /opt/ros/noetic/setup.bash
-#source /home/ubuntu/rUBot_mecanum_ws/devel/setup.bash
-#cd /home/ubuntu/rUBot_mecanum_ws
-export ROS_MASTER_URI=http://<rubot-IP>:11311
-export ROS_HOSTNAME=<rubot-IP>
-````
-**rUBot has Raspberrypi SO with Docker (rUBot0xD)**
-- Configure the **rubot_bringup.sh** and **docker-compose.yaml** in "Files"
-- configure the ".bashrc" in Container and in rUBot
+In that case the latency is reduced and is optimum fast robot control 
+
+- Connect the PC to the same network as rUBot
+- Use nomachine remote Desktop to connect the PC to the rUBot with graphical interface
+
 
 ## **2. rUBot starts a local hotspot**
 
