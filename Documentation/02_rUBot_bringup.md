@@ -474,7 +474,6 @@ You will have to:
 - Design a custom rUBot model corresponding to the real rUBot_mecanum (rubot_custom.urdf), with:
   - Customized model colors (rviz and gazebo)
   - Add a 3D-part on top with a fixed joint
-  - Modify the "base_scan" link and joint to take into account the lidar orientation in our robot
 - Design a custom virtual world using the wooden model parts
 
 To verify the final bringup, create a new "rubot_bringup_sw.launch" file with your rubot_custom.urdf and the world you have created:
