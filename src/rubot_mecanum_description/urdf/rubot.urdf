@@ -149,7 +149,7 @@
       <inertia ixx="0.000166" ixy="0" ixz="0" iyy="0.000303" iyz="0" izz="0.000166"/>
     </inertial>
   </link>
-<!-- 2D Camera as a mesh of actual PiCamera -->
+<!-- 2D Camera as a mesh of actual Camera -->
   <joint name="joint_camera" type="fixed">
     <origin rpy="0 0 0" xyz="0.120 0.0 0.09"/>
     <parent link="base_link"/>
@@ -160,7 +160,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://rubot_mecanum_description/meshes/rubot/piCamera.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rubot_mecanum_description/meshes/rubot/Camera.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="black"/>
     </visual>
