@@ -228,7 +228,8 @@ It will be good to bringup the robot on boot:
 To create a fast and robust image of ROS Noetic for our robot, an improved method is to use Docker.
 
 References:
-- Docker for LIMO robot: https://hub.docker.com/repository/docker/theconstructai/limo/general
+- Docker for LIMO robot (ROS1): https://bitbucket.org/theconstructcore/agilex_limo/src/master/
+- Docker for LIMO robot (ROS2): https://hub.docker.com/repository/docker/theconstructai/limo/general
 
 
 ### **2.1. Install Raspberrypi Desktop**
