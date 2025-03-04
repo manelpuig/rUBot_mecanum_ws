@@ -3,7 +3,7 @@
     <arg name="v" default="0.2"/>
     <arg name="w" default="0.4"/>
     <arg name="td" default="2"/>
-    <arg name="path" default="Square"/>
+    <arg name="path" default="Rombe"/>
   <node name="rubot_nav" pkg="rubot_control" type="rubot_path_control.py" output="screen" >
     <param name="v" value="$(arg v)"/>
     <param name="w" value="$(arg w)"/>

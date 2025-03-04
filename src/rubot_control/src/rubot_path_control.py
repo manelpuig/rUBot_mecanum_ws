@@ -16,6 +16,13 @@ def triangular_path(v, td):
     move_rubot(-v,v,0,td/sqrt(2))
     move_rubot(-v,-v,0,td/sqrt(2))
 
+def rombe_path(v, td):
+    move_rubot(v,0,0,td)
+    move_rubot(-v,-v,0,td/sqrt(2))
+    move_rubot( -v,0,0,td)
+    move_rubot( v, v,0,td/sqrt(2))
+
+
 
 if __name__ == '__main__':
     try:
@@ -30,6 +37,8 @@ if __name__ == '__main__':
 
         elif path == "Triangular":
             triangular_path(v, td)
+        elif path == "Rombe":
+            rombe_path(v, td)
         else:
             print('Error: unknown movement')
 
