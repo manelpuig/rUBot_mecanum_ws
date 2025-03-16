@@ -55,7 +55,7 @@ class rUBot:
             self._msg.angular.z = -sign(angleClosestDistance) * self._rotationSpeed * self._speedFactor
         else:
             self._msg.linear.x = self._forwardSpeed * self._speedFactor
-            self._msg.angular.z = 0
+            self._msg.angular.z = 0.0
 
         #rospy.logwarn(f"Twist vx={self._msg.linear.x:.1f} m/s, wz={self._msg.angular.z:.1f} rad/s")
         self._cmdVel.publish(self._msg)
