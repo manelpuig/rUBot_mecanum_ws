@@ -1,0 +1,23 @@
+name: pc-noetic
+
+services:
+    pc-noetic-container:
+    image: noetic_ports
+    pull_policy: always
+    privileged: true
+    network_mode: host
+    container_name: noetic_ports_container
+    environment:
+        - ROS_MASTER_URI=http://master:11311
+        - ROS_HOSTNAME=master
+    volumes:
+        - c:/test:/root/test  # Adjust host path if needed
+        - /dev:/dev
+        - ./volumes/launch_ros_drivers.sh:/launch_ros_drivers.sh
+    devices:
+        - "/dev/bus/usb:/dev/bus/usb"
+    device_cgroup_rules:
+        - 'c 189:* rmw'
+    entrypoint: /ros_entrypoint.sh
+    command: ["/launch_ros_drivers.sh"]
+    restart: always
