@@ -218,6 +218,8 @@ Upload the:
 ## **2. Autonomous navigation with obstacle avoidance**
 We will use now the created world to test the autonomous navigation with obstacle avoidance performance. 
 
+An interesting program is described in: https://www.youtube.com/watch?v=qO7Y1PCkB8g&t=624s
+
 The algorithm description functionality, created in "rubot_self_control.py" file,is:
 - The created node makes the robot go forward.
     - LIDAR is allways searching the closest distance and the angle
