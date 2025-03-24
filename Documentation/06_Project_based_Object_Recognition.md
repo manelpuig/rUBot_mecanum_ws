@@ -15,7 +15,7 @@ sudo pip install keras
 sudo pip install tensorflow
 sudo pip install tflite-runtime
 ````
-We will use Keras that is a high-level API that runs on top of TensorFlow. By using both TensorFlow and Keras, you get the best of both worlds: the ease of use and simplicity of Keras, combined with the power and flexibility of TensorFlow.
+We will use Keras that is a high-level API that runs on top of TensorFlow. By using both TensorFlow and Keras, you get the best of both worlds: the ease of use and simplicity of Keras, combined with the power and flexibility of TensorFlow. ()
 
 ## Using the USB_Cam
 
