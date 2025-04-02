@@ -16,42 +16,43 @@ sudo pip install tensorflow
 ````
 We will use Keras that is a high-level API that runs on top of TensorFlow. By using both TensorFlow and Keras, you get the best of both worlds: the ease of use and simplicity of Keras, combined with the power and flexibility of TensorFlow. (Check if tensorflow installation is necessary)
 
-Compile workspace (theConstruct):
-   ```bash
-   cd ~/catkin_ws
-   catkin_make
-   source devel/setup.bash
-   ````
-
-
 ## Getting started
 
 1. Bringup the rUBot:
    ```bash
    roslaunch rubot_mecanum_description rubot_bringup_HW_arduino.launch
    ````
+2. Place the rUBot in front of the Traffic Signal
 
-2. Verify topics (theConstruct):
+3. Take photos from USB camera
+    ````bash
+    rosrun rubot_projects rubot_take_photo.py
+    ````
+4. Open RVIZ to see the pictura frame
+
+3. Open the "teachablemachine" app to create a model for "Traffic Signs". Go to https://teachablemachine.withgoogle.com/ and create an image project.
+
+4. Collect images with rUBot USB_CAM for each sign and upload them to the project.
+
+5. Train the model.
+
+6.  Export the model as a keras .h5 model
+
+7. Verify topics (theConstruct):
    ```bash
    rostopic list
    ````
+   Verify the topic name: /usb_cam/image_raw to place it in "keras_detect_signs.py" node
    
 3. Launch classification node (theConstruct):
    ```bash
    roslaunch rubot_projects detect_signs.launch
    ````
 
-
 ### How to send a sequence of goals to ROS NavStack
 
 * [Sending a sequence of Goals to ROS NavStack with Python](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/)
 
-### Basic Tutorials for image analysis using OpenCV
-* [Shape Detection Using findContourns and approxPolyDP ](https://www.pyimagesearch.com/2016/02/08/opencv-shape-detection/)
-* [Arrow Interpretation using findContourns and approxPolyDP](https://programs.wiki/wiki/use-opencv-to-judge-the-arrow-direction.html)
-* [Detecting lines using Canny Edges and Hough Lines](https://docs.opencv.org/3.4/d9/db0/tutorial_hough_lines.html) --> [Example code ](https://github.com/michael-pacheco/opencv-arrow-detection)
-* [Color Detection using HSV space](https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/)
-* [HSV color picker (in opencv H value goes from 0 to 179)](https://alloyui.com/examples/color-picker/hsv.html)
 
 
 ### Final Exercise:

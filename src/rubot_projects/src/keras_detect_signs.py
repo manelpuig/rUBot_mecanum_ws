@@ -26,7 +26,7 @@ class KerasImageClassifier:
         self.bridge = CvBridge()
 
         # ROS communication
-        self.sub = rospy.Subscriber("/camera/image_raw", Image, self.image_callback, queue_size=1)
+        self.sub = rospy.Subscriber("/usb_cam/image_raw", Image, self.image_callback, queue_size=1)
         self.pub = rospy.Publisher("/predicted_class", String, queue_size=1)
 
     def load_labels(self, path):
