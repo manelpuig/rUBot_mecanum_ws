@@ -1,0 +1,7 @@
+0 Flecha
+1 Stop
+2 Prohibido_Entrar
+3 Ceda
+4 Estacionamiento
+5 Prohibido_General
+6 Nada

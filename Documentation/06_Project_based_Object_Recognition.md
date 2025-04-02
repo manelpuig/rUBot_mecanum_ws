@@ -13,59 +13,34 @@ sudo apt install python3-pip
 sudo pip install numpy matplotlib
 sudo pip install keras
 sudo pip install tensorflow
-sudo pip install tflite-runtime
 ````
 We will use Keras that is a high-level API that runs on top of TensorFlow. By using both TensorFlow and Keras, you get the best of both worlds: the ease of use and simplicity of Keras, combined with the power and flexibility of TensorFlow. (Check if tensorflow installation is necessary)
 
-## Using the USB_Cam
+Compile workspace (theConstruct):
+   ```bash
+   cd ~/catkin_ws
+   catkin_make
+   source devel/setup.bash
+   ````
 
-A simple program to take Images:
-```python
-#!/usr/bin/env python
 
-import rospy
-from sensor_msgs.msg import Image
-from cv_bridge import CvBridge, CvBridgeError
-import cv2
-import numpy as np
-```
-**Capturing an image from the camera**
+## Getting started
 
-We gonna create a class for encapsuling the attributes and callback function:
+1. Bringup the rUBot:
+   ```bash
+   roslaunch rubot_mecanum_description rubot_bringup_HW_arduino.launch
+   ````
 
-```python
-class TakeAShot(object):
+2. Verify topics (theConstruct):
+   ```bash
+   rostopic list
+   ````
+   
+3. Launch classification node (theConstruct):
+   ```bash
+   roslaunch rubot_projects detect_signs.launch
+   ````
 
- def __init__(self):
-        self.image_sub = rospy.Subscriber("/camera/rgb/image_raw", Image, self.camera_callback)
-        self.bridge_object = CvBridge()
-```
-The callback function will recieve the Image object from the camera in a missage and then it will save the Image as a png file in your 
-
-```python
- def camera_callback(self,data):
-      try:
-           # We select bgr8 because its the OpenCV encoding by default
-           cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8")
-           cv2.imwrite("image.png", cv_image)
-      except CvBridgeError as e:
-           print(e)        
-```     		
-The main is as usual:
-
-```python
-def main():
-
-    rospy.init_node('take_a_shot', anonymous=True)
-    take_a_shot = TakeAShot()
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        print("Shutting down")
-
-if __name__ == '__main__':
-    main()
-```
 
 ### How to send a sequence of goals to ROS NavStack
 

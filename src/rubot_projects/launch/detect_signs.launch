@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="rubot_projects" type="keras_detect_signs.py" name="keras_detect_signs" output="screen"/>
+</launch>
