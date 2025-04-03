@@ -29,7 +29,7 @@ class KerasImageClassifier:
 
         # Capturas
         self.capture_enabled = True
-        self.capture_dir = os.path.expanduser("~/Pictures/rUBot_captures")
+        self.capture_dir = os.path.expanduser("~/rUBot_mecanum_ws/src/rubot_projects/rUBot_captures")
         os.makedirs(self.capture_dir, exist_ok=True)
         self.last_capture_time = time.time()
         self.capture_interval = 1.0  # segundos
