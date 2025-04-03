@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="rubot_projects" type="keras_detect_signs_v2.py" name="keras_detect_signs_v2" output="screen">
+        <param name="image_topic" value="/usb_cam/image_raw"/>
+    </node>
+</launch>
