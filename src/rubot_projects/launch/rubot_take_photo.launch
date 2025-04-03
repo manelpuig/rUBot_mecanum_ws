@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="rubot_projects" type="rubot_take_photo.py" name="rubot_take_photo" output="screen">
+        <param name="image_topic" value="/usb_cam/image_raw" />
+        <param name="image_dir" value="/home/user/rUBot_mecanum_ws/src/rubot_projects/photos" />
+    </node>
+</launch>
