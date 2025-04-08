@@ -31,6 +31,8 @@ class KerasImageClassifier:
         self.capture_enabled = True
         self.capture_dir = os.path.expanduser("~/rUBot_mecanum_ws/src/rubot_projects/rUBot_captures")
         os.makedirs(self.capture_dir, exist_ok=True)
+        self.create_class_dirs()  # Crear carpetas por clase
+
         self.last_capture_time = time.time()
         self.capture_interval = 1.0  # segundos
 
@@ -43,6 +45,11 @@ class KerasImageClassifier:
         with open(path, 'r') as f:
             lines = f.readlines()
             return [line.strip().split(' ', 1)[1] for line in lines]
+
+    def create_class_dirs(self):
+        for class_name in self.labels:
+            class_path = os.path.join(self.capture_dir, class_name)
+            os.makedirs(class_path, exist_ok=True)
 
     def toggle_callback(self, msg):
         self.capture_enabled = msg.data
@@ -69,9 +76,11 @@ class KerasImageClassifier:
                 current_time = time.time()
                 if current_time - self.last_capture_time >= self.capture_interval:
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    filename = os.path.join(self.capture_dir, f"capture_{timestamp}.jpg")
-                    cv2.imwrite(filename, cv_image)
-                    rospy.loginfo(f"Imagen guardada: {filename}")
+                    filename = f"{class_name}_{timestamp}.jpg"
+                    class_folder = os.path.join(self.capture_dir, class_name)
+                    filepath = os.path.join(class_folder, filename)
+                    cv2.imwrite(filepath, cv_image)
+                    rospy.loginfo(f"Imagen guardada: {filepath}")
                     self.last_capture_time = current_time
 
         except Exception as e:
