@@ -33,16 +33,14 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
     rosrun rubot_projects keras_takePictures_detect_signs.py
     ````
 4. Open RVIZ to see the picture frame
-
-3. Open the "teachablemachine" app to create a model for "Traffic Signs". Go to https://teachablemachine.withgoogle.com/ and create an image project.
-
-4. Collect images with rUBot USB_CAM for each sign and upload them to the project.
-
-5. Train the model.
-
-6.  Export the model as a keras .h5 model. The model can be created with some pictures, but this would be improved with some more pictures.
-
-7. The models will be uploaded in "models" folder
+    ````bash
+    rviz
+    ````
+- Open the "teachablemachine" app to create a model for "Traffic Signs". Go to https://teachablemachine.withgoogle.com/ and create an image project.  
+- Collect images with rUBot USB_CAM for each sign and upload them to the project.  
+- Train the model.  
+- Export the model as a keras .h5 model. The model can be created with some pictures, but this would be improved with some more pictures.  
+- The models will be uploaded in "models" folder  
 
 8. Verify topics (theConstruct):
    ```bash
@@ -63,6 +61,9 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    rostopic pub /capture_toggle std_msgs/Bool "data: false"
    ````
    If you want to do photos again set false value to true 
+   ```bash
+   rostopic pub /capture_toggle std_msgs/Bool "data: true"
+   ````
 ### How to send a sequence of goals to ROS NavStack
 
 * [Sending a sequence of Goals to ROS NavStack with Python](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/)
