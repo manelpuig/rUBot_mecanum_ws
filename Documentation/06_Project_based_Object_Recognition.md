@@ -56,7 +56,7 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    ```bash
    roslaunch rubot_projects detect_signs_take_pictures.launch
    ````
-12.1. Stop doing photos (theConstruct) (in a new Terminal):
+10.1. Stop doing photos (theConstruct) (in a new Terminal):
    ```bash
    rostopic pub /capture_toggle std_msgs/Bool "data: false"
    ````
