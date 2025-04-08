@@ -61,6 +61,9 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    rostopic pub /capture_toggle std_msgs/Bool "data: false"
    ````
    If you want to do photos again set false value to true 
+   ```bash
+   rostopic pub /capture_toggle std_msgs/Bool "data: true"
+   ````
 ### How to send a sequence of goals to ROS NavStack
 
 * [Sending a sequence of Goals to ROS NavStack with Python](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/)
