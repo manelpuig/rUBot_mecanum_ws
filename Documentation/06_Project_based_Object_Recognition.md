@@ -54,7 +54,15 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    ```bash
    roslaunch rubot_projects detect_signs.launch
    ````
-
+10. Launch classification node and take photos (v2) (theConstruct):
+   ```bash
+   roslaunch rubot_projects detect_signs_take_pictures.launch
+   ````
+10.1. Stop doing photos (theConstruct) (in a new Terminal):
+   ```bash
+   rostopic pub /capture_toggle std_msgs/Bool "data: false"
+   ````
+   If you want to do photos again set false value to true 
 ### How to send a sequence of goals to ROS NavStack
 
 * [Sending a sequence of Goals to ROS NavStack with Python](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/)
