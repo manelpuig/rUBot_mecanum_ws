@@ -77,49 +77,16 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
 * [Sending a sequence of Goals to ROS NavStack with Python](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/)
 
 ### Final Project:
-#### First scenario: Image processing
 
 * Load the room map 
 * Start the navigation stack. 
 * Get the coordinates of all the traffic sign using Rviz.
 * Write a Python node with the folowing behaviour:
-	* Go to the first sign.
-	* When the robot stops:
-		* take an image. 
-		* recognize the object using image processing by coulour and shape. 
-		* go to next sign according the signs:
-			* Left: go to next sign on the left
-			* Right: go to next sign on the right
-			* STOP: Shutdown node.
-			* Forbidden: continues to the next sign  	 
-
-#### Second scenario: Computer Vision
-
-* Load the room map 
-* Start the navigation stack. 
-* Get the coordinates of all the traffic sign using Rviz.
-* Write a Python node with the folowing behaviour:
-	* Go to the first sign.
-	* When the robot stops:
-		* take an image. 
-        * recognize the object using TensorFlow model and do inference on each image
-		* go to next sign according the signs:
-			* Left: go to next sign on the left
-			* Right: go to next sign on the right
-			* STOP: Shutdown node.
-			* Forbidden: continues to the next sign  
-
-### How to train and use a TensorFlow model for object recognition:
-* Go to https://teachablemachine.withgoogle.com/ and create an image project.
-* Collect images with your mobile for each sign and upload them to the project.
-* Train the model.
-* Export the model as a keras .h5 model: 
-* Create a ROS node that uses the model for inference:
-  
-
-Here's how you can adapt your code to create a ROS node that subscribes to the USB camera topic and identifies traffic signs in real time:
-
-- Set Up ROS Environment: Ensure ROS Noetic is installed and configured on your Raspberry Pi 4.
-
-- Create ROS Node: Develop a ROS node that subscribes to the USB camera topic, processes the images using the Keras model, and publishes the detected traffic signs.
-
+	* Lacalize the robot in the starting POSE
+   - Define a goal and start the movement to the defined goal
+   - If you find a traffic sign execute the corresponding movement when you are close (aroud 30cm) to the sign. This movement has to be:
+      - Stop: publish a Twist message (0,0,0,0,0,0)
+      - Turn_Right: publish a Twist message (0,0,0,0,0,-wz)
+      - Turn_Left: publish a Twist message (0,0,0,0,0,+wz)
+	* continue to the target pose according to a new path obtained by Navigation stack during the previous movement
+* Test a more complex escenario when there are 2 or 3 traffic signs involved in the path from init pose to target pose.
