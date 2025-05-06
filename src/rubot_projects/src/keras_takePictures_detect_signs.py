@@ -14,8 +14,8 @@ class KerasImageClassifier:
     def __init__(self):
         # Paths relativos al script
         script_dir = os.path.dirname(os.path.realpath(__file__))
-        model_path = os.path.join(script_dir, "../models/keras_model.h5")
-        labels_path = os.path.join(script_dir, "../models/labels.txt")
+        model_path = os.path.join(script_dir, "../models/keras_model1.h5")
+        labels_path = os.path.join(script_dir, "../models/labels1.txt")
 
         # Cargar modelo y etiquetas
         self.model = load_model(model_path)
