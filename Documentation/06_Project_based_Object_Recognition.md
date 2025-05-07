@@ -47,33 +47,48 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    - A zip file is created in PC Download folder. It contains a folder with "keras_model.h5" and "labels.txt". Change the names if needed. The model can be created with some few photos, but this would be improved with some more photos in a later step.  
    - These two files model will be uploaded in "models" folder project 
 
-6. Launch classification node (theConstruct):
+6. Launch classification node to verify the performance of your generated model:
 
    Verify the topic name: /usb_cam/image_raw to place it in "keras_detect_signs.py" node and the names of the model
    
    ```bash
    roslaunch rubot_projects keras_detect_signs.launch
    ````
-7. Launch classification node and take photos:
+7. Refine the model:
 
-   When you already have a first model and you want to refine this model with more and better photos, you can use a more performand program to take photos continuously, make an identification with tha actual model and the photo to the speciffic folder with the name of the class.
-   ```bash
-   roslaunch rubot_projects keras_takePictures_detect_signs.launch
-   ````
-      - Stop doing photos (theConstruct) (in a new Terminal):
+   When you already have a first model and you want to refine this model with more and better photos, you can use a more performand program to take photos continuously, make an identification with that actual model and store the photos to the corresponding folder with the name of the class. These new photos will help you to improve the performances of your model.
+   - Launch "keras_takePictures_detect_signs.launch" file created for this purpose:
+      ```bash
+      roslaunch rubot_projects keras_takePictures_detect_signs.launch
+      ````
+      - Stop doing photos and only identify:
          ````bash
          rostopic pub /capture_toggle std_msgs/Bool "data: false"
          ````
-      - If you want to do photos again set false value to true 
+      - If you want to do photos again set the argument to true 
          ```bash
          rostopic pub /capture_toggle std_msgs/Bool "data: true"
          ````
          >This is the default setting
-   8. To update the model
+   - Update the model
 
       You have to select "Tensorflow.js" and upload the model to the Cloud. A link appears corresponding of the model in the cloud.
 
       Open the link in a new google tip with this link. The model appears with the previous photos. You can add there the new ones.
+8. Perform a trajectory in your world from Initial POSE to final POSE takin care of the different traffic signs 
+
+This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals.
+   - Contruct the desired world with the available wooden parts
+   - Launch the slam gmapping node to generate the map
+   - Launch the navigation node to:
+      - Localize the initial POSE of the robot in the map
+      - define a destination POSE
+      - generate an optimal trajectory and start the movement
+   -  Launch the node "keras_takePictures_detect_signs_move" who is able to identify the traffic signal and execute the corresponding movemment. 
+   ````shell
+   roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
+   ````
+   > You will have to modify this node to subscribe to the Odometry and start to execute the corresponding movement when the robot is close enough (i.e. 40cm) of the traffic signal. A first version of this node is implemented in: keras_takePictures_detect_signs_move.py
 
 ### Final Project:
 

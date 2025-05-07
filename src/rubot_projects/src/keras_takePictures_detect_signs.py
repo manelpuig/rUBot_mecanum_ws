@@ -87,6 +87,6 @@ class KerasImageClassifier:
             rospy.logerr(f"Error procesando imagen: {e}")
 
 if __name__ == "__main__":
-    rospy.init_node("keras_detector")
+    rospy.init_node("keras_takePictures_detect_signs")
     KerasImageClassifier()
     rospy.spin()

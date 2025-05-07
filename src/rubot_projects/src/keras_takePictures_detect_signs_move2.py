@@ -3,6 +3,7 @@ import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import String, Bool
 from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import numpy as np
@@ -10,8 +11,9 @@ from tensorflow.keras.models import load_model
 import time
 from datetime import datetime
 import os
+import tf_transformations
 
-class KerasImageClassifier:
+class KerasImageClassifier_move:
     def __init__(self):
         # Paths relativos al script
         script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -28,6 +30,20 @@ class KerasImageClassifier:
         self.image_sub = rospy.Subscriber("/usb_cam/image_raw", Image, self.image_callback, queue_size=1)
         self.class_pub = rospy.Publisher("/predicted_class", String, queue_size=1)
         self.cmd_vel_pub = rospy.Publisher("/cmd_vel", Twist, queue_size=1) # Publisher para Twist
+
+        # Odometria
+        self.odom_sub = rospy.Subscriber("/odom", Odometry, self.odom_callback)
+        self.robot_x = 0.0
+        self.robot_y = 0.0
+
+        # Posició del senyal detectat
+        self.signal_x = None
+        self.signal_y = None
+        self.last_detection_time = None
+        self.detection_timeout = 10.0 # Segons per considerar una detecció vàlida
+
+        # Paràmetre de distància per actuar
+        self.detection_distance_threshold = 0.4# Distancia en m a la senyal
 
         # Capturas
         self.capture_enabled = True
@@ -58,6 +74,10 @@ class KerasImageClassifier:
         state = "ACTIVADA" if self.capture_enabled else "DESACTIVADA"
         rospy.loginfo(f"Captura automática {state}")
 
+    def odom_callback(self, msg):
+        self.robot_x = msg.pose.pose.position.x
+        self.robot_y = msg.pose.pose.position.y
+
     def image_callback(self, msg):
         try:
             # Convertir imagen
@@ -73,25 +93,33 @@ class KerasImageClassifier:
             rospy.loginfo(f"Detectado: {class_name}")
             self.class_pub.publish(class_name)
 
-            # Publicar mensaje Twist basado en la clase detectada
-            twist_msg = Twist()
-            if class_name == "stop":
-                twist_msg.linear.x = 0.0
-                twist_msg.angular.z = 0.0
-            elif class_name == "adelante":
-                twist_msg.linear.x = 0.2
-                twist_msg.angular.z = 0.0
-            elif class_name == "izquierda":
-                twist_msg.linear.x = 0.1
-                twist_msg.angular.z = 0.3
-            elif class_name == "derecha":
-                twist_msg.linear.x = 0.1
-                twist_msg.angular.z = -0.3
-            else:
-                twist_msg.linear.x = 0.0
-                twist_msg.angular.z = 0.0
-            self.cmd_vel_pub.publish(twist_msg)
+            # Actualitzar posició del senyal (simplificació: assumim que el senyal està sempre davant del robot)
+            self.signal_x = self.robot_x + 0.5 # Assumim que el senyal es detecta a 0.5m davant
+            self.signal_y = self.robot_y
+            self.last_detection_time = rospy.Time.now()
 
+            # Calcular distància al senyal i actuar
+            if self.signal_x is not None and self.signal_y is not None and self.last_detection_time is not None:
+                time_diff = rospy.Time.now() - self.last_detection_time
+                if time_diff.to_sec() < self.detection_timeout:
+                    distance_to_signal = np.sqrt((self.robot_x - self.signal_x)**2 + (self.robot_y - self.signal_y)**2)
+                    rospy.loginfo(f"Distancia al senyal {class_name}: {distance_to_signal:.2f} metres")
+
+                    twist_msg = Twist()
+                    if distance_to_signal <= self.detection_distance_threshold:
+                        if class_name == "stop":
+                            twist_msg.linear.x = 0.0
+                            twist_msg.angular.z = 0.0
+                        elif class_name == "adelante":
+                            twist_msg.linear.x = 0.0
+                            twist_msg.angular.z = 0.0 # Aturar abans de passar
+                        elif class_name == "izquierda":
+                            twist_msg.linear.x = 0.0
+                            twist_msg.angular.z = 0.5 # Girar més pronunciadament
+                        elif class_name == "derecha":
+                            twist_msg.linear.x = 0.0
+                            twist_msg.angular.z = -0.5 # Girar més pronunciadament
+                        self.cmd_vel_pub.publish(twist_msg)
             # Guardar imagen si está activado
             if self.capture_enabled:
                 current_time = time.time()
@@ -111,5 +139,5 @@ class KerasImageClassifier:
 
 if __name__ == "__main__":
     rospy.init_node("keras_takePictures_detect_signs_move")
-    KerasImageClassifier()
+    KerasImageClassifier_move()
     rospy.spin()
