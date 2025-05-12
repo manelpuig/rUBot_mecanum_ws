@@ -77,18 +77,18 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
       Open the link in a new google tip with this link. The model appears with the previous photos. You can add there the new ones.
 8. Perform a trajectory in your world from Initial POSE to final POSE takin care of the different traffic signs 
 
-This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals.
-   - Contruct the desired world with the available wooden parts
-   - Launch the slam gmapping node to generate the map
-   - Launch the navigation node to:
-      - Localize the initial POSE of the robot in the map
-      - define a destination POSE
-      - generate an optimal trajectory and start the movement
-   -  Launch the node "keras_takePictures_detect_signs_move" who is able to identify the traffic signal and execute the corresponding movemment. 
-   ````shell
-   roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
-   ````
-   > You will have to modify this node to subscribe to the Odometry and start to execute the corresponding movement when the robot is close enough (i.e. 40cm) of the traffic signal. A first version of this node is implemented in: keras_takePictures_detect_signs_move.py
+   This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals.
+      - Contruct the desired world with the available wooden parts
+      - Launch the slam gmapping node to generate the map
+      - Launch the navigation node to:
+         - Localize the initial POSE of the robot in the map
+         - define a destination POSE
+         - generate an optimal trajectory and start the movement
+      -  Launch the node "keras_takePictures_detect_signs_move" who is able to identify the traffic signal and execute the corresponding movemment. 
+      ````shell
+      roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
+      ````
+      > You will have to modify this node to subscribe to the Odometry and start to execute the corresponding movement when the robot is close enough (i.e. 40cm) of the traffic signal. A first version of this node is implemented in: keras_takePictures_detect_signs_move.py
 
 ### Final Project:
 
@@ -100,6 +100,7 @@ This is the core of your project. Different traffic signals will be placed on yo
    - Define a goal and start the movement to the defined goal
    - If you find a traffic sign execute the corresponding movement when you are close (aroud 30cm) to the sign. This movement has to be:
       - Stop: publish a Twist message (0,0,0,0,0,0)
+      - Give_Way: publish a Twist message (0,0,0,0,0,0) during 5 seconds
       - Turn_Right: publish a Twist message (0,0,0,0,0,-wz)
       - Turn_Left: publish a Twist message (0,0,0,0,0,+wz)
 	* continue to the target pose according to a new path obtained by Navigation stack during the previous movement

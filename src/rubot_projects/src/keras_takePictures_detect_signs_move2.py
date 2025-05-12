@@ -107,18 +107,18 @@ class KerasImageClassifier_move:
 
                     twist_msg = Twist()
                     if distance_to_signal <= self.detection_distance_threshold:
-                        if class_name == "stop":
+                        if class_name == "Stop":
                             twist_msg.linear.x = 0.0
                             twist_msg.angular.z = 0.0
-                        elif class_name == "adelante":
+                        elif class_name == "Give_Way":
                             twist_msg.linear.x = 0.0
                             twist_msg.angular.z = 0.0 # Aturar abans de passar
-                        elif class_name == "izquierda":
+                        elif class_name == "Turn_Left":
                             twist_msg.linear.x = 0.0
-                            twist_msg.angular.z = 0.5 # Girar més pronunciadament
-                        elif class_name == "derecha":
+                            twist_msg.angular.z = 0.5 # Girar més pronunciadament a l'esquerra
+                        elif class_name == "Turn_Right":
                             twist_msg.linear.x = 0.0
-                            twist_msg.angular.z = -0.5 # Girar més pronunciadament
+                            twist_msg.angular.z = -0.5 # Girar més pronunciadament a la dreta
                         self.cmd_vel_pub.publish(twist_msg)
             # Guardar imagen si está activado
             if self.capture_enabled:
