@@ -49,7 +49,7 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
 
 6. Launch classification node to verify the performance of your generated model:
 
-   Verify the topic name: /usb_cam/image_raw to place it in "keras_detect_signs.py" node and the names of the model
+   Verify the topic name: /usb_cam/image_raw to place it in "keras_detect_signs.py" node and the names of the model and the Classes on labels.txt
    
    ```bash
    roslaunch rubot_projects keras_detect_signs.launch
@@ -75,6 +75,7 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
       You have to select "Tensorflow.js" and upload the model to the Cloud. A link appears corresponding of the model in the cloud.
 
       Open the link in a new google tip with this link. The model appears with the previous photos. You can add there the new ones.
+
 8. Perform a trajectory in your world from Initial POSE to final POSE takin care of the different traffic signs 
 
    This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals.
@@ -82,8 +83,9 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
       - Launch the slam gmapping node to generate the map
       - Launch the navigation node to:
          - Localize the initial POSE of the robot in the map
+         - Localize the traffic signal POSEs (you will use later)
          - define a destination POSE
-         - generate an optimal trajectory and start the movement
+         - Navigation node generates an optimal trajectory and starts the movement
       -  Launch the node "keras_takePictures_detect_signs_move" who is able to identify the traffic signal and execute the corresponding movemment. 
       ````shell
       roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
@@ -96,9 +98,9 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
 * Start the navigation stack. 
 * Get the coordinates of all the traffic sign using Rviz.
 * Write a Python node with the folowing behaviour:
-	* Lacalize the robot in the starting POSE
+	* Localize the robot in the starting POSE
    - Define a goal and start the movement to the defined goal
-   - If you find a traffic sign execute the corresponding movement when you are close (aroud 30cm) to the sign. This movement has to be:
+   - If you find a traffic sign execute the corresponding movement when you are close (i.e. aroud 30cm) to the sign. This movement has to be:
       - Stop: publish a Twist message (0,0,0,0,0,0)
       - Give_Way: publish a Twist message (0,0,0,0,0,0) during 5 seconds
       - Turn_Right: publish a Twist message (0,0,0,0,0,-wz)
