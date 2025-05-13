@@ -78,7 +78,7 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
 
 8. Perform a trajectory in your world from Initial POSE to final POSE takin care of the different traffic signs 
 
-   This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals.
+   This is the core of your project. Different traffic signals will be placed on your world and the robot will be able to identify them and generate a proper tarjectory to reach the Final POSE takin care the traffic signals. For this purpose you need to:
       - Contruct the desired world with the available wooden parts
       - Launch the slam gmapping node to generate the map
       - Launch the navigation node to:
@@ -90,22 +90,26 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
       ````shell
       roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
       ````
-      > You will have to modify this node to subscribe to the Odometry and start to execute the corresponding movement when the robot is close enough (i.e. 40cm) of the traffic signal. A first version of this node is implemented in: keras_takePictures_detect_signs_move.py
+      > We have created this node to subscribe to the Odometry and start to execute the corresponding movement when the robot is close enough (i.e. 40cm) of the traffic signal. A first version of this node is implemented in: keras_takePictures_detect_signs_move.py
 
 ### Final Project:
 
-* Load the room map 
-* Start the navigation stack. 
-* Get the coordinates of all the traffic sign using Rviz.
-* Write a Python node with the folowing behaviour:
-	* Localize the robot in the starting POSE
+Once you have practice with all the previous described nodes, the objective of the project is to optimize the structure of this last node and verify its behaviour with 1 or 2 traffic signals between the Robot starting POSE and the Robot target POSE. For this purpose, you have to:
+* **Construct the Final world** and create the MAP with 1 or 2 Traffic signals
+* **Start the Navigation node**. For this node you have in RVIZ to:
+   - Localize the robot in the starting POSE
    - Define a goal and start the movement to the defined goal
-   - If you find a traffic sign execute the corresponding movement when you are close (i.e. aroud 30cm) to the sign. This movement has to be:
-      - Stop: publish a Twist message (0,0,0,0,0,0)
-      - Give_Way: publish a Twist message (0,0,0,0,0,0) during 5 seconds
-      - Turn_Right: publish a Twist message (0,0,0,0,0,-wz)
-      - Turn_Left: publish a Twist message (0,0,0,0,0,+wz)
-	* continue to the target pose according to a new path obtained by Navigation stack during the previous movement
+   - Get the coordinates of all the traffic sign using Rviz.
+* **Modify the keras_takePictures_detect_signs_move.py node** to divide in 2 nodes:
+   - "keras_takePictures_detect_signs" node: this node subscribes to the /usb_cam/image_raw topic, makes the signal class prediction and publishes this prediction to the /predicted_class topic
+   - "keras_make_move_action" node: this node subscribes to the /predicted_class topic, in function of the signal class predicted decides a Twist robot movement and publishes this Twist message to the /cmd_vel topic. For this node you have to:
+      - Subscribe also to the /odom topic to identify the POSE of your robot in real-time
+      - Publish the Twist message when you are close (i.e. aroud 30cm) to the sign. This Twist message could be:
+         - Stop: publish a Twist message (0,0,0,0,0,0)
+         - Give_Way: publish a Twist message (0,0,0,0,0,0) during 5 seconds
+         - Turn_Right: publish a Twist message (0,0,0,0,0,-wz)
+         - Turn_Left: publish a Twist message (0,0,0,0,0,+wz)
+	   * The Navigation node finds periodically the optimum trajectory from real-time robot pose to the target pose. This will surelly take into account the traffic signal predicted
 * Test a more complex escenario when there are 2 or 3 traffic signs involved in the path from init pose to target pose.
 
 **Documentation:**
