@@ -73,6 +73,9 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
    - Update the model
 
       You have to select "Tensorflow.js" and upload the model to the Cloud. A link appears corresponding of the model in the cloud.
+      ````xml
+      https://teachablemachine.withgoogle.com/models/wx2s3R1IV/
+      ````
 
       Open the link in a new google tip with this link. The model appears with the previous photos. You can add there the new ones.
 

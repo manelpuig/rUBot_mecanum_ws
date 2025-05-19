@@ -46,7 +46,7 @@ class KerasImageClassifier_move:
         self.detection_distance_threshold = 0.4# Distancia en m a la senyal
 
         # Capturas
-        self.capture_enabled = True
+        self.capture_enabled = False
         self.capture_dir = os.path.expanduser("~/rUBot_mecanum_ws/src/rubot_projects/rUBot_captures")
         os.makedirs(self.capture_dir, exist_ok=True)
         self.create_class_dirs()  # Crear carpetas por clase
