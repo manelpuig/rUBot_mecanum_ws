@@ -10,12 +10,12 @@
 
     <!-- Particle filter configuration -->
     <param name="min_particles"             value="500"/>  <!-- Minimum number of particles -->
-    <param name="max_particles"             value="3000"/> <!-- Maximum number of particles -->
+    <param name="max_particles"             value="1000"/> <!-- Maximum number of particles -->
     <param name="kld_err"                   value="0.02"/> <!-- Error threshold for KLD sampling -->
-    <param name="update_min_d"              value="0.20"/> <!-- Minimum distance before updating particles -->
-    <param name="update_min_a"              value="0.20"/> <!-- Minimum angle change before updating particles -->
+    <param name="update_min_d"              value="0.30"/> <!-- Minimum distance before updating particles -->
+    <param name="update_min_a"              value="0.30"/> <!-- Minimum angle change before updating particles -->
     <param name="resample_interval"         value="1"/>    <!-- Frequency of particle resampling -->
-    <param name="transform_tolerance"       value="1.0"/>  <!-- Tolerance for transform lookups -->
+    <param name="transform_tolerance"       value="3.0"/>  <!-- Tolerance for transform lookups -->
     <param name="recovery_alpha_slow"       value="0.00"/> <!-- Slow recovery rate for the particle filter -->
     <param name="recovery_alpha_fast"       value="0.00"/> <!-- Fast recovery rate for the particle filter -->
 
@@ -45,7 +45,7 @@
     <param name="odom_alpha3"               value="0.5"/>    <!-- Noise in translation from translational motion -->
     <param name="odom_alpha4"               value="0.5"/>    <!-- Noise in rotation from translational motion -->
     <param name="odom_frame_id"             value="odom"/>   <!-- Name of the odometry frame -->
-    <param name="base_frame_id"             value="base_link"/> <!-- Name of the robot's base frame -->
+    <param name="base_frame_id"             value="base_footprint"/> <!-- Name of the robot's base frame -->
     <param name="global_frame_id"           value="map"/>    <!-- Name of the global reference frame -->
   </node>
 </launch>

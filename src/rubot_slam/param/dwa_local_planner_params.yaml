@@ -23,10 +23,10 @@ DWAPlannerROS:
   latch_xy_goal_tolerance: false #true
 
 # Forward Simulation Parameters
-  sim_time: 1.5
-  vx_samples: 20
-  vy_samples: 20 #0.0 non holonomic
-  vth_samples: 40
+  sim_time: 1.0
+  vx_samples: 10
+  vy_samples: 10 #0.0 non holonomic
+  vth_samples: 10
   controller_frequency: 10.0
 
 # Trajectory Scoring Parameters
