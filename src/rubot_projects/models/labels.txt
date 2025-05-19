@@ -1,7 +1,6 @@
-0 Flecha
-1 Stop
-2 Prohibido_Entrar
-3 Ceda
-4 Estacionamiento
-5 Prohibido_General
-6 Nada
+0 Forbidden_Direction
+1 Give_Way
+2 Turn_Left
+3 Nothing
+4 Turn_Right
+5 Stop

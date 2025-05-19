@@ -40,7 +40,7 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
       ````
       > You can change the rate that is 1Hz by default
    
-5. Open the "teachablemachine" app to create a model for "Traffic Signs". Go to https://teachablemachine.withgoogle.com/ and create an image project. Select "Standard Image model" and create a Class name for each Traffic sign with the exact name you have choosen for each sign (Stop, Turn_Right, Turn_Left, forbidden_direction, give_way, etc). 
+5. Open the "teachablemachine" app to create a model for "Traffic Signs". Go to https://teachablemachine.withgoogle.com/ and create an image project. Select "Standard Image model" and create a Class name for each Traffic sign with the exact name you have choosen for each sign (Stop, Turn_Right, Turn_Left, Forbidden_Direction, Give_Way, etc). 
    - Copy the photos you have made with the robot from the local PC folder for each sign and upload them to each class of the project.  
    - Train the model.  
    - Open "Export model" and select "Tensorflow" option and choose "Download model"
