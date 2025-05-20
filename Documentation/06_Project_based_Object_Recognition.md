@@ -89,6 +89,11 @@ We will use Keras that is a high-level API that runs on top of TensorFlow. By us
          - Localize the traffic signal POSEs (you will use later)
          - define a destination POSE
          - Navigation node generates an optimal trajectory and starts the movement
+
+
+   ![](./Images/06_Traffic/keras1.png)
+
+
       -  Launch the node "keras_takePictures_detect_signs_move" who is able to identify the traffic signal and execute the corresponding movemment. 
       ````shell
       roslaunch rubot_projects keras_takePictures_detect_signs_move.launch
@@ -104,8 +109,12 @@ Once you have practice with all the previous described nodes, the objective of t
    - Define a goal and start the movement to the defined goal
    - Get the coordinates of all the traffic sign using Rviz.
 * **Modify the keras_takePictures_detect_signs_move.py node** to divide in 2 nodes:
-   - "keras_takePictures_detect_signs" node: this node subscribes to the /usb_cam/image_raw topic, makes the signal class prediction and publishes this prediction to the /predicted_class topic
-   - "keras_make_move_action" node: this node subscribes to the /predicted_class topic, in function of the signal class predicted decides a Twist robot movement and publishes this Twist message to the /cmd_vel topic. For this node you have to:
+
+   ![](./Images/06_Traffic/keras2.png)
+
+
+   - "**keras_detect_signs**" node: this node subscribes to the /usb_cam/image_raw topic, makes the signal class prediction and publishes this prediction to the /predicted_class topic
+   - "**keras_robot_move**" node: this node subscribes to the /predicted_class topic, in function of the signal class predicted decides a Twist robot movement and publishes this Twist message to the /cmd_vel topic. For this node you have to:
       - Subscribe also to the /odom topic to identify the POSE of your robot in real-time
       - Publish the Twist message when you are close (i.e. aroud 30cm) to the sign. This Twist message could be:
          - Stop: publish a Twist message (0,0,0,0,0,0)
